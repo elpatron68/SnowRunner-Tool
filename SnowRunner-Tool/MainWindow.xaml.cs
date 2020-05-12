@@ -13,8 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Label = System.Windows.Controls.Label;
-using MessageBox = System.Windows.MessageBox;
+using System.IO.Compression;
 
 namespace SnowRunner_Tool
 {
@@ -22,19 +21,23 @@ namespace SnowRunner_Tool
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-
     {
+        private string @SRBaseDir;
+        private string SRProfile;
+        private string @SRBackupDir;
+
         public MainWindow()
         {
             InitializeComponent();
-            string @base = findBaseDirectory();
-            string profile = findProfileName(@base);
-            string backupdir = @base + @"\storage\BackupSlots\" + profile;
+            @SRBaseDir = findBaseDirectory();
+
+            SRProfile = findProfileName(@SRBaseDir);
+            @SRBackupDir = @SRBaseDir + @"\storage\BackupSlots\" + SRProfile;
            
             dgBackups.AutoGenerateColumns = true;
-            dgBackups.ItemsSource = getBackups(backupdir); ;
+            dgBackups.ItemsSource = getBackups(@SRBackupDir); 
             
-            sr_p.Content = @base;
+            sr_p.Content = @SRBaseDir;
         }
 
         private List<Backup> getBackups(string backupdir)
@@ -87,7 +90,10 @@ namespace SnowRunner_Tool
 
         private void backupCurrentSavegame(string directory)
         {
+            string startPath = directory;
+            string zipPath = @".\result.zip";
 
+            ZipFile.CreateFromDirectory(startPath, zipPath);
         }
 
     }

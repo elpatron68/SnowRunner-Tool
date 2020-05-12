@@ -15,10 +15,10 @@
             <RowDefinition Height="246*"/>
             <RowDefinition Height="175*"/>
         </Grid.RowDefinitions>
-        <Label Content="SnowRunner Base Path" Margin="20,18,506,0" VerticalAlignment="Top"/>
-        <Label x:Name="sr_p" Content="Path" Margin="239,18,18.333,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Label Content="SnowRunner Base Path" Margin="20,18,500,0" VerticalAlignment="Top"/>
+        <Label x:Name="sr_p" Content="Path" Margin="240,18,18,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
         <DataGrid x:Name="dgBackups" 
-                          Margin="20,60,20,20" 
+                          Margin="20,60,20,60" 
                           RenderTransformOrigin="-0.429,0.15" 
                           Grid.RowSpan="2" 
                           IsReadOnly="True" 
@@ -39,6 +39,7 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>
+        <Label Content="Right click on backup item to restore it" Margin="20,90,400,0" Grid.Row="1" Height="36" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="215"/>
     </Grid>
 
 </Window>

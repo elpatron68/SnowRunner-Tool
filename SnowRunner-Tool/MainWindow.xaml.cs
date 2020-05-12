@@ -41,8 +41,7 @@ namespace SnowRunner_Tool
 
             // Fill Datagrid
             dgBackups.AutoGenerateColumns = true;
-            dgBackups.ItemsSource = getBackups(@SRBackupDir); 
-            
+            dgBackups.ItemsSource = getBackups(@SRBackupDir);
             sr_p.Content = SRBaseDir;
         }
 

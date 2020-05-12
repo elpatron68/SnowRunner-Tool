@@ -17,6 +17,11 @@
                                            CanExecute="BackupCommand_CanExecute" 
                         >
         </CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Save" 
+                                           CanExecute="SaveCommand_CanExecute" 
+                                           Executed="SaveCommand_Executed" 
+                        >
+        </CommandBinding>
     </Window.CommandBindings>
     <Grid>
         <Label Content="SnowRunner Base Path" 
@@ -65,10 +70,20 @@
         </Label>
         <Button Content="Backup current save game" 
                        HorizontalAlignment="Left" 
-                       Margin="20,310,0,16"
+                       Margin="20,320,0,24.667"
                        Width="215"
-                       Height="28"
+                       RenderTransformOrigin="-0.29,0.04"
                        Command="ApplicationCommands.New"
+                >
+        </Button>
+        <TextBox x:Name="txtAmount" HorizontalAlignment="Left" Height="23" Margin="355,321,0,0" TextWrapping="Wrap" Text="Amount" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Set Money" 
+                       HorizontalAlignment="Left" 
+                       Margin="266,320,0,0" 
+                       VerticalAlignment="Top" 
+                       Width="75" 
+                       RenderTransformOrigin="-0.29,0.04"
+                       Command="ApplicationCommands.Save"
                 >
         </Button>
     </Grid>

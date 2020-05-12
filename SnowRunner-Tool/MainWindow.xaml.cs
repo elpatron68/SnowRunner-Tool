@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO.Compression;
 using MahApps.Metro.Controls;
+using System.Text.RegularExpressions;
 
 namespace SnowRunner_Tool
 {
@@ -127,11 +128,29 @@ namespace SnowRunner_Tool
             e.CanExecute = true;
         }
 
+        private void SaveCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
         private void BackupCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             backupCurrentSavegame();
             MessageBox.Show("Your current save game was backed up to the folder " + MyBackupDir + ".");
         }
 
+        private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            saveMoney();
+            MessageBox.Show("You are rich now.");
+        }
+
+        private void saveMoney()
+        {
+            backupCurrentSavegame();
+            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+            string amount = txtAmount.Text;
+            File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + amount));
+        }
     }
 }

@@ -73,28 +73,21 @@ namespace SnowRunner_Tool
 
         private void RestoreBackup_Click(object sender, RoutedEventArgs e)
         {
-            var clickedItem = FindClickedItem(sender);
-            if (clickedItem != null)
-            {
-                MessageBox.Show(" Viewing: " + clickedItem.Content);
-            }
+            var menuItem = (MenuItem)sender;
+            var contextMenu = (ContextMenu)menuItem.Parent;
+            var item = (DataGrid)contextMenu.PlacementTarget;
+            var restoreItem = (Backup)item.SelectedCells[0].Item;
+            restoreBackup(restoreItem.DirectoryName);
         }
 
-        private static Label FindClickedItem(object sender)
+        private void restoreBackup(string directory)
         {
-            var mi = sender as MenuItem;
-            if (mi == null)
-            {
-                return null;
-            }
 
-            var cm = mi.CommandParameter as ContextMenu;
-            if (cm == null)
-            {
-                return null;
-            }
+        }
 
-            return cm.PlacementTarget as Label;
+        private void backupCurrentSavegame(string directory)
+        {
+
         }
 
     }

@@ -35,9 +35,3 @@ steps:
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
 
-- task: PublishBuildArtifacts@0
-  inputs:
-    CopyRoot: '$(Build.ArtifactStagingDirectory)'
-    Contents: '*.zip'
-    ArtifactName: 'Release.zip'
-    ArtifactType: 'Container'

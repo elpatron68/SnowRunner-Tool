@@ -34,10 +34,3 @@ steps:
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
-
-- task: PublishBuildArtifacts@0
-  inputs:
-    CopyRoot: '$(Build.ArtifactStagingDirectory)'
-    Contents: '$(Build.BuildId).zip'
-    ArtifactName: 'Release'
-    ArtifactType: 'Container'

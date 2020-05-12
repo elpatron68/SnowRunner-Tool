@@ -14,14 +14,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO.Compression;
-using Path = System.IO.Path;
+using MahApps.Metro.Controls;
 
 namespace SnowRunner_Tool
 {
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         private string SRBaseDir;
         private string SRProfile;

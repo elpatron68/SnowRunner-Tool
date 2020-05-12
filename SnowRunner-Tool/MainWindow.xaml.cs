@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO.Compression;
 using MahApps.Metro.Controls;
 using System.Text.RegularExpressions;
@@ -44,6 +35,7 @@ namespace SnowRunner_Tool
             dgBackups.AutoGenerateColumns = true;
             dgBackups.ItemsSource = getBackups(@SRBackupDir);
             sr_p.Content = SRBaseDir;
+            txtAmount.Text = getMoney();
         }
 
         private List<Backup> getBackups(string backupdir)
@@ -151,6 +143,24 @@ namespace SnowRunner_Tool
             string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
             string amount = txtAmount.Text;
             File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + amount));
+        }
+        private string getMoney()
+        {
+            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+            string s = File.ReadAllText(saveGameFile);
+            string sPattern = @"\""money\""\:\d+";
+            string moneyAmount = null;
+            if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
+            {
+                moneyAmount = Regex.Match(s, sPattern).Value;
+                moneyAmount = moneyAmount.Replace("\"money\":", null);
+                return moneyAmount;
+            }
+            else
+            {
+                moneyAmount = "-1";
+                return null;
+            }
         }
     }
 }

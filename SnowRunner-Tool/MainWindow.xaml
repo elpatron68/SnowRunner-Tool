@@ -5,14 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SnowRunner_Tool"
         mc:Ignorable="d"
-        Title="SnowRunner-Tool" Height="380" Width="500" WindowStyle="ToolWindow" ResizeMode="NoResize">
+        Title="SnowRunner-Tool" 
+        Height="400" 
+        Width="500" 
+        WindowStyle="ToolWindow" 
+        ResizeMode="NoResize">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.New" 
+                                           Executed="BackupCommand_Executed" 
+                                           CanExecute="BackupCommand_CanExecute" 
+                        >
+        </CommandBinding>
+    </Window.CommandBindings>
     <Grid>
-        <Label Content="SnowRunner Base Path" Margin="20,18,20,0" VerticalAlignment="Top" FontStyle="Italic"/>
-        <Label x:Name="sr_p" Content="Path" Margin="20,50,20,0" VerticalAlignment="Top"/>
+        <Label Content="SnowRunner Base Path" 
+                     Margin="20,18,20,0" 
+                     VerticalAlignment="Top" 
+                     FontStyle="Italic"
+               >
+        </Label>
+        <Label x:Name="sr_p" 
+                    Content="Path" 
+                    Margin="20,50,20,0" 
+                    VerticalAlignment="Top"
+               >
+        </Label>
         <DataGrid x:Name="dgBackups" 
-                          Margin="20,100,20,60" 
+                          Margin="20,112,19.667,59.667" 
                           RenderTransformOrigin="-0.429,0.15" 
-                          Grid.RowSpan="2" 
                           IsReadOnly="True" 
                           SelectedItem="{Binding SelectedRow, Mode=TwoWay}" 
                           Background="LightGray" 
@@ -34,7 +54,22 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>
-        <Label Content="Right click on backup item to restore it" Margin="20,20,20,0" Grid.Row="1" Height="36" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="215"/>
+        <Label Content="Right click on backup item to restore it" 
+                     Margin="20,0,0,240.667" 
+                     Height="36" 
+                     VerticalAlignment="Bottom" 
+                     HorizontalAlignment="Left" 
+                     Width="215"
+               >
+        </Label>
+        <Button Content="Backup current save game" 
+                       HorizontalAlignment="Left" 
+                       Margin="20,310,0,16"
+                       Width="215"
+                       Height="28"
+                       Command="ApplicationCommands.New"
+                >
+        </Button>
     </Grid>
 
 </Window>

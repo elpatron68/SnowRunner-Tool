@@ -96,7 +96,7 @@ namespace SnowRunner_Tool
             dCopy(source, SRSaveGameDir, false, true);
         }
 
-        private void backupCurrentSavegame()
+        private string backupCurrentSavegame()
         {
             if (!Directory.Exists(MyBackupDir))
             {
@@ -114,11 +114,24 @@ namespace SnowRunner_Tool
             {
                 throw new IOException("Target file exists: " + zipPath + Environment.NewLine + Environment.NewLine + ex.Message);
             }
+            return zipPath;
         }
         private static void dCopy(string sourceDirName, string destDirName, bool copySubDirs, bool overwriteExisting)
         {
             foreach (string newPath in Directory.GetFiles(sourceDirName, "*.*", SearchOption.AllDirectories))
                 File.Copy(newPath, newPath.Replace(sourceDirName, destDirName), true);
         }
+
+        private void BackupCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void BackupCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            backupCurrentSavegame();
+            MessageBox.Show("Your current save game was backed up to the folder " + MyBackupDir + ".");
+        }
+
     }
 }

@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO.Compression;
+using Path = System.IO.Path;
 
 namespace SnowRunner_Tool
 {
@@ -22,22 +23,27 @@ namespace SnowRunner_Tool
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string @SRBaseDir;
+        private string SRBaseDir;
         private string SRProfile;
         private string @SRBackupDir;
+        private string @MyBackupDir;
+        private string @SRSaveGameDir;
 
         public MainWindow()
         {
             InitializeComponent();
-            @SRBaseDir = findBaseDirectory();
+            SRBaseDir = findBaseDirectory();
 
-            SRProfile = findProfileName(@SRBaseDir);
-            @SRBackupDir = @SRBaseDir + @"\storage\BackupSlots\" + SRProfile;
-           
+            SRProfile = findProfileName(SRBaseDir);
+            @MyBackupDir = Directory.GetParent(SRBaseDir) + @"\SRToolBackup";
+            @SRBackupDir = SRBaseDir + @"\storage\BackupSlots\" + SRProfile;
+            @SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
+
+            // Fill Datagrid
             dgBackups.AutoGenerateColumns = true;
             dgBackups.ItemsSource = getBackups(@SRBackupDir); 
             
-            sr_p.Content = @SRBaseDir;
+            sr_p.Content = SRBaseDir;
         }
 
         private List<Backup> getBackups(string backupdir)
@@ -80,21 +86,40 @@ namespace SnowRunner_Tool
             var contextMenu = (ContextMenu)menuItem.Parent;
             var item = (DataGrid)contextMenu.PlacementTarget;
             var restoreItem = (Backup)item.SelectedCells[0].Item;
+            backupCurrentSavegame();
             restoreBackup(restoreItem.DirectoryName);
+            MessageBox.Show("The selected save game backup has been restored. A backup of your former save game has been saved in " + MyBackupDir);
         }
 
         private void restoreBackup(string directory)
         {
-
+            string source = SRBackupDir + @"\" + directory;
+            dCopy(source, SRSaveGameDir, false, true);
         }
 
-        private void backupCurrentSavegame(string directory)
+        private void backupCurrentSavegame()
         {
-            string startPath = directory;
-            string zipPath = @".\result.zip";
-
-            ZipFile.CreateFromDirectory(startPath, zipPath);
+            if (!Directory.Exists(MyBackupDir))
+            {
+                Directory.CreateDirectory(MyBackupDir);
+            }
+            string startPath = SRSaveGameDir;
+            string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd_hh-mm");
+            string zipPath = MyBackupDir + @"\backup" + timestamp + ".zip";
+            
+            try
+            {
+                ZipFile.CreateFromDirectory(startPath, zipPath);
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Target file exists: " + zipPath);
+            }
         }
-
+        private static void dCopy(string sourceDirName, string destDirName, bool copySubDirs, bool overwriteExisting)
+        {
+            foreach (string newPath in Directory.GetFiles(sourceDirName, "*.*", SearchOption.AllDirectories))
+                File.Copy(newPath, newPath.Replace(sourceDirName, destDirName), true);
+        }
     }
 }

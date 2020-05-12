@@ -1,0 +1,44 @@
+﻿<Window x:Class="SnowRunner_Tool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SnowRunner_Tool"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="380" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="706*"/>
+            <ColumnDefinition Width="87*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="246*"/>
+            <RowDefinition Height="175*"/>
+        </Grid.RowDefinitions>
+        <Label Content="SnowRunner Base Path" Margin="20,18,506,0" VerticalAlignment="Top"/>
+        <Label x:Name="sr_p" Content="Path" Margin="239,18,18.333,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <DataGrid x:Name="dgBackups" 
+                          Margin="20,60,20,20" 
+                          RenderTransformOrigin="-0.429,0.15" 
+                          Grid.RowSpan="2" 
+                          IsReadOnly="True" 
+                          SelectedItem="{Binding SelectedRow, Mode=TwoWay}" 
+                          Background="LightGray" 
+                          RowBackground="LightYellow" 
+                          AlternatingRowBackground="LightBlue"  
+                          HorizontalScrollBarVisibility="Disabled" 
+                          Grid.ColumnSpan="2"
+                         SelectionMode="Single"
+        >
+            <DataGrid.ContextMenu>
+                <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" >
+                    <MenuItem  Header="Restore" 
+                                          Click="RestoreBackup_Click" 
+                                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}"
+                    />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+    </Grid>
+
+</Window>

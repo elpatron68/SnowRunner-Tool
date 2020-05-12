@@ -112,7 +112,7 @@ namespace SnowRunner_Tool
             }
             catch (IOException ex)
             {
-                throw new IOException("Target file exists: " + zipPath);
+                throw new IOException("Target file exists: " + zipPath + Environment.NewLine + Environment.NewLine + ex.Message);
             }
         }
         private static void dCopy(string sourceDirName, string destDirName, bool copySubDirs, bool overwriteExisting)

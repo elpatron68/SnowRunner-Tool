@@ -38,6 +38,11 @@ namespace SnowRunner_Tool
             txtAmount.Text = getMoney();
         }
 
+        /// <summary>
+        /// Collect save game backups in list
+        /// </summary>
+        /// <param name="backupdir"></param>
+        /// <returns></returns>
         private List<Backup> getBackups(string backupdir)
         {
             List<Backup> backups = new List<Backup>();
@@ -51,6 +56,11 @@ namespace SnowRunner_Tool
             return backups;
         }
 
+        /// <summary>
+        /// Try to find the profile directory name
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         private string findProfileName(string p)
         {
             p += "\\storage";
@@ -72,6 +82,7 @@ namespace SnowRunner_Tool
             return p;
         }
 
+        
         private void RestoreBackup_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = (MenuItem)sender;
@@ -83,12 +94,20 @@ namespace SnowRunner_Tool
             MessageBox.Show("The selected save game backup has been restored. A backup of your former save game has been saved in " + MyBackupDir);
         }
 
+        /// <summary>
+        /// Restore a game backup (overwrites current save game)
+        /// </summary>
+        /// <param name="directory"></param>
         private void restoreBackup(string directory)
         {
             string source = SRBackupDir + @"\" + directory;
             dCopy(source, SRSaveGameDir, false, true);
         }
 
+        /// <summary>
+        /// Create a zip compressed backup of the current save game
+        /// </summary>
+        /// <returns></returns>
         private string backupCurrentSavegame()
         {
             if (!Directory.Exists(MyBackupDir))
@@ -109,6 +128,13 @@ namespace SnowRunner_Tool
             }
             return zipPath;
         }
+        /// <summary>
+        /// Copies a directory to another directory
+        /// </summary>
+        /// <param name="sourceDirName"></param>
+        /// <param name="destDirName"></param>
+        /// <param name="copySubDirs"></param>
+        /// <param name="overwriteExisting"></param>
         private static void dCopy(string sourceDirName, string destDirName, bool copySubDirs, bool overwriteExisting)
         {
             foreach (string newPath in Directory.GetFiles(sourceDirName, "*.*", SearchOption.AllDirectories))
@@ -125,18 +151,31 @@ namespace SnowRunner_Tool
             e.CanExecute = true;
         }
 
+        /// <summary>
+        /// "Backup" Button click event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BackupCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             backupCurrentSavegame();
             MessageBox.Show("Your current save game was backed up to the folder " + MyBackupDir + ".");
         }
 
+        /// <summary>
+        /// "Set Money" Button click event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             saveMoney();
             MessageBox.Show("You are rich now.");
         }
 
+        /// <summary>
+        /// Cheat: Set amount of money in current save game
+        /// </summary>
         private void saveMoney()
         {
             backupCurrentSavegame();
@@ -144,6 +183,10 @@ namespace SnowRunner_Tool
             string amount = txtAmount.Text;
             File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + amount));
         }
+        /// <summary>
+        /// Get amount of money from current save game
+        /// </summary>
+        /// <returns></returns>
         private string getMoney()
         {
             string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";

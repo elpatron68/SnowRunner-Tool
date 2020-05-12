@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="SnowRunner-Tool" Height="380" Width="500" WindowStyle="ToolWindow" ResizeMode="NoResize">
     <Grid>
-        <Label Content="SnowRunner Base Path" Margin="20,18,20,0" VerticalAlignment="Top"/>
+        <Label Content="SnowRunner Base Path" Margin="20,18,20,0" VerticalAlignment="Top" FontStyle="Italic"/>
         <Label x:Name="sr_p" Content="Path" Margin="20,50,20,0" VerticalAlignment="Top"/>
         <DataGrid x:Name="dgBackups" 
                           Margin="20,100,20,60" 

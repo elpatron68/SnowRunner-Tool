@@ -201,7 +201,7 @@ namespace SnowRunner_Tool
             }
             else
             {
-                moneyAmount = "-1";
+                moneyAmount = "failed";
                 return null;
             }
         }

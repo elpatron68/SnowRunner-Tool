@@ -103,7 +103,7 @@ namespace SnowRunner_Tool
                 Directory.CreateDirectory(MyBackupDir);
             }
             string startPath = SRSaveGameDir;
-            string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd_hh-mm");
+            string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss");
             string zipPath = MyBackupDir + @"\backup" + timestamp + ".zip";
             
             try

@@ -10,6 +10,8 @@ using System.Text.RegularExpressions;
 using System.Collections;
 using System.Reflection;
 using System.Text;
+using MahApps.Metro.Controls.Dialogs;
+using System.Threading.Tasks;
 
 namespace SnowRunner_Tool
 {
@@ -38,6 +40,7 @@ namespace SnowRunner_Tool
             dgBackups.AutoGenerateColumns = true;
             readBackups();
             sr_p.Content = SRBaseDir;
+            _ = MetroMessage("Heads Up", "This tool creates backups of your current save game whenever changes are made.\n\n");
             txtAmount.Text = getMoney();
         }
 
@@ -109,7 +112,7 @@ namespace SnowRunner_Tool
 
         private string findBaseDirectory()
         {
-            var p = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\SnowRunner\\base";
+            var p = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\My Games\SnowRunner\base";
             return p;
         }
 
@@ -122,7 +125,7 @@ namespace SnowRunner_Tool
             var restoreItem = (Backup)item.SelectedCells[0].Item;
             backupCurrentSavegame();
             restoreBackup(restoreItem.DirectoryName, restoreItem.Type);
-            MessageBox.Show("The selected save game backup has been restored. A backup of your former save game has been saved in " + MyBackupDir);
+            _ = MetroMessage("Next time better luck", "The selected save game backup has been restored. A backup of your former save game has been saved in " + MyBackupDir);
         }
 
         /// <summary>
@@ -199,7 +202,8 @@ namespace SnowRunner_Tool
         private void BackupCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             backupCurrentSavegame();
-            MessageBox.Show("Your current save game was backed up to the folder " + MyBackupDir + ".");
+
+            _ = MetroMessage("Just for sure", "Your current save game was backed up to the folder " + MyBackupDir + ".");
         }
 
         /// <summary>
@@ -210,7 +214,7 @@ namespace SnowRunner_Tool
         private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             saveMoney();
-            MessageBox.Show("You are rich now.");
+            _ = MetroMessage("Congratulations", "You are rich now.");
         }
 
         /// <summary>
@@ -244,6 +248,22 @@ namespace SnowRunner_Tool
                 moneyAmount = "failed";
                 return null;
             }
+        }
+        private async Task<bool> MetroMessage(string title, string message)
+        {
+            var dialogSettings = new MetroDialogSettings();
+            dialogSettings.AffirmativeButtonText = "Fine";
+
+            var dialogResult = await this.ShowMessageAsync(title,
+                message,
+                MessageDialogStyle.Affirmative, dialogSettings);
+
+            if (dialogResult == MessageDialogResult.Affirmative)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

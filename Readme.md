@@ -33,6 +33,13 @@ You can manually create a backup of the current game state by clicking on *Backu
 
 Set the amount of money you´d like to have by entering a value and clicking the *Set money* button. Before changing the money in your save game, another backup will be created.
 
+After restoring a save game from a backup or after altering the money, the Epic Launcher detects locally changed files. You are asked if you want to upload local files into the cloud or download cloud files to your local disk. Choose *Upload local files*.
+
+## Useful links
+
+- User [grimdanfango](https://forums.focus-home.com/user/grimdanfango) made a Powershell Script that creates Backups in a configurable interval while the game is running. Instructions can be found <a href="https://forums.focus-home.com/topic/47932/backup-save-game-script" target="_blank">here</a>.
+- Thread on <a href="https://www.reddit.com/r/snowrunner/comments/gdf1jt/pc_snowrunner_backs_up_your_saved_games_heres_how/" target="_blank">Reddit</a> discussing the games´s backups and how to restore them manually.
+
 ## License
 
 ![](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png)
@@ -52,3 +59,10 @@ Version 2, December 2004
 
   0. You just DO WHAT THE FUCK YOU WANT TO.
  ```
+ 
+ ## 3rd party Licenses
+ 
+ - Icons from https://material.io/ ([Apache License](https://github.com/google/material-design-icons/blob/master/LICENSE))
+ - WPF theme from https://mahapps.com/ ([MIT License](https://github.com/MahApps/MahApps.Metro/blob/develop/LICENSE))
+ 
+ 

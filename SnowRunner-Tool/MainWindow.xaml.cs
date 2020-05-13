@@ -7,9 +7,6 @@ using System.Windows.Input;
 using System.IO.Compression;
 using MahApps.Metro.Controls;
 using System.Text.RegularExpressions;
-using System.Collections;
-using System.Reflection;
-using System.Text;
 using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
 using System.Globalization;
@@ -42,7 +39,7 @@ namespace SnowRunner_Tool
             dgBackups.AutoGenerateColumns = true;
             readBackups();
             sr_p.Content = SRBaseDir;
-            _ = MetroMessage("Heads Up", "This tool creates backups of your current save game whenever changes are made.\n\n");
+            _ = MetroMessage("Heads Up", "This tool creates backups of your current SnowRunner save game whenever changes are made.\n\n");
             txtAmount.Text = getMoney();
         }
 
@@ -79,7 +76,6 @@ namespace SnowRunner_Tool
         /// <summary>
         /// Collect save game backups in list
         /// </summary>
-        /// <param name="backupdir"></param>
         /// <returns></returns>
         private List<Backup> getBackups()
         {

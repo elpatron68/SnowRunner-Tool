@@ -10,7 +10,7 @@
         Height="400" 
         Width="720" 
         WindowStyle="ToolWindow" 
-        ResizeMode="NoResize">
+        ResizeMode="NoResize" Icon="baseline_restore_black_18dp.ico">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.New" 
                                            Executed="BackupCommand_Executed" 

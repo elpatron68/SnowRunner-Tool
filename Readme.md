@@ -6,18 +6,20 @@ So, if you feel that restoring a saved game would sometimes be nice to have, her
 
 The *SnowRunner-Tool* does nothing that you could not do in a manual way, but it makes it safe and easy and it´s looking nice.
 
+**Use this software with caution! I have tested a lot, but only on my own machine. I recommend to make manual backups until you are sure that everything works as expected.**
+
 ## Features
 
 *SnowRunner-Tool* lets you
 - restore a saved game from the game´s backup repository,
-- create backups of the current games sate and
-- cheats the amount of money you have in your pocket.
+- create backups of the current games state and
+- cheat the amount of money you have in your pocket.
 
 ![SnowRunner-Tool](images/SnowRunner-Tool_Screenshot.png)
 
 # Installation
 
-Download the latest version from Releases and unzip the files to a location of your choice.
+Download the latest version from [Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) and unzip the files to a location of your choice.
 
 Start `SnowRunner-Tool.exe` or create a desktop shortcut. Windows will warn you about using suspicious software as this program is not signed with a valid certificate. You have to accept this at the first start.
 

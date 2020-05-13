@@ -7,6 +7,9 @@ using System.Windows.Input;
 using System.IO.Compression;
 using MahApps.Metro.Controls;
 using System.Text.RegularExpressions;
+using System.Collections;
+using System.Reflection;
+using System.Text;
 
 namespace SnowRunner_Tool
 {
@@ -33,9 +36,37 @@ namespace SnowRunner_Tool
 
             // Fill Datagrid
             dgBackups.AutoGenerateColumns = true;
-            dgBackups.ItemsSource = getBackups(@SRBackupDir);
+            readBackups();
             sr_p.Content = SRBaseDir;
             txtAmount.Text = getMoney();
+        }
+
+        /// <summary>
+        /// Clear items in datagrid and (re)loads backups
+        /// </summary>
+        private void readBackups()
+        {
+            var allBackups = getBackups();
+            allBackups.AddRange(getMyBackups());
+            dgBackups.ItemsSource = allBackups;
+            dgBackups.Items.Refresh();
+        }
+
+        /// <summary>
+        /// Load backups made by SnorRunner-Tool
+        /// </summary>
+        /// <returns></returns>
+        private List<Backup> getMyBackups()
+        {
+            List<Backup> backups = new List<Backup>();
+            string[] fileEntries = Directory.GetFiles(MyBackupDir);
+            foreach (string f in fileEntries)
+            {
+                string fName = new FileInfo(f).Name;
+                DateTime timestamp = File.GetCreationTime(f);
+                backups.Add(new Backup() { DirectoryName = fName, Timestamp = timestamp, Type = "Tool-Backup" });
+            }
+            return backups;
         }
 
         /// <summary>
@@ -43,15 +74,15 @@ namespace SnowRunner_Tool
         /// </summary>
         /// <param name="backupdir"></param>
         /// <returns></returns>
-        private List<Backup> getBackups(string backupdir)
+        private List<Backup> getBackups()
         {
             List<Backup> backups = new List<Backup>();
-            string[] subdirectoryEntries = Directory.GetDirectories(backupdir);
+            string[] subdirectoryEntries = Directory.GetDirectories(@SRBackupDir);
             foreach (string subdirectory in subdirectoryEntries)
             {
                 string dir = new DirectoryInfo(subdirectory).Name;
                 DateTime timestamp = Directory.GetCreationTime(subdirectory);
-                backups.Add(new Backup() { DirectoryName = dir, Timestamp = timestamp });
+                backups.Add(new Backup() { DirectoryName = dir, Timestamp = timestamp, Type = "Game-Backup" });
             }
             return backups;
         }
@@ -90,18 +121,26 @@ namespace SnowRunner_Tool
             var item = (DataGrid)contextMenu.PlacementTarget;
             var restoreItem = (Backup)item.SelectedCells[0].Item;
             backupCurrentSavegame();
-            restoreBackup(restoreItem.DirectoryName);
+            restoreBackup(restoreItem.DirectoryName, restoreItem.Type);
             MessageBox.Show("The selected save game backup has been restored. A backup of your former save game has been saved in " + MyBackupDir);
         }
 
         /// <summary>
         /// Restore a game backup (overwrites current save game)
         /// </summary>
-        /// <param name="directory"></param>
-        private void restoreBackup(string directory)
+        /// <param name="backupItem"></param>
+        private void restoreBackup(string backupItem, string type)
         {
-            string source = SRBackupDir + @"\" + directory;
-            dCopy(source, SRSaveGameDir, false, true);
+            if (type == "Game-Backup")
+            {
+                string source = SRBackupDir + @"\" + backupItem;
+                dCopy(source, SRSaveGameDir, false, true);
+            }
+            else
+            {
+                string zipFile = MyBackupDir + @"\" + backupItem;
+                ZipExtractHelperClass.ZipFileExtractToDirectory(zipFile, SRSaveGameDir);
+            }
         }
 
         /// <summary>
@@ -126,6 +165,7 @@ namespace SnowRunner_Tool
             {
                 throw new IOException("Target file exists: " + zipPath + Environment.NewLine + Environment.NewLine + ex.Message);
             }
+            readBackups();
             return zipPath;
         }
         /// <summary>

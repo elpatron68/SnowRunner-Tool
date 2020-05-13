@@ -12,6 +12,8 @@ using System.Reflection;
 using System.Text;
 using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
+using System.Globalization;
+using System.ComponentModel;
 
 namespace SnowRunner_Tool
 {
@@ -52,6 +54,8 @@ namespace SnowRunner_Tool
             var allBackups = getBackups();
             allBackups.AddRange(getMyBackups());
             dgBackups.ItemsSource = allBackups;
+            dgBackups.Items.SortDescriptions.Clear();
+            dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
             dgBackups.Items.Refresh();
         }
 
@@ -67,7 +71,7 @@ namespace SnowRunner_Tool
             {
                 string fName = new FileInfo(f).Name;
                 DateTime timestamp = File.GetCreationTime(f);
-                backups.Add(new Backup() { DirectoryName = fName, Timestamp = timestamp, Type = "Tool-Backup" });
+                backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = "Tool-Backup" });
             }
             return backups;
         }
@@ -85,7 +89,7 @@ namespace SnowRunner_Tool
             {
                 string dir = new DirectoryInfo(subdirectory).Name;
                 DateTime timestamp = Directory.GetCreationTime(subdirectory);
-                backups.Add(new Backup() { DirectoryName = dir, Timestamp = timestamp, Type = "Game-Backup" });
+                backups.Add(new Backup() { BackupName = dir, Timestamp = timestamp, Type = "Game-Backup" });
             }
             return backups;
         }
@@ -124,7 +128,7 @@ namespace SnowRunner_Tool
             var item = (DataGrid)contextMenu.PlacementTarget;
             var restoreItem = (Backup)item.SelectedCells[0].Item;
             backupCurrentSavegame();
-            restoreBackup(restoreItem.DirectoryName, restoreItem.Type);
+            restoreBackup(restoreItem.BackupName, restoreItem.Type);
             _ = MetroMessage("Next time better luck", "The selected save game backup has been restored. A backup of your former save game has been saved in " + MyBackupDir);
         }
 
@@ -157,7 +161,7 @@ namespace SnowRunner_Tool
                 Directory.CreateDirectory(MyBackupDir);
             }
             string startPath = SRSaveGameDir;
-            string timestamp = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss");
+            string timestamp = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss", CultureInfo.CurrentCulture);
             string zipPath = MyBackupDir + @"\backup" + timestamp + ".zip";
             
             try

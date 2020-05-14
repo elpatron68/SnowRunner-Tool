@@ -421,5 +421,10 @@ namespace SnowRunner_Tool
             _ = MetroMessage("License", "DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\n\nDO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\nTERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION\n\n0. You just DO WHAT THE FUCK YOU WANT TO.");
         }
 
+        private void MnuReload_Click(object sender, RoutedEventArgs e)
+        {
+            readBackups();            
+        }
+
     }
 }

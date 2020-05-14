@@ -28,7 +28,7 @@ namespace SnowRunner_Tool
         private string @SRSaveGameDir;
         private string guid;
         private string aVersion= System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        private const string @guidFile = @".\SnowRunner-Tool.guid";
+        private string logPrefix;
 
         public MainWindow()
         {
@@ -37,6 +37,8 @@ namespace SnowRunner_Tool
             
             // Initialize Logging
             var myLog = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+            logPrefix = guid + " v" + aVersion + " - ";
+
             if (Properties.Settings.Default.graylog == true)
             {
                 cbLogging.IsChecked = true;
@@ -55,7 +57,12 @@ namespace SnowRunner_Tool
             @SRBackupDir = SRBaseDir + @"\storage\BackupSlots\" + SRProfile;
             @SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
             
-            myLog.Information(guid + " " + aVersion + " " + " started");
+            myLog.Information(logPrefix + "Program started");
+            myLog.Information(logPrefix + "SRBaseDir: " + SRBaseDir);
+            myLog.Information(logPrefix + "SRProfile: " + SRProfile);
+            myLog.Information(logPrefix + "MyBackupDir: " + @MyBackupDir);
+            myLog.Information(logPrefix + "SRBackupDir: " + @SRBackupDir);
+            myLog.Information(logPrefix + "SRSaveGameDir: " + @SRSaveGameDir);
 
             // Fill Datagrid
             dgBackups.AutoGenerateColumns = true;
@@ -68,15 +75,16 @@ namespace SnowRunner_Tool
 
         private string genGuid()
         {
-            if (!File.Exists(guidFile))
+            if (Properties.Settings.Default.guid == "")
             {
                 string g = Guid.NewGuid().ToString();
-                File.WriteAllText(guidFile, g);
+                Properties.Settings.Default.guid = g;
+                Properties.Settings.Default.Save();
                 return g;
             }
             else
             {
-                string g = File.ReadAllText(guidFile);
+                string g = Properties.Settings.Default.guid;
                 return g;
             }
         }

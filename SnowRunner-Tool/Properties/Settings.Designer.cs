@@ -34,5 +34,17 @@ namespace SnowRunner_Tool.Properties {
                 this["graylog"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string guid {
+            get {
+                return ((string)(this["guid"]));
+            }
+            set {
+                this["guid"] = value;
+            }
+        }
     }
 }

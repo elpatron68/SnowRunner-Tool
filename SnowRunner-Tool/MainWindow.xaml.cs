@@ -17,6 +17,7 @@ using CommandLine;
 using System.Linq;
 using System.Windows.Documents;
 using System.Diagnostics;
+using Serilog.Events;
 
 namespace SnowRunner_Tool
 {
@@ -33,7 +34,8 @@ namespace SnowRunner_Tool
         private string @SRSaveGameDir;
         private string guid;
         private readonly string aVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        private string logPrefix;
+        // private string logPrefix;
+        // private MessageTemplate logPrefix;
         private bool enableRemoteLogging;
 
         public MainWindow()
@@ -58,7 +60,6 @@ namespace SnowRunner_Tool
             
             // Initialize Logging
             var myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
-            logPrefix = guid + " v" + aVersion + " - ";
 
             if (Properties.Settings.Default.graylog == true || enableRemoteLogging == true)
             {
@@ -83,12 +84,12 @@ namespace SnowRunner_Tool
             @SRBackupDir = SRBaseDir + @"\storage\BackupSlots\" + SRProfile;
             @SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
 
-            Log.Information("{Prefix}Program started", logPrefix);
-            Log.Debug("{Prefix}SRBaseDir:{dir} ", logPrefix, SRBaseDir);
-            Log.Debug("{Prefix}SRProfile: {profile}", logPrefix, SRProfile);
-            Log.Debug("{Prefix}MyBackupDir: {dir}", logPrefix, MyBackupDir);
-            Log.Debug("{Prefix}SRBackupDir: {dir}", logPrefix, SRBackupDir);
-            Log.Debug("{Prefix}SRSaveGameDir: {dir}", logPrefix, SRSaveGameDir);
+            Log.Information("{guid} {version} Program started", guid, aVersion);
+            Log.Debug("{guid} {version} {SRBaseDir} ", guid, aVersion, SRBaseDir);
+            Log.Debug("{guid} {version} {SRProfile}", guid, aVersion, SRProfile);
+            Log.Debug("{guid} {version} {MyBackupDir}", guid, aVersion, MyBackupDir);
+            Log.Debug("{guid} {version} {SRBackupDir}", guid, aVersion, SRBackupDir);
+            Log.Debug("{guid} {version} }{SRSaveGameDir}", guid, aVersion, SRSaveGameDir);
 
             // Fill Datagrid
             dgBackups.AutoGenerateColumns = true;
@@ -138,10 +139,10 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         private List<Backup> getOtherBackups(string directory, string backupType)
         {
-            Log.Information("{Prefix}Reading other backups from {directory}", logPrefix, directory);
+            Log.Information("{guid} {version} Reading other backups from {BackupDirectory}", guid, aVersion, directory);
             List<Backup> backups = new List<Backup>();
             string[] fileEntries = Directory.GetFiles(directory);
-            Log.Debug("{Prefix}{amount} files found.", logPrefix, fileEntries.Length.ToString());
+            Log.Debug("{guid} {version} {FilesFound}.", guid, aVersion, fileEntries.Length.ToString());
             foreach (string f in fileEntries)
             {
                 string fName = new FileInfo(f).Name;
@@ -157,10 +158,10 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         private List<Backup> getBackups()
         {
-            Log.Information("{Prefix}Reading game backups", logPrefix);
+            Log.Information("{guid} {version} Reading game backups", guid, aVersion);
             List<Backup> backups = new List<Backup>();
             string[] subdirectoryEntries = Directory.GetDirectories(@SRBackupDir);
-            Log.Debug("{Prefix}{amount} subdirectories found.", logPrefix, subdirectoryEntries.Length.ToString());
+            Log.Debug("{guid} {version} {SubDirCount}", guid, aVersion, subdirectoryEntries.Length.ToString());
             foreach (string subdirectory in subdirectoryEntries)
             {
                 string dir = new DirectoryInfo(subdirectory).Name;
@@ -182,7 +183,7 @@ namespace SnowRunner_Tool
             string pattern = @"^[A-Fa-f0-9]+$";
             foreach (string subdirectory in subdirectoryEntries)
             {
-                Log.Debug("{Prefix}Checking {dir}", logPrefix, subdirectory);
+                Log.Debug("{guid} {version} {ProfileCandidate}", guid, aVersion, subdirectory);
                 if (!subdirectory.Contains("backupSlots"))
                 {
                     // Check if subdirectory is hex string
@@ -190,12 +191,12 @@ namespace SnowRunner_Tool
                     if (Regex.IsMatch(dirName, pattern))
                     {
                         string profiledir = new DirectoryInfo(subdirectory).Name;
-                        Log.Debug("{Prefix}Profile directory found: {dir}", logPrefix, profiledir);
+                        Log.Debug("{guid} {version} {ProfileFound}", guid, aVersion, profiledir);
                         return profiledir;
                     }
                 }
             }
-            Log.Warning("{Prefix}No profile directory found!", logPrefix);
+            Log.Warning("{guid} {version} No profile directory found!", guid, aVersion);
             return null;
         }
 
@@ -226,13 +227,13 @@ namespace SnowRunner_Tool
             if (type == "Game-Backup")
             {
                 string source = SRBackupDir + @"\" + backupItem;
-                Log.Debug("{Prefix}Restoring game backup from {source} to {destination}", logPrefix, source, @SRSaveGameDir);
+                Log.Debug("{guid} {version} {RestoreSource} to {RestoreDestination}", guid, aVersion, source, @SRSaveGameDir);
                 dCopy(source, SRSaveGameDir, false, true);
             }
             else
             {
                 string zipFile = MyBackupDir + @"\" + backupItem;
-                Log.Debug("{Prefix}Restoring my backup from zip file {source} to {destination}", logPrefix, zipFile, @SRSaveGameDir);
+                Log.Debug("{guid} {version} {ZipRestoreSource} {ZipRestoreDestination}", guid, aVersion, zipFile, @SRSaveGameDir);
                 ZipExtractHelperClass.ZipFileExtractToDirectory(zipFile, SRSaveGameDir);
             }
         }
@@ -243,7 +244,7 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         private string backupCurrentSavegame()
         {
-            Log.Information("{Prefix} Starting backup of current save game", logPrefix);
+            Log.Information("{guid} {version}Starting backup of current save game", guid, aVersion);
             if (!Directory.Exists(MyBackupDir))
             {
                 Directory.CreateDirectory(MyBackupDir);
@@ -255,11 +256,11 @@ namespace SnowRunner_Tool
             try
             {
                 ZipFile.CreateFromDirectory(startPath, zipPath);
-                Log.Debug("{Prefix}Created ZIP file from directory {source} to {target}", logPrefix, startPath, zipPath);
+                Log.Debug("{guid} {version} {ZipCreateSource} {ZipCreateTarget}", guid, aVersion, startPath, zipPath);
             }
             catch (IOException ex)
             {
-                Log.Error("{Prefix}ZIP creation failed: {message}", logPrefix, ex.Message);
+                Log.Error("{guid} {version} {ZipCreateException}", guid, aVersion, ex.Message);
                 throw new IOException("Target file exists: " + zipPath + Environment.NewLine + Environment.NewLine + ex.Message);
             }
             readBackups();
@@ -281,7 +282,7 @@ namespace SnowRunner_Tool
                 }
                 catch (IOException ex)
                 {
-                    Log.Warning("{Prefix}Failed to copy file from game backup to {destination}: {message}", logPrefix, destDirName, ex.Message);
+                    Log.Warning("{guid} {version} {CopyFileToDestination} {message}", guid, aVersion, destDirName, ex.Message);
                 }
         }
 
@@ -334,7 +335,6 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         private string getMoney()
         {
-            Log.Debug("{Prefix}Reading money from save game", logPrefix);
             string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
             string s = File.ReadAllText(saveGameFile);
             string sPattern = @"\""money\""\:\d+";
@@ -343,13 +343,13 @@ namespace SnowRunner_Tool
             {
                 moneyAmount = Regex.Match(s, sPattern).Value;
                 moneyAmount = moneyAmount.Replace("\"money\":", null);
-                Log.Information("{Prefix}Found money: {value}", logPrefix, moneyAmount);
+                Log.Information("{guid} {version} {MoneyFromSavegame}", guid, aVersion, moneyAmount);
                 return moneyAmount;
             }
             else
             {
                 moneyAmount = "failed";
-                Log.Warning("{Prefix}Money not found in {file}", logPrefix, saveGameFile);
+                Log.Warning("{guid} {version} {MoneyNotFoundInFile}", guid, aVersion, saveGameFile);
                 return null;
             }
         }

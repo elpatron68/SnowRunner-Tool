@@ -51,7 +51,7 @@
             IsReadOnly="True"
                />
         <CheckBox x:Name="cbLogging" 
-            Content="Enable logging" 
+            Content="Send log" 
             Grid.Column="1" 
             HorizontalAlignment="Left" 
             Margin="249,60,0,0" 

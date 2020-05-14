@@ -35,7 +35,12 @@ You can manually create a backup of the current game state by clicking on *Backu
 
 Set the amount of money you´d like to have by entering a value and clicking the *Set money* button. Before changing the money in your save game, another backup will be created.
 
+Activate *Send log* if you wish to help the developer find bugs and add new features.
+
+### Note
+
 After restoring a save game from a backup or after altering the money, the Epic Launcher detects locally changed files. You are asked if you want to upload local files into the cloud or download cloud files to your local disk. Choose *Upload local files*.
+
 
 ## Useful links
 

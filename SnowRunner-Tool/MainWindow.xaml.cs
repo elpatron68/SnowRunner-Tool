@@ -37,22 +37,26 @@ namespace SnowRunner_Tool
             InitializeComponent();
             
             // Initialize Logging
-            var myLog = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+            var myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
             logPrefix = guid + " v" + aVersion + " - ";
 
             if (Properties.Settings.Default.graylog == true)
             {
                 cbLogging.IsChecked = true;
-                myLog = new LoggerConfiguration().WriteTo.Graylog
+                myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Graylog
                                     (new GraylogSinkOptions
                                     {
                                         HostnameOrAddress = "markus.medisoftware.org",
                                         Port = 12201
                                     }
-                                    ).CreateLogger(); ;
+                                    ).CreateLogger(); 
+            }
+            else
+            {
+                cbLogging.IsChecked = false;
             }
             Log.Logger = myLog;
-
+            
             SRBaseDir = findBaseDirectory();
             SRProfile = findProfileName();
             @MyBackupDir = Directory.GetParent(SRBaseDir) + @"\SRToolBackup";
@@ -158,7 +162,8 @@ namespace SnowRunner_Tool
                 if (! subdirectory.Contains("backupSlots"))
                 {
                     // Check if subdirectory is hex string
-                    if (Regex.IsMatch(subdirectory, pattern))
+                    string dirName = new DirectoryInfo(subdirectory).Name;
+                    if (Regex.IsMatch(dirName, pattern))
                     {
                         string profiledir = new DirectoryInfo(subdirectory).Name;
                         Log.Debug("{Prefix}Profile directory found: {dir}", logPrefix, profiledir);
@@ -314,7 +319,7 @@ namespace SnowRunner_Tool
             {
                 moneyAmount = Regex.Match(s, sPattern).Value;
                 moneyAmount = moneyAmount.Replace("\"money\":", null);
-                Log.Debug("{Prefix}Found money: {value}", logPrefix, moneyAmount);
+                Log.Information("{Prefix}Found money: {value}", logPrefix, moneyAmount);
                 return moneyAmount;
             }
             else
@@ -326,8 +331,12 @@ namespace SnowRunner_Tool
         }
         private async Task<bool> MetroMessage(string title, string message)
         {
+            string[] answer = { "Fine", "OK", "Make it so", "Hmmm", "Okay" };
+            Random r = new Random();
+            int rInt = r.Next(0, answer.Length);
+            string a = answer[rInt];
             var dialogSettings = new MetroDialogSettings();
-            dialogSettings.AffirmativeButtonText = "Fine";
+            dialogSettings.AffirmativeButtonText = a;
 
             var dialogResult = await this.ShowMessageAsync(title,
                 message,
@@ -352,7 +361,7 @@ namespace SnowRunner_Tool
                 Properties.Settings.Default.graylog = false;
             }
             Properties.Settings.Default.Save();
-            _ = MetroMessage("Hey trucker", "You have to restart the application to activate the new setting.");
+            _ = MetroMessage("Hey trucker", "You have to restart the app to activate the new setting.");
         }
     }
 }

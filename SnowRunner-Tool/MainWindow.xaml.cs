@@ -15,6 +15,8 @@ using Serilog;
 using Serilog.Sinks.Graylog;
 using CommandLine;
 using System.Linq;
+using System.Windows.Documents;
+using System.Diagnostics;
 
 namespace SnowRunner_Tool
 {
@@ -30,7 +32,7 @@ namespace SnowRunner_Tool
         private string @ThirdPartyBackupDir;
         private string @SRSaveGameDir;
         private string guid;
-        private readonly string aVersion= System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        private readonly string aVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private string logPrefix;
         private bool enableRemoteLogging;
 
@@ -67,20 +69,20 @@ namespace SnowRunner_Tool
                                         HostnameOrAddress = "markus.medisoftware.org",
                                         Port = 12201
                                     }
-                                    ).CreateLogger(); 
+                                    ).CreateLogger();
             }
             else
             {
                 cbLogging.IsChecked = false;
             }
             Log.Logger = myLog;
-            
+
             SRBaseDir = findBaseDirectory();
             SRProfile = findProfileName();
             @MyBackupDir = Directory.GetParent(SRBaseDir) + @"\SRToolBackup";
             @SRBackupDir = SRBaseDir + @"\storage\BackupSlots\" + SRProfile;
             @SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
-            
+
             Log.Information(logPrefix + "Program started");
             Log.Debug(logPrefix + "SRBaseDir: " + SRBaseDir);
             Log.Debug(logPrefix + "SRProfile: " + SRProfile);
@@ -96,6 +98,7 @@ namespace SnowRunner_Tool
             _ = MetroMessage("Heads Up", "This tool creates backups of your current SnowRunner save game whenever changes are made.\n\n");
             txtAmount.Text = getMoney();
         }
+
 
         private string genGuid()
         {
@@ -137,7 +140,7 @@ namespace SnowRunner_Tool
         private List<Backup> getOtherBackups(string directory, string backupType)
         {
             Log.Information("{Prefix}Reading other backups from {directory}", logPrefix, directory);
-            List <Backup> backups = new List<Backup>();
+            List<Backup> backups = new List<Backup>();
             string[] fileEntries = Directory.GetFiles(directory);
             Log.Debug(logPrefix + fileEntries.Length.ToString() + " files found.");
             foreach (string f in fileEntries)
@@ -181,7 +184,7 @@ namespace SnowRunner_Tool
             foreach (string subdirectory in subdirectoryEntries)
             {
                 Log.Debug(logPrefix + "Checking " + subdirectory);
-                if (! subdirectory.Contains("backupSlots"))
+                if (!subdirectory.Contains("backupSlots"))
                 {
                     // Check if subdirectory is hex string
                     string dirName = new DirectoryInfo(subdirectory).Name;
@@ -203,7 +206,7 @@ namespace SnowRunner_Tool
             return p;
         }
 
-        
+
         private void RestoreBackup_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = (MenuItem)sender;
@@ -249,7 +252,7 @@ namespace SnowRunner_Tool
             string startPath = SRSaveGameDir;
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss", CultureInfo.CurrentCulture);
             string zipPath = MyBackupDir + @"\backup" + timestamp + ".zip";
-            
+
             try
             {
                 ZipFile.CreateFromDirectory(startPath, zipPath);
@@ -370,7 +373,7 @@ namespace SnowRunner_Tool
 
             return false;
         }
-        
+
         private void CheckBox_Click(object sender, RoutedEventArgs e)
         {
             if (cbLogging.IsChecked == true)
@@ -384,5 +387,31 @@ namespace SnowRunner_Tool
             Properties.Settings.Default.Save();
             _ = MetroMessage("Hey trucker", "You have to restart the app to activate the new setting.");
         }
+
+        private void MnuAbout_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://github.com/elpatron68/SnowRunner-Tool");
+        }
+
+        private void MnuLatestVersion_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://github.com/elpatron68/SnowRunner-Tool/releases/latest");
+        }
+
+        private void MnuExit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void MnuIssues_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://github.com/elpatron68/SnowRunner-Tool/issues");
+        }
+
+        private void MnuSRTLicense_Click(object sender, RoutedEventArgs e)
+        {
+            _ = MetroMessage("License", "DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\n\nDO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\nTERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION\n\n0. You just DO WHAT THE FUCK YOU WANT TO.");
+        }
+
     }
 }

@@ -11,16 +11,16 @@ The *SnowRunner-Tool* does nothing that you could not do in a manual way, but it
 ## Features
 
 *SnowRunner-Tool* lets you
-- restore a saved game from the game´s backup repository,
-- create backups of the current game state and
+- create backups of the current game state,
+- restore a saved game from the game´s backup repository, a backup made with this tool or a directory containing 3rd party backups as Zip files and
 - cheat the amount of money you have in your pocket.
 
 ![SnowRunner-Tool](images/SnowRunner-Tool_Screenshot.png)
 
 ## Installation
 
-1. Microsoft .NET Framework 4.7.2. **must be installed** for *SnowRunner-Tool* to start. It should deliver with Windows Updates, but it is not a mandatory update. You can download .NET Framework 4.7.2 [here](http://go.microsoft.com/fwlink/?linkid=863262).
-2. Download the latest version from [Github Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) or [mod.io](https://snowrunner.mod.io/snowrunner-tool/#15370) and unzip the files to a location of your choice. *Never download from any other website*!
+1. Microsoft .NET Framework 4.7.2. **must be installed** for *SnowRunner-Tool* to start! It should deliver with Windows Updates, but it is not a mandatory update. You can download .NET Framework 4.7.2 [here](http://go.microsoft.com/fwlink/?linkid=863262).
+2. Download the latest version from [Github Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) or [mod.io](https://snowrunner.mod.io/snowrunner-tool/#15370) and unzip the files to a location of your choice. **Never download the file from any other website**!
 3. Start `SnowRunner-Tool.exe` or create a desktop shortcut. Windows will warn you about using suspicious software as this program is not signed with a valid certificate. You have to accept this at the first start.
 
 

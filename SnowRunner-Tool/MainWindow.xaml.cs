@@ -331,12 +331,11 @@ namespace SnowRunner_Tool
         }
         private async Task<bool> MetroMessage(string title, string message)
         {
-            string[] answer = { "Fine", "OK", "Make it so", "Hmmm", "Okay" };
+            string[] answers = { "Fine", "OK", "Make it so", "Hmmm", "Okay", "Hoot" };
             Random r = new Random();
-            int rInt = r.Next(0, answer.Length);
-            string a = answer[rInt];
+            int rInt = r.Next(0, answers.Length);
             var dialogSettings = new MetroDialogSettings();
-            dialogSettings.AffirmativeButtonText = a;
+            dialogSettings.AffirmativeButtonText = answers[rInt];
 
             var dialogResult = await this.ShowMessageAsync(title,
                 message,

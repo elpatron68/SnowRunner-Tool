@@ -17,11 +17,12 @@ The *SnowRunner-Tool* does nothing that you could not do in a manual way, but it
 
 ![SnowRunner-Tool](images/SnowRunner-Tool_Screenshot.png)
 
-# Installation
+## Installation
 
 1. Microsoft .NET Framework 4.7.2. **must be installed** for *SnowRunner-Tool* to start. It should deliver with Windows Updates, but it is not a mandatory update. You can download .NET Framework 4.7.2 [here](http://go.microsoft.com/fwlink/?linkid=863262).
 2. Download the latest version from [Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) and unzip the files to a location of your choice.
 3. Start `SnowRunner-Tool.exe` or create a desktop shortcut. Windows will warn you about using suspicious software as this program is not signed with a valid certificate. You have to accept this at the first start.
+
 
 ## Uninstall
 
@@ -35,13 +36,28 @@ You can manually create a backup of the current game state by clicking on *Backu
 
 Set the amount of money you´d like to have by entering a value and clicking the *Set money* button. Before changing the money in your save game, another backup will be created.
 
-Activate *Send log* if you wish to help the developer find bugs and add new features.
+Activate *Send log* if you wish to help the developer to find bugs and add new features. All log messages are sent to a private server and **don´t contain** any personal data like your IP address. *Remote logging is disabled by default*. Remote logging can also be enabled with the command line argument `-l` (see *Advanced*).
 
 ### Notes
 
 * After restoring a save game from a backup or after altering the money, the Epic Launcher detects locally changed files. You are asked if you want to upload local files into the cloud or download cloud files to your local disk. Choose *Upload local files*.
 * If *SnowRunner-Tool* does not start after double clicking, install Microsoft .NET Framework 4.7.2 (see *Installation* above).
 
+## Advanced
+
+*SnowRunner-Tool* has a few command line arguments. Just create a desktop shortcut for `SnowRunner-Tool.exe`, edit the properties and append the command line parameters to the field *Target* (see Screenshot).
+
+![](images/DesktopShortcutSettings.png)
+
+### Command line arguments
+
+`-i <Path-to-3rd-Party-Backup>`
+
+Imports 3rd party backups. The directory must contain backups from the save game directory as **Zip files**. You can use a Powershell [script](https://forums.focus-home.com/user/grimdanfango) to create backups in regular intervals while you are playing the game. *SnowRunner-Tool* lists these backups and lets you restore them with one click.
+
+`-l`
+
+Enables remote logging and makes the dev happy.
 
 ## Useful links
 

@@ -32,6 +32,7 @@ namespace SnowRunner_Tool
         private string guid;
         private readonly string aVersion= System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private string logPrefix;
+        private bool enableRemoteLogging;
 
         public MainWindow()
         {
@@ -45,6 +46,10 @@ namespace SnowRunner_Tool
                        {
                            @ThirdPartyBackupDir = o.ThirdPartyDirectory;
                        }
+                       if (o.EnableLogging == true)
+                       {
+                           enableRemoteLogging = true;
+                       }
                    });
             guid = genGuid();
             InitializeComponent();
@@ -53,7 +58,7 @@ namespace SnowRunner_Tool
             var myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
             logPrefix = guid + " v" + aVersion + " - ";
 
-            if (Properties.Settings.Default.graylog == true)
+            if (Properties.Settings.Default.graylog == true || enableRemoteLogging == true)
             {
                 cbLogging.IsChecked = true;
                 myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Graylog
@@ -327,7 +332,7 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         private string getMoney()
         {
-            Log.Debug("{Prefix}Reding money from save game", logPrefix);
+            Log.Debug("{Prefix}Reading money from save game", logPrefix);
             string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
             string s = File.ReadAllText(saveGameFile);
             string sPattern = @"\""money\""\:\d+";

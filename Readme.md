@@ -19,9 +19,11 @@ The *SnowRunner-Tool* does nothing that you could not do in a manual way, but it
 
 # Installation
 
-Download the latest version from [Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) and unzip the files to a location of your choice.
+(1) Microsoft .NET Framework 4.7.2. **must be installed** for *SnowRunner-Tool* to start. It should deliver with Windows Updates, but it is not a mandatory update. You can download .NET Framework 4.7.2 [here](http://go.microsoft.com/fwlink/?linkid=863262).
 
-Start `SnowRunner-Tool.exe` or create a desktop shortcut. Windows will warn you about using suspicious software as this program is not signed with a valid certificate. You have to accept this at the first start.
+(2) Download the latest version from [Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) and unzip the files to a location of your choice.
+
+(3) Start `SnowRunner-Tool.exe` or create a desktop shortcut. Windows will warn you about using suspicious software as this program is not signed with a valid certificate. You have to accept this at the first start.
 
 ## Uninstall
 
@@ -37,9 +39,11 @@ Set the amount of money you´d like to have by entering a value and clicking the
 
 Activate *Send log* if you wish to help the developer find bugs and add new features.
 
-### Note
+### Notes
 
-After restoring a save game from a backup or after altering the money, the Epic Launcher detects locally changed files. You are asked if you want to upload local files into the cloud or download cloud files to your local disk. Choose *Upload local files*.
+(1) After restoring a save game from a backup or after altering the money, the Epic Launcher detects locally changed files. You are asked if you want to upload local files into the cloud or download cloud files to your local disk. Choose *Upload local files*.
+
+(2) If *SnowRunner-Tool* does not start after double clicking, install Microsoft .NET Framework 4.7.2 (see *Installation* above).
 
 
 ## Useful links

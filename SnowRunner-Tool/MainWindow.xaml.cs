@@ -94,7 +94,6 @@ namespace SnowRunner_Tool
             dgBackups.AutoGenerateColumns = true;
             readBackups();
             sr_p.Content = SRBaseDir;
-            txtLogID.Text = guid;
             _ = MetroMessage("Heads Up", "This tool creates backups of your current SnowRunner save game whenever changes are made.\n\n");
             txtAmount.Text = getMoney();
         }
@@ -390,7 +389,7 @@ namespace SnowRunner_Tool
 
         private void MnuAbout_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://github.com/elpatron68/SnowRunner-Tool");
+            _ = MetroMessage("About", "SnowRunner-Tool\n\nVersion " + aVersion + "\n(c) 2020 elpatron68\nhttps://github.com/elpatron68/SnowRunner-Tool/");
         }
 
         private void MnuLatestVersion_Click(object sender, RoutedEventArgs e)
@@ -409,6 +408,13 @@ namespace SnowRunner_Tool
         {
             Process.Start("https://github.com/elpatron68/SnowRunner-Tool/issues");
         }
+
+        private void MnuSupportID_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(guid);
+            _ = MetroMessage("Support ID copied", "Your support ID has been copied to the clipboard. Make sure, \"Send log\" is activated when the problem occured before filing an issue.");
+        }
+
 
         private void MnuSRTLicense_Click(object sender, RoutedEventArgs e)
         {

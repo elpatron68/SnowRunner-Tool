@@ -13,6 +13,7 @@ using System.Globalization;
 using System.ComponentModel;
 using Serilog;
 using Serilog.Sinks.Graylog;
+using CommandLine;
 using System.Linq;
 
 namespace SnowRunner_Tool
@@ -26,13 +27,25 @@ namespace SnowRunner_Tool
         private string SRProfile;
         private string @SRBackupDir;
         private string @MyBackupDir;
+        private string @ThirdPartyBackupDir;
         private string @SRSaveGameDir;
         private string guid;
-        private string aVersion= System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        private readonly string aVersion= System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private string logPrefix;
 
         public MainWindow()
         {
+            // Command line options
+            // 3rd party backup directory
+            string[] args = Environment.GetCommandLineArgs();
+            Parser.Default.ParseArguments<Options>(args)
+                   .WithParsed<Options>(o =>
+                   {
+                       if (!string.IsNullOrEmpty(o.ThirdPartyDirectory))
+                       {
+                           @ThirdPartyBackupDir = o.ThirdPartyDirectory;
+                       }
+                   });
             guid = genGuid();
             InitializeComponent();
             
@@ -101,7 +114,11 @@ namespace SnowRunner_Tool
         private void readBackups()
         {
             var allBackups = getBackups();
-            allBackups.AddRange(getMyBackups());
+            allBackups.AddRange(getOtherBackups(MyBackupDir, "Tool-Backup"));
+            if (!string.IsNullOrEmpty(ThirdPartyBackupDir))
+            {
+                allBackups.AddRange(getOtherBackups(ThirdPartyBackupDir, "3rd party -Backup"));
+            }
             dgBackups.ItemsSource = allBackups;
             dgBackups.Items.SortDescriptions.Clear();
             dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
@@ -112,17 +129,17 @@ namespace SnowRunner_Tool
         /// Load backups made by SnorRunner-Tool
         /// </summary>
         /// <returns></returns>
-        private List<Backup> getMyBackups()
+        private List<Backup> getOtherBackups(string directory, string backupType)
         {
-            Log.Information(logPrefix + "Reading my backups");
+            Log.Information("{Prefix}Reading other backups from {directory}", logPrefix, directory);
             List <Backup> backups = new List<Backup>();
-            string[] fileEntries = Directory.GetFiles(MyBackupDir);
+            string[] fileEntries = Directory.GetFiles(directory);
             Log.Debug(logPrefix + fileEntries.Length.ToString() + " files found.");
             foreach (string f in fileEntries)
             {
                 string fName = new FileInfo(f).Name;
                 DateTime timestamp = File.GetCreationTime(f);
-                backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = "Tool-Backup" });
+                backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = backupType });
             }
             return backups;
         }
@@ -331,11 +348,11 @@ namespace SnowRunner_Tool
         }
         private async Task<bool> MetroMessage(string title, string message)
         {
-            string[] answers = { "Fine", "OK", "Make it so", "Hmmm", "Okay", "Hoot" };
+            string[] answers = { "Fine", "OK", "Make it so", "Hmmm", "Okay", "Hoot", "Ладно", "Хорошо", "d'accord", "Très bien", "Na gut", "Von mir aus" };
             Random r = new Random();
             int rInt = r.Next(0, answers.Length);
             var dialogSettings = new MetroDialogSettings();
-            dialogSettings.AffirmativeButtonText = answers[rInt];
+            dialogSettings.AffirmativeButtonText = answers[rInt] + " [OK]";
 
             var dialogResult = await this.ShowMessageAsync(title,
                 message,

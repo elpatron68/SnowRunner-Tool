@@ -83,12 +83,12 @@ namespace SnowRunner_Tool
             @SRBackupDir = SRBaseDir + @"\storage\BackupSlots\" + SRProfile;
             @SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
 
-            Log.Information(logPrefix + "Program started");
-            Log.Debug(logPrefix + "SRBaseDir: " + SRBaseDir);
-            Log.Debug(logPrefix + "SRProfile: " + SRProfile);
-            Log.Debug(logPrefix + "MyBackupDir: " + @MyBackupDir);
-            Log.Debug(logPrefix + "SRBackupDir: " + @SRBackupDir);
-            Log.Debug(logPrefix + "SRSaveGameDir: " + @SRSaveGameDir);
+            Log.Information("{Prefix}Program started", logPrefix);
+            Log.Debug("{Prefix}SRBaseDir:{dir} ", logPrefix, SRBaseDir);
+            Log.Debug("{Prefix}SRProfile: {profile}", logPrefix, SRProfile);
+            Log.Debug("{Prefix}MyBackupDir: {dir}", logPrefix, MyBackupDir);
+            Log.Debug("{Prefix}SRBackupDir: {dir}", logPrefix, SRBackupDir);
+            Log.Debug("{Prefix}SRSaveGameDir: {dir}", logPrefix, SRSaveGameDir);
 
             // Fill Datagrid
             dgBackups.AutoGenerateColumns = true;
@@ -142,7 +142,7 @@ namespace SnowRunner_Tool
             Log.Information("{Prefix}Reading other backups from {directory}", logPrefix, directory);
             List<Backup> backups = new List<Backup>();
             string[] fileEntries = Directory.GetFiles(directory);
-            Log.Debug(logPrefix + fileEntries.Length.ToString() + " files found.");
+            Log.Debug("{Prefix}{amount} files found.", logPrefix, fileEntries.Length.ToString());
             foreach (string f in fileEntries)
             {
                 string fName = new FileInfo(f).Name;
@@ -158,10 +158,10 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         private List<Backup> getBackups()
         {
-            Log.Information(logPrefix + "Reading game backups");
+            Log.Information("{Prefix}Reading game backups", logPrefix);
             List<Backup> backups = new List<Backup>();
             string[] subdirectoryEntries = Directory.GetDirectories(@SRBackupDir);
-            Log.Debug(logPrefix + subdirectoryEntries.Length.ToString() + " subdirectories found.");
+            Log.Debug("{Prefix}{amount} subdirectories found.", logPrefix, subdirectoryEntries.Length.ToString());
             foreach (string subdirectory in subdirectoryEntries)
             {
                 string dir = new DirectoryInfo(subdirectory).Name;
@@ -183,7 +183,7 @@ namespace SnowRunner_Tool
             string pattern = @"^[A-Fa-f0-9]+$";
             foreach (string subdirectory in subdirectoryEntries)
             {
-                Log.Debug(logPrefix + "Checking " + subdirectory);
+                Log.Debug("{Prefix}Checking {dir}", logPrefix, subdirectory);
                 if (!subdirectory.Contains("backupSlots"))
                 {
                     // Check if subdirectory is hex string
@@ -395,6 +395,8 @@ namespace SnowRunner_Tool
 
         private void MnuLatestVersion_Click(object sender, RoutedEventArgs e)
         {
+            // /owner/name/releases/latest/download/asset-name.zip
+            // https://github.com/elpatron68/SnowRunner-Tool/releases/latest/Release.zip
             Process.Start("https://github.com/elpatron68/SnowRunner-Tool/releases/latest");
         }
 

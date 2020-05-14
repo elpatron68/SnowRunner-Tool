@@ -36,7 +36,7 @@ You can manually create a backup of the current game state by clicking on *Backu
 
 Set the amount of money you´d like to have by entering a value and clicking the *Set money* button. Before changing the money in your save game, another backup will be created.
 
-Activate *Send log* if you wish to help the developer to find bugs and add new features. All log messages are sent to a private server and **don´t contain** any personal data like your IP address. *Remote logging is disabled by default*. Remote logging can also be enabled with the command line argument `-l` (see *Advanced*).
+Activate *Send log* if you wish to help the developer to find bugs and add new features. All log messages are sent to a private server and **don´t contain** any personal data like your IP address. *Remote logging is disabled by default*. Remote logging can also be enabled with the command line argument `-l` (see *Advanced*). If you need help from the developer, open an issue at [Github](https://github.com/elpatron68/SnowRunner-Tool/issues), describe the problem and post your Support ID shown in the main window.
 
 ### Notes
 
@@ -88,5 +88,5 @@ Version 2, December 2004
  
  - Icons from https://material.io/ ([Apache License](https://github.com/google/material-design-icons/blob/master/LICENSE))
  - WPF theme from https://mahapps.com/ ([MIT License](https://github.com/MahApps/MahApps.Metro/blob/develop/LICENSE))
- 
+ - [Command Line Parser Library for CLR and NetStandard](https://github.com/commandlineparser/commandline) (MIT License)
  

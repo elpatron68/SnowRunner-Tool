@@ -139,10 +139,10 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         private List<Backup> getOtherBackups(string directory, string backupType)
         {
-            Log.Information("{guid} {version} Reading other backups from {BackupDirectory}", guid, aVersion, directory);
+            Log.Information("{guid} {version} {OtherBackupDirectory} {BackupType}", guid, aVersion, directory, backupType);
             List<Backup> backups = new List<Backup>();
             string[] fileEntries = Directory.GetFiles(directory);
-            Log.Debug("{guid} {version} {FilesFound}.", guid, aVersion, fileEntries.Length.ToString());
+            Log.Debug("{guid} {version} {BackupFilesFound}.", guid, aVersion, fileEntries.Length.ToString());
             foreach (string f in fileEntries)
             {
                 string fName = new FileInfo(f).Name;
@@ -227,7 +227,7 @@ namespace SnowRunner_Tool
             if (type == "Game-Backup")
             {
                 string source = SRBackupDir + @"\" + backupItem;
-                Log.Debug("{guid} {version} {RestoreSource} to {RestoreDestination}", guid, aVersion, source, @SRSaveGameDir);
+                Log.Debug("{guid} {version} {RestoreSource} {RestoreDestination}", guid, aVersion, source, @SRSaveGameDir);
                 dCopy(source, SRSaveGameDir, false, true);
             }
             else
@@ -282,7 +282,7 @@ namespace SnowRunner_Tool
                 }
                 catch (IOException ex)
                 {
-                    Log.Warning("{guid} {version} {CopyFileToDestination} {message}", guid, aVersion, destDirName, ex.Message);
+                    Log.Warning("{guid} {version} {CopyFileToDestination} {Exception}", guid, aVersion, destDirName, ex.Message);
                 }
         }
 

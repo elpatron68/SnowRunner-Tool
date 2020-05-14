@@ -12,7 +12,7 @@ The *SnowRunner-Tool* does nothing that you could not do in a manual way, but it
 
 *SnowRunner-Tool* lets you
 - restore a saved game from the game´s backup repository,
-- create backups of the current games state and
+- create backups of the current game state and
 - cheat the amount of money you have in your pocket.
 
 ![SnowRunner-Tool](images/SnowRunner-Tool_Screenshot.png)

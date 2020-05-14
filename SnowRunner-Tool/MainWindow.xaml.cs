@@ -11,6 +11,8 @@ using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
 using System.Globalization;
 using System.ComponentModel;
+using Serilog;
+using Serilog.Sinks.Graylog;
 
 namespace SnowRunner_Tool
 {
@@ -24,23 +26,59 @@ namespace SnowRunner_Tool
         private string @SRBackupDir;
         private string @MyBackupDir;
         private string @SRSaveGameDir;
+        private string guid;
+        private string aVersion= System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        private const string @guidFile = @".\SnowRunner-Tool.guid";
 
         public MainWindow()
         {
+            guid = genGuid();
             InitializeComponent();
-            SRBaseDir = findBaseDirectory();
+            
+            // Initialize Logging
+            var myLog = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+            if (Properties.Settings.Default.graylog == true)
+            {
+                cbLogging.IsChecked = true;
+                myLog = new LoggerConfiguration().WriteTo.Graylog
+                                    (new GraylogSinkOptions
+                                    {
+                                        HostnameOrAddress = "markus.medisoftware.org",
+                                        Port = 12201
+                                    }
+                                    ).CreateLogger(); ;
+            }
 
+            SRBaseDir = findBaseDirectory();
             SRProfile = findProfileName(SRBaseDir);
             @MyBackupDir = Directory.GetParent(SRBaseDir) + @"\SRToolBackup";
             @SRBackupDir = SRBaseDir + @"\storage\BackupSlots\" + SRProfile;
             @SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
+            
+            myLog.Information(guid + " " + aVersion + " " + " started");
 
             // Fill Datagrid
             dgBackups.AutoGenerateColumns = true;
             readBackups();
             sr_p.Content = SRBaseDir;
+            txtLogID.Text = guid;
             _ = MetroMessage("Heads Up", "This tool creates backups of your current SnowRunner save game whenever changes are made.\n\n");
             txtAmount.Text = getMoney();
+        }
+
+        private string genGuid()
+        {
+            if (!File.Exists(guidFile))
+            {
+                string g = Guid.NewGuid().ToString();
+                File.WriteAllText(guidFile, g);
+                return g;
+            }
+            else
+            {
+                string g = File.ReadAllText(guidFile);
+                return g;
+            }
         }
 
         /// <summary>
@@ -264,6 +302,20 @@ namespace SnowRunner_Tool
             }
 
             return false;
+        }
+        
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbLogging.IsChecked == true)
+            {
+                Properties.Settings.Default.graylog = true;
+            }
+            else
+            {
+                Properties.Settings.Default.graylog = false;
+            }
+            Properties.Settings.Default.Save();
+            _ = MetroMessage("Hey trucker", "You have to restart the application to activate the new setting.");
         }
     }
 }

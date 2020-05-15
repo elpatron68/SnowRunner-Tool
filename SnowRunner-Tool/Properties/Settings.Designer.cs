@@ -46,5 +46,17 @@ namespace SnowRunner_Tool.Properties {
                 this["guid"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool usagelog {
+            get {
+                return ((bool)(this["usagelog"]));
+            }
+            set {
+                this["usagelog"] = value;
+            }
+        }
     }
 }

@@ -18,6 +18,10 @@ using System.Linq;
 using System.Windows.Documents;
 using System.Diagnostics;
 using Serilog.Events;
+using System.Windows.Media.Imaging;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Windows.Media;
 
 namespace SnowRunner_Tool
 {
@@ -34,9 +38,8 @@ namespace SnowRunner_Tool
         private string @SRSaveGameDir;
         private string guid;
         private readonly string aVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        // private string logPrefix;
-        // private MessageTemplate logPrefix;
-        private bool enableRemoteLogging;
+        private bool enableDebugLogging;
+        private bool enableUsageLogging;
 
         public MainWindow()
         {
@@ -52,7 +55,8 @@ namespace SnowRunner_Tool
                        }
                        if (o.EnableLogging == true)
                        {
-                           enableRemoteLogging = true;
+                           enableDebugLogging = true;
+                           enableUsageLogging = true;
                        }
                    });
             guid = genGuid();
@@ -61,9 +65,8 @@ namespace SnowRunner_Tool
             // Initialize Logging
             var myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
 
-            if (Properties.Settings.Default.graylog == true || enableRemoteLogging == true)
+            if (Properties.Settings.Default.graylog == true || enableDebugLogging == true)
             {
-                cbLogging.IsChecked = true;
                 myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Graylog
                                     (new GraylogSinkOptions
                                     {
@@ -71,11 +74,20 @@ namespace SnowRunner_Tool
                                         Port = 12201
                                     }
                                     ).CreateLogger();
+                enableDebugLogging = true;
             }
-            else
+            else if (Properties.Settings.Default.usagelog == true)
             {
-                cbLogging.IsChecked = false;
+                myLog = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Graylog
+                                    (new GraylogSinkOptions
+                                    {
+                                        HostnameOrAddress = "markus.medisoftware.org",
+                                        Port = 12201
+                                    }
+                                    ).CreateLogger();
+                enableUsageLogging = true;
             }
+            
             Log.Logger = myLog;
 
             SRBaseDir = findBaseDirectory();
@@ -95,8 +107,24 @@ namespace SnowRunner_Tool
             dgBackups.AutoGenerateColumns = true;
             readBackups();
             sr_p.Content = SRBaseDir;
-            _ = MetroMessage("Heads Up", "This tool creates backups of your current SnowRunner save game whenever changes are made.\n\n");
+            _ = MetroMessage("Heads Up", "This tool creates backups of your current SnowRunner save game whenever changes are made.");
             txtAmount.Text = getMoney();
+
+            // Get log settings and set icons for Menuitems
+            if (Properties.Settings.Default.graylog == true || enableDebugLogging == true)
+            {
+                MnEnableLog.Icon = new System.Windows.Controls.Image
+                {
+                    Source = new BitmapImage(new Uri("images/baseline_report_black_18dp.png", UriKind.Relative))
+                };
+            }
+            if (Properties.Settings.Default.usagelog == true || enableUsageLogging == true)
+            {
+                MnUsageLog.Icon = new System.Windows.Controls.Image
+                {
+                    Source = new BitmapImage(new Uri("images/baseline_report_off_black_18dp.png", UriKind.Relative))
+                };
+            }
         }
 
 
@@ -373,20 +401,6 @@ namespace SnowRunner_Tool
             return false;
         }
 
-        private void CheckBox_Click(object sender, RoutedEventArgs e)
-        {
-            if (cbLogging.IsChecked == true)
-            {
-                Properties.Settings.Default.graylog = true;
-            }
-            else
-            {
-                Properties.Settings.Default.graylog = false;
-            }
-            Properties.Settings.Default.Save();
-            _ = MetroMessage("Hey trucker", "You have to restart the app to activate the new setting.");
-        }
-
         private void MnuAbout_Click(object sender, RoutedEventArgs e)
         {
             _ = MetroMessage("About", "SnowRunner-Tool\n\nVersion " + aVersion + "\n(c) 2020 elpatron68\nhttps://github.com/elpatron68/SnowRunner-Tool/");
@@ -412,7 +426,7 @@ namespace SnowRunner_Tool
         private void MnuSupportID_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(guid);
-            _ = MetroMessage("Support ID copied", "Your support ID has been copied to the clipboard. Make sure, \"Send log\" is activated when the problem occured before filing an issue.");
+            _ = MetroMessage("Support ID copied", "Your support ID has been copied to the clipboard. Make sure, \"Send log\" is activated when the problem occured before filing an issue.\n\nSupport ID: " + guid);
         }
 
 
@@ -423,8 +437,56 @@ namespace SnowRunner_Tool
 
         private void MnuReload_Click(object sender, RoutedEventArgs e)
         {
-            readBackups();            
+            readBackups();
+            getMoney();
         }
 
+        private void MnuToggleRemoteLog_Click(object sender, RoutedEventArgs e)
+        {
+            if (Properties.Settings.Default.graylog == false)
+            {
+                enableDebugLogging = true;
+                Properties.Settings.Default.graylog = true;
+                MnEnableLog.Icon = new System.Windows.Controls.Image
+                {
+                    Source = new BitmapImage(new Uri("images/baseline_report_black_18dp.png", UriKind.Relative))
+                };
+            }
+            else
+            {
+                enableDebugLogging = false;
+                Properties.Settings.Default.graylog = false;
+                MnEnableLog.Icon = new System.Windows.Controls.Image
+                {
+                    Source = new BitmapImage(new Uri("images/baseline_report_off_black_18dp.png", UriKind.Relative))
+                };
+            }
+            Properties.Settings.Default.Save();
+            _ = MetroMessage("Hey trucker", "You have to restart the app to activate the new setting.");
+        }
+
+        private void MnuReportUsage_Click(object sender, RoutedEventArgs e)
+        {
+            if (Properties.Settings.Default.usagelog == false)
+            {
+                enableUsageLogging = true;
+                Properties.Settings.Default.usagelog = true;
+                MnUsageLog.Icon = new System.Windows.Controls.Image
+                {
+                    Source = new BitmapImage(new Uri("images/baseline_report_black_18dp.png", UriKind.Relative))
+                };
+            }
+            else
+            {
+                enableUsageLogging = false;
+                Properties.Settings.Default.usagelog = false;
+                MnUsageLog.Icon = new System.Windows.Controls.Image
+                {
+                    Source = new BitmapImage(new Uri("images/baseline_report_off_black_18dp.png", UriKind.Relative))
+                };
+            }
+            Properties.Settings.Default.Save();
+            _ = MetroMessage("Hey trucker", "You have to restart the app to activate the new setting.");
+        }
     }
 }

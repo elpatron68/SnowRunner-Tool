@@ -36,12 +36,25 @@ You can manually create a backup of the current game state by clicking on *Backu
 
 Set the amount of money you´d like to have by entering a value and clicking the *Set money* button. Before changing the money in your save game file, another fresh backup will be created.
 
-Activate *Send log* if you wish to help the developer to find bugs and add new features. All log messages are sent to a private server and **don´t contain** any personal data like your IP address. *Remote logging is disabled by default*. Remote logging can also be enabled with the command line argument `-l` (see *Advanced*). If you need help from the developer, open an issue at [Github](https://github.com/elpatron68/SnowRunner-Tool/issues), describe the problem and post your Support ID shown in the main window.
+## Settings
 
-### Notes
+In the *Settings* menu usage reporting and remote logging can en- and disabled. A check mark will be displayed if the option is enabled.
 
-* After restoring a save game from a backup or after altering the money, the *Epic Launcher* detects locally changed files. You are asked if you want to upload local files into the cloud or download cloud files to your local disk. Choose *Upload local files*.
+Remote logging sends debug information to a private log server. Enable it if you have a problem with *SnowRunner-Tool*. If you need help from the developer, open an issue at [Github](https://github.com/elpatron68/SnowRunner-Tool/issues), describe the problem and post your Support ID (shown under *Help* - *Support ID*).
+
+Usage reporting sends small datagrams when one of these events occur:
+- User starts *SnowRunner-Tool* 
+- User Restores a Backup
+- User changes money (just the event, not the value you entered)
+
+Both reporting options require an active internet connection. No personal data will be sent. Usage reporting helps the developer to decide, if this tool will be expanded in the future.
+
+Debug logging is disabled by default. Usage reporting is enabled by default.
+
+## Notes
+
 * If *SnowRunner-Tool* does not start after double clicking, install Microsoft .NET Framework 4.7.2 (see *Installation* above).
+* After restoring a save game from a backup or after altering the money, the *Epic Launcher* detects locally changed files. You are asked if you want to upload local files into the cloud or download cloud files to your local disk. Choose *Upload local files*.![Epic Launcher](images/epic-cloud.png)
 
 ## Advanced
 

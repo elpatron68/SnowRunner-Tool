@@ -96,7 +96,7 @@ namespace SnowRunner_Tool
             @SRBackupDir = SRBaseDir + @"\storage\BackupSlots\" + SRProfile;
             @SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
 
-            Log.Information("{guid} {version} Program started", guid, aVersion);
+            Log.Information("{guid} {version} App started", guid, aVersion);
             Log.Debug("{guid} {version} {SRBaseDir} ", guid, aVersion, SRBaseDir);
             Log.Debug("{guid} {version} {SRProfile}", guid, aVersion, SRProfile);
             Log.Debug("{guid} {version} {MyBackupDir}", guid, aVersion, MyBackupDir);
@@ -115,14 +115,14 @@ namespace SnowRunner_Tool
             {
                 MnEnableLog.Icon = new System.Windows.Controls.Image
                 {
-                    Source = new BitmapImage(new Uri("images/baseline_report_black_18dp.png", UriKind.Relative))
+                    Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
                 };
             }
-            if (Properties.Settings.Default.usagelog == true || enableUsageLogging == true)
+            if (Properties.Settings.Default.usagelog == true)
             {
                 MnUsageLog.Icon = new System.Windows.Controls.Image
                 {
-                    Source = new BitmapImage(new Uri("images/baseline_report_off_black_18dp.png", UriKind.Relative))
+                    Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
                 };
             }
         }
@@ -167,7 +167,7 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         private List<Backup> getOtherBackups(string directory, string backupType)
         {
-            Log.Information("{guid} {version} {OtherBackupDirectory} {BackupType}", guid, aVersion, directory, backupType);
+            Log.Debug("{guid} {version} {OtherBackupDirectory} {BackupType}", guid, aVersion, directory, backupType);
             List<Backup> backups = new List<Backup>();
             string[] fileEntries = Directory.GetFiles(directory);
             Log.Debug("{guid} {version} {BackupFilesFound}.", guid, aVersion, fileEntries.Length.ToString());
@@ -186,7 +186,7 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         private List<Backup> getBackups()
         {
-            Log.Information("{guid} {version} Reading game backups", guid, aVersion);
+            Log.Debug("{guid} {version} Reading game backups", guid, aVersion);
             List<Backup> backups = new List<Backup>();
             string[] subdirectoryEntries = Directory.GetDirectories(@SRBackupDir);
             Log.Debug("{guid} {version} {SubDirCount}", guid, aVersion, subdirectoryEntries.Length.ToString());
@@ -252,6 +252,7 @@ namespace SnowRunner_Tool
         /// <param name="backupItem"></param>
         private void restoreBackup(string backupItem, string type)
         {
+            Log.Information("{guid} {version} Restores backup", guid, aVersion);
             if (type == "Game-Backup")
             {
                 string source = SRBackupDir + @"\" + backupItem;
@@ -272,7 +273,7 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         private string backupCurrentSavegame()
         {
-            Log.Information("{guid} {version}Starting backup of current save game", guid, aVersion);
+            Log.Debug("{guid} {version}Starting backup of current save game", guid, aVersion);
             if (!Directory.Exists(MyBackupDir))
             {
                 Directory.CreateDirectory(MyBackupDir);
@@ -352,6 +353,7 @@ namespace SnowRunner_Tool
         /// </summary>
         private void saveMoney()
         {
+            Log.Information("{guid} {version} Set money", guid, aVersion);
             backupCurrentSavegame();
             string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
             string amount = txtAmount.Text;
@@ -371,7 +373,7 @@ namespace SnowRunner_Tool
             {
                 moneyAmount = Regex.Match(s, sPattern).Value;
                 moneyAmount = moneyAmount.Replace("\"money\":", null);
-                Log.Information("{guid} {version} {MoneyFromSavegame}", guid, aVersion, moneyAmount);
+                Log.Debug("{guid} {version} {MoneyFromSavegame}", guid, aVersion, moneyAmount);
                 return moneyAmount;
             }
             else
@@ -449,16 +451,7 @@ namespace SnowRunner_Tool
                 Properties.Settings.Default.graylog = true;
                 MnEnableLog.Icon = new System.Windows.Controls.Image
                 {
-                    Source = new BitmapImage(new Uri("images/baseline_report_black_18dp.png", UriKind.Relative))
-                };
-            }
-            else
-            {
-                enableDebugLogging = false;
-                Properties.Settings.Default.graylog = false;
-                MnEnableLog.Icon = new System.Windows.Controls.Image
-                {
-                    Source = new BitmapImage(new Uri("images/baseline_report_off_black_18dp.png", UriKind.Relative))
+                    Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
                 };
             }
             Properties.Settings.Default.Save();
@@ -473,16 +466,7 @@ namespace SnowRunner_Tool
                 Properties.Settings.Default.usagelog = true;
                 MnUsageLog.Icon = new System.Windows.Controls.Image
                 {
-                    Source = new BitmapImage(new Uri("images/baseline_report_black_18dp.png", UriKind.Relative))
-                };
-            }
-            else
-            {
-                enableUsageLogging = false;
-                Properties.Settings.Default.usagelog = false;
-                MnUsageLog.Icon = new System.Windows.Controls.Image
-                {
-                    Source = new BitmapImage(new Uri("images/baseline_report_off_black_18dp.png", UriKind.Relative))
+                    Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
                 };
             }
             Properties.Settings.Default.Save();

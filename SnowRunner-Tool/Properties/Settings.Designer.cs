@@ -58,5 +58,17 @@ namespace SnowRunner_Tool.Properties {
                 this["usagelog"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SRbasedir {
+            get {
+                return ((string)(this["SRbasedir"]));
+            }
+            set {
+                this["SRbasedir"] = value;
+            }
+        }
     }
 }

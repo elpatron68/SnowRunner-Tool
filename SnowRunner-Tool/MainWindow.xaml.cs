@@ -22,6 +22,8 @@ using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Media;
+using MahApps.Metro.Converters;
+using SnowRunner_Tool.Properties;
 
 namespace SnowRunner_Tool
 {
@@ -39,7 +41,6 @@ namespace SnowRunner_Tool
         private string guid;
         private readonly string aVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private bool enableDebugLogging;
-        private bool enableUsageLogging;
 
         public MainWindow()
         {
@@ -56,16 +57,15 @@ namespace SnowRunner_Tool
                        if (o.EnableLogging == true)
                        {
                            enableDebugLogging = true;
-                           enableUsageLogging = true;
                        }
                    });
             guid = genGuid();
             InitializeComponent();
-            
+
             // Initialize Logging
             var myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
 
-            if (Properties.Settings.Default.graylog == true || enableDebugLogging == true)
+            if (Settings.Default.graylog == true || enableDebugLogging == true)
             {
                 myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Graylog
                                     (new GraylogSinkOptions
@@ -76,7 +76,7 @@ namespace SnowRunner_Tool
                                     ).CreateLogger();
                 enableDebugLogging = true;
             }
-            else if (Properties.Settings.Default.usagelog == true)
+            else if (Settings.Default.usagelog == true)
             {
                 myLog = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Graylog
                                     (new GraylogSinkOptions
@@ -85,61 +85,86 @@ namespace SnowRunner_Tool
                                         Port = 12201
                                     }
                                     ).CreateLogger();
-                enableUsageLogging = true;
             }
-            
             Log.Logger = myLog;
 
             SRBaseDir = findBaseDirectory();
+            if (!Directory.Exists(SRBaseDir)) 
+            { 
+                if (string.IsNullOrEmpty(Settings.Default.SRbasedir))
+                {
+                    InputGamePath gamePath = new InputGamePath();
+                    gamePath.ShowDialog();
+                    SRBaseDir = gamePath.TxSaveGamePath.Text;
+                    Settings.Default.SRbasedir = SRBaseDir;
+                    Settings.Default.Save();
+                }
+                else
+                {
+                    SRBaseDir = Settings.Default.SRbasedir;
+                }
+            }
+
+            if (string.IsNullOrEmpty(SRBaseDir))
+            {
+                Log.Error("{guid} {version} {SRBaseDir}", guid, aVersion, SRBaseDir);
+            }
             SRProfile = findProfileName();
+            if (string.IsNullOrEmpty(SRProfile))
+            {
+                Log.Error("{guid} {version} {SRProfile]", guid, aVersion, SRProfile);
+            }
             @MyBackupDir = Directory.GetParent(SRBaseDir) + @"\SRToolBackup";
             @SRBackupDir = SRBaseDir + @"\storage\BackupSlots\" + SRProfile;
             @SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
 
             Log.Information("{guid} {version} App started", guid, aVersion);
             Log.Debug("{guid} {version} {SRBaseDir} ", guid, aVersion, SRBaseDir);
-            Log.Debug("{guid} {version} {SRProfile}", guid, aVersion, SRProfile);
+            Log.Information("{guid} {version} {SRProfile}", guid, aVersion, SRProfile);
             Log.Debug("{guid} {version} {MyBackupDir}", guid, aVersion, MyBackupDir);
             Log.Debug("{guid} {version} {SRBackupDir}", guid, aVersion, SRBackupDir);
             Log.Debug("{guid} {version} }{SRSaveGameDir}", guid, aVersion, SRSaveGameDir);
 
-            // Fill Datagrid
-            dgBackups.AutoGenerateColumns = true;
-            readBackups();
-            sr_p.Content = SRBaseDir;
-            _ = MetroMessage("Heads Up", "This tool creates backups of your current SnowRunner save game whenever changes are made.");
-            txtAmount.Text = getMoney();
-
             // Get log settings and set icons for Menuitems
-            if (Properties.Settings.Default.graylog == true || enableDebugLogging == true)
+            if (Settings.Default.graylog == true || enableDebugLogging == true)
             {
                 MnEnableLog.Icon = new System.Windows.Controls.Image
                 {
                     Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
                 };
             }
-            if (Properties.Settings.Default.usagelog == true)
+            if (Settings.Default.usagelog == true)
             {
                 MnUsageLog.Icon = new System.Windows.Controls.Image
                 {
                     Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
                 };
             }
-        }
 
+            if (!string.IsNullOrEmpty(SRProfile))
+            {
+                sr_p.Content = SRBaseDir;
+                txtAmount.Text = getMoney();
+                this.Title = this.Title + " v" + aVersion;
+
+                // Fill Datagrid
+                dgBackups.AutoGenerateColumns = true;
+                _ = readBackups();
+            }
+        }
 
         private string genGuid()
         {
-            if (Properties.Settings.Default.guid == "")
+            if (Settings.Default.guid == "")
             {
                 string g = Guid.NewGuid().ToString();
-                Properties.Settings.Default.guid = g;
-                Properties.Settings.Default.Save();
+                Settings.Default.guid = g;
+                Settings.Default.Save();
                 return g;
             }
             else
             {
-                string g = Properties.Settings.Default.guid;
+                string g = Settings.Default.guid;
                 return g;
             }
         }
@@ -147,18 +172,31 @@ namespace SnowRunner_Tool
         /// <summary>
         /// Clear items in datagrid and (re)loads backups
         /// </summary>
-        private void readBackups()
+        private bool readBackups()
         {
             var allBackups = getBackups();
             allBackups.AddRange(getOtherBackups(MyBackupDir, "Tool-Backup"));
             if (!string.IsNullOrEmpty(ThirdPartyBackupDir))
             {
-                allBackups.AddRange(getOtherBackups(ThirdPartyBackupDir, "3rd party -Backup"));
+                if (Directory.Exists(ThirdPartyBackupDir))
+                {
+                    allBackups.AddRange(getOtherBackups(ThirdPartyBackupDir, "3rd party -Backup"));
+                }
             }
-            dgBackups.ItemsSource = allBackups;
-            dgBackups.Items.SortDescriptions.Clear();
-            dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
-            dgBackups.Items.Refresh();
+            if (allBackups.Count > 0)
+            {
+                dgBackups.ItemsSource = allBackups;
+                dgBackups.Items.SortDescriptions.Clear();
+                dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
+                dgBackups.Items.Refresh();
+                return true;
+            }
+            else
+            {
+                Log.Error("{guid} {version} No backups found!", guid, aVersion);
+                return false;
+            }
+            
         }
 
         /// <summary>
@@ -169,15 +207,23 @@ namespace SnowRunner_Tool
         {
             Log.Debug("{guid} {version} {OtherBackupDirectory} {BackupType}", guid, aVersion, directory, backupType);
             List<Backup> backups = new List<Backup>();
-            string[] fileEntries = Directory.GetFiles(directory);
-            Log.Debug("{guid} {version} {BackupFilesFound}.", guid, aVersion, fileEntries.Length.ToString());
-            foreach (string f in fileEntries)
+            if (Directory.Exists(directory))
             {
-                string fName = new FileInfo(f).Name;
-                DateTime timestamp = File.GetCreationTime(f);
-                backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = backupType });
+                string[] fileEntries = Directory.GetFiles(directory);
+                Log.Debug("{guid} {version} {BackupFilesFound}.", guid, aVersion, fileEntries.Length.ToString());
+                foreach (string f in fileEntries)
+                {
+                    string fName = new FileInfo(f).Name;
+                    DateTime timestamp = File.GetCreationTime(f);
+                    backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = backupType });
+                }
+                return backups;
             }
-            return backups;
+            else
+            {
+                return null;
+            }
+
         }
 
         /// <summary>
@@ -188,14 +234,15 @@ namespace SnowRunner_Tool
         {
             Log.Debug("{guid} {version} Reading game backups", guid, aVersion);
             List<Backup> backups = new List<Backup>();
-            string[] subdirectoryEntries = Directory.GetDirectories(@SRBackupDir);
-            Log.Debug("{guid} {version} {SubDirCount}", guid, aVersion, subdirectoryEntries.Length.ToString());
-            foreach (string subdirectory in subdirectoryEntries)
-            {
-                string dir = new DirectoryInfo(subdirectory).Name;
-                DateTime timestamp = Directory.GetCreationTime(subdirectory);
-                backups.Add(new Backup() { BackupName = dir, Timestamp = timestamp, Type = "Game-Backup" });
-            }
+                string[] subdirectoryEntries = Directory.GetDirectories(@SRBackupDir);
+                Log.Debug("{guid} {version} {SubDirCount}", guid, aVersion, subdirectoryEntries.Length.ToString());
+
+                foreach (string subdirectory in subdirectoryEntries)
+                {
+                    string dir = new DirectoryInfo(subdirectory).Name;
+                    DateTime timestamp = Directory.GetCreationTime(subdirectory);
+                    backups.Add(new Backup() { BackupName = dir, Timestamp = timestamp, Type = "Game-Backup" });
+                }            
             return backups;
         }
 
@@ -207,31 +254,46 @@ namespace SnowRunner_Tool
         private string findProfileName()
         {
             string searchPath = @SRBaseDir + @"\storage";
-            string[] subdirectoryEntries = Directory.GetDirectories(searchPath);
-            string pattern = @"^[A-Fa-f0-9]+$";
-            foreach (string subdirectory in subdirectoryEntries)
+            try
             {
-                Log.Debug("{guid} {version} {ProfileCandidate}", guid, aVersion, subdirectory);
-                if (!subdirectory.Contains("backupSlots"))
+                string[] subdirectoryEntries = Directory.GetDirectories(searchPath);
+                string pattern = @"^[A-Fa-f0-9]+$";
+                foreach (string subdirectory in subdirectoryEntries)
                 {
-                    // Check if subdirectory is hex string
-                    string dirName = new DirectoryInfo(subdirectory).Name;
-                    if (Regex.IsMatch(dirName, pattern))
+                    Log.Debug("{guid} {version} {ProfileCandidate}", guid, aVersion, subdirectory);
+                    if (!subdirectory.Contains("backupSlots"))
                     {
-                        string profiledir = new DirectoryInfo(subdirectory).Name;
-                        Log.Debug("{guid} {version} {ProfileFound}", guid, aVersion, profiledir);
-                        return profiledir;
+                        // Check if subdirectory is hex string
+                        string dirName = new DirectoryInfo(subdirectory).Name;
+                        if (Regex.IsMatch(dirName, pattern))
+                        {
+                            string profiledir = new DirectoryInfo(subdirectory).Name;
+                            Log.Debug("{guid} {version} {ProfileFound}", guid, aVersion, profiledir);
+                            return profiledir;
+                        }
                     }
                 }
             }
-            Log.Warning("{guid} {version} No profile directory found!", guid, aVersion);
+            catch
+            {
+                Log.Warning("{guid} {version} No profile directory found!", guid, aVersion);
+                return null;
+            }
             return null;
         }
 
         private string findBaseDirectory()
         {
-            var p = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\My Games\SnowRunner\base";
-            return p;
+            string p = null;
+            try
+            {
+                p = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\My Games\SnowRunner\base";
+                return p;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
 
@@ -445,31 +507,30 @@ namespace SnowRunner_Tool
 
         private void MnuToggleRemoteLog_Click(object sender, RoutedEventArgs e)
         {
-            if (Properties.Settings.Default.graylog == false)
+            if (Settings.Default.graylog == false)
             {
                 enableDebugLogging = true;
-                Properties.Settings.Default.graylog = true;
+                Settings.Default.graylog = true;
                 MnEnableLog.Icon = new System.Windows.Controls.Image
                 {
                     Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
                 };
             }
-            Properties.Settings.Default.Save();
+            Settings.Default.Save();
             _ = MetroMessage("Hey trucker", "You have to restart the app to activate the new setting.");
         }
 
         private void MnuReportUsage_Click(object sender, RoutedEventArgs e)
         {
-            if (Properties.Settings.Default.usagelog == false)
+            if (Settings.Default.usagelog == false)
             {
-                enableUsageLogging = true;
-                Properties.Settings.Default.usagelog = true;
+                Settings.Default.usagelog = true;
                 MnUsageLog.Icon = new System.Windows.Controls.Image
                 {
                     Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
                 };
             }
-            Properties.Settings.Default.Save();
+            Settings.Default.Save();
             _ = MetroMessage("Hey trucker", "You have to restart the app to activate the new setting.");
         }
     }

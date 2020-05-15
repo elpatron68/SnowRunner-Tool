@@ -19,14 +19,26 @@ The *SnowRunner-Tool* does nothing that you could not do in a manual way, but it
 
 ## Installation
 
-1. Microsoft .NET Framework 4.7.2. **must be installed** for *SnowRunner-Tool* to start! It should deliver with Windows Updates, but it is not a mandatory update. You can download .NET Framework 4.7.2 [here](http://go.microsoft.com/fwlink/?linkid=863262).
-2. Download the latest version from [Github Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) or [mod.io](https://snowrunner.mod.io/snowrunner-tool/#15370) and unzip the files to a location of your choice. **Never download the file from any other website**!
+### Installation From Zip File (Recommended)
+
+1. Microsoft .NET Framework 4.7.2. **must be installed** for *SnowRunner-Tool* to start! It should deliver with Windows Updates, but it is not a mandatory update. You can manually download .NET Framework 4.7.2 [here](http://go.microsoft.com/fwlink/?linkid=863262) or update your Windows - see optional updates.
+2. Download the latest *Release.zip* from [Github Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) or [mod.io](https://snowrunner.mod.io/snowrunner-tool/#15370) and unzip the files to a location of your choice. **Never download the file from any other website**!
 3. Start `SnowRunner-Tool.exe` or create a desktop shortcut. Windows will warn you about using suspicious software as this program is not signed with a valid certificate. You have to accept this at the first start.
 
+### Installation With Setup.exe (Experimental)
+
+1. Download the latest *Setup.exe* from [Github Releases](https://github.com/elpatron68/SnowRunner-Tool/releases)
+2. Install *SnowRunner-Tool*  by starting the setup. The setup will install the required Microsoft .NET Framework 4.7.2 if it is not found on your computer.
 
 ## Uninstall
 
+### Zip File Version
+
 *SnowRunner-Tool* does not create any further files or registry settings. Just delete the folder you unzipped it to.
+
+### Setup Version
+
+Uninstall *SnowRunner-Tool* with the Windows *Programs and Functions* control.
 
 ## Usage
 
@@ -35,6 +47,8 @@ After the start, *SnowRunner-Tool* reads all backup files created by the game, b
 You can manually create a backup of the current game state by clicking on *Backup current save game*.
 
 Set the amount of money you´d like to have by entering a value and clicking the *Set money* button. Before changing the money in your save game file, another fresh backup will be created.
+
+**See *Advanced* if you are asked for the path save game file after the first start.**
 
 ## Settings
 
@@ -46,6 +60,8 @@ Usage reporting sends small datagrams when one of these events occur:
 - User starts *SnowRunner-Tool* 
 - User Restores a Backup
 - User changes money (just the event, not the value you entered)
+- Critical errors
+- This version only: Your SnowRunner game profile directory
 
 Both reporting options require an active internet connection. No personal data will be sent. Usage reporting helps the developer to decide, if this tool will be expanded in the future.
 
@@ -58,9 +74,26 @@ Debug logging is disabled by default. Usage reporting is enabled by default.
 
 ## Advanced
 
+### Command Line Arguments
+
 *SnowRunner-Tool* has a few command line arguments. Just create a desktop shortcut for `SnowRunner-Tool.exe`, edit the properties and append the command line parameters to the field *Target* (see Screenshot).
 
 ![Shortcut Properties](images/DesktopShortcutSettings.png)
+
+### Save Game Path Not Found
+
+If *SnowRunner-Tool* cannot find your game profile directory, you are asked to enter the path to your save game file *CompleteSave.dat*.
+
+![](images/File_not_found.png)
+
+Click on *Browse* and navigate to your SnowRunner save game directory. Usually, it is located under your documents folder -> my games -> snowrunner -> base -> storage -> (profile directory, long name of random characters).
+
+Example:
+```
+C:\Users\mbusc\Documents\My Games\SnowRunner\base\storage\f2555667235d4dbd899a5670674d88b0
+```
+
+Select the file *CompleteSave.dat* in that folder, click *Open* and close the *FILE NOT FOUND!* dialog.
 
 ### Command line arguments
 

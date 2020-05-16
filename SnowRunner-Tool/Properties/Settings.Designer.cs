@@ -94,5 +94,17 @@ namespace SnowRunner_Tool.Properties {
                 this["LogPort"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SRprofile {
+            get {
+                return ((string)(this["SRprofile"]));
+            }
+            set {
+                this["SRprofile"] = value;
+            }
+        }
     }
 }

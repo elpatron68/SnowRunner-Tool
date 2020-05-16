@@ -87,42 +87,62 @@ namespace SnowRunner_Tool
                                     ).CreateLogger();
             }
             Log.Logger = myLog;
-
-            SRBaseDir = findBaseDirectory();
-
-            // Test!
-            InputGamePath gamePath = new InputGamePath();
-
-            if (!Directory.Exists(SRBaseDir)) 
-            { 
-                if (string.IsNullOrEmpty(Settings.Default.SRbasedir))
-                {
-                    // InputGamePath gamePath = new InputGamePath();
-                    gamePath.ShowDialog();
-                    SRBaseDir = gamePath.TxSaveGamePath.Text;
-                    Settings.Default.SRbasedir = SRBaseDir;
-                    Settings.Default.Save();
-                }
-                else
-                {
-                    SRBaseDir = Settings.Default.SRbasedir;
-                }
-            }
-
-            if (string.IsNullOrEmpty(SRBaseDir))
-            {
-                Log.Error("{guid} {version} {SRBaseDir}", guid, aVersion, SRBaseDir);
-            }
-            SRProfile = findProfileName();
-            if (string.IsNullOrEmpty(SRProfile))
-            {
-                Log.Error("{guid} {version} {SRProfile]", guid, aVersion, SRProfile);
-            }
-            @MyBackupDir = Directory.GetParent(SRBaseDir) + @"\SRToolBackup";
-            @SRBackupDir = SRBaseDir + @"\storage\BackupSlots\" + SRProfile;
-            @SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
-
             Log.Information("{guid} {version} App started", guid, aVersion);
+
+            bool manualPaths = false;
+
+            // Read directories from settings or find them automatically
+            if (string.IsNullOrEmpty(Settings.Default.SRbasedir))
+            {
+                SRBaseDir = findBaseDirectory();
+            }
+            else
+            {
+                SRBaseDir = Settings.Default.SRbasedir;
+            }
+            if (string.IsNullOrEmpty(Settings.Default.SRprofile))
+            {
+                SRProfile = findProfileName();
+            }
+            else
+            {
+                SRProfile = Settings.Default.SRprofile;
+            }
+
+            // Check base directory for existance
+            if (!Directory.Exists(SRBaseDir))
+            {
+                manualPaths = true;
+            }
+
+            // Set derived directory
+            SRBackupDir = SRBaseDir + @"\storage\BackupSlots\" + SRProfile;
+
+            // Check for existance
+            if (!Directory.Exists(SRBackupDir))
+            {
+                manualPaths = true;
+            }
+
+            // Set derived directories
+            MyBackupDir = Directory.GetParent(SRBaseDir) + @"\SRToolBackup";
+            SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
+
+            // Check for existance
+            if (!Directory.Exists(SRSaveGameDir))
+            {
+                manualPaths = true;
+            }
+
+            if (manualPaths == true)
+            {
+                Log.Information("{guid} {version} Manual path input", guid, aVersion);
+                ShowInputPathDialog();
+            }
+
+            // Check again after manual input
+
+            // Send directories to log
             Log.Debug("{guid} {version} {SRBaseDir} ", guid, aVersion, SRBaseDir);
             Log.Information("{guid} {version} {SRProfile}", guid, aVersion, SRProfile);
             Log.Debug("{guid} {version} {MyBackupDir}", guid, aVersion, MyBackupDir);
@@ -146,16 +166,13 @@ namespace SnowRunner_Tool
             }
 
             // Set value of some UI elements, load backup data
-            if (!string.IsNullOrEmpty(SRProfile))
-            {
-                lblSnowRunnerPath.Content = SRBaseDir;
-                txtAmount.Text = getMoney();
-                this.Title = this.Title + " v" + aVersion;
+            lblSnowRunnerPath.Content = SRBaseDir;
+            txtAmount.Text = getMoney();
+            this.Title = this.Title + " v" + aVersion;
 
-                // Fill Datagrid
-                dgBackups.AutoGenerateColumns = true;
-                readBackups();
-            }
+            // Fill Datagrid
+            dgBackups.AutoGenerateColumns = true;
+            readBackups();
         }
 
         /// <summary>
@@ -562,7 +579,33 @@ namespace SnowRunner_Tool
 
         private void MnPaths_Click(object sender, RoutedEventArgs e)
         {
+            ShowInputPathDialog();
+            readBackups();
+        }
 
+        private void ShowInputPathDialog()
+        {
+            InputGamePath gamePath = new InputGamePath();
+            gamePath.ShowDialog();
+            if (!string.IsNullOrEmpty(gamePath.TxSRBaseDir.Text))
+            {
+                SRBaseDir = gamePath.TxSRBaseDir.Text;
+                SRProfile = gamePath.TxSRProfileName.Text;
+                SRBackupDir = gamePath.TxSRBackupDir.Text;
+                MyBackupDir = Directory.GetParent(SRBaseDir) + @"\SRToolBackup";
+                SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
+                Settings.Default.SRbasedir = SRBaseDir;
+                Settings.Default.SRprofile = SRProfile;
+                Settings.Default.Save();
+            }
+            else
+            {
+                if (!Directory.Exists(SRBaseDir))
+                {
+                    _ = MetroMessage("Sorry!", "You can`t leave the settings without entering a valid path!");
+                    ShowInputPathDialog();
+                }
+            }
         }
     }
 }

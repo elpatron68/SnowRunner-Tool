@@ -20,5 +20,8 @@
     <Setting Name="LogPort" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">12201</Value>
     </Setting>
+    <Setting Name="SRprofile" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

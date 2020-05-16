@@ -38,11 +38,10 @@
                        Click="BtnBrowse_Click"
                 >
         </Button>
-        <TextBox x:Name="TxSGBaseDir" 
+        <TextBox x:Name="TxSRBaseDir" 
                          HorizontalAlignment="Left" 
                          Height="23" Margin="10,108,0,0" 
                          TextWrapping="Wrap" 
-                         Text="TxSGBaseDir" 
                          VerticalAlignment="Top" Width="470"
                          IsReadOnly="True"
                  >
@@ -53,11 +52,10 @@
                      VerticalAlignment="Top"
                >
         </Label>
-        <TextBox x:Name="TxSGProfileName" 
+        <TextBox x:Name="TxSRProfileName" 
                          HorizontalAlignment="Left" 
                          Height="23" Margin="10,168,0,0" 
                          TextWrapping="Wrap" 
-                         Text="TxSGProfileName" 
                          VerticalAlignment="Top" Width="470"
                          IsReadOnly="True"
                  >
@@ -68,11 +66,10 @@
                      VerticalAlignment="Top"
                >
         </Label>
-        <TextBox x:Name="TxSGBackupDir" 
+        <TextBox x:Name="TxSRBackupDir" 
                          HorizontalAlignment="Left" 
                          Height="46" Margin="10,228,0,0" 
                          TextWrapping="Wrap" 
-                         Text="TxSGBackupDir" 
                          VerticalAlignment="Top" Width="470"
                          IsReadOnly="True"
                  >

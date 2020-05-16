@@ -125,7 +125,7 @@ namespace SnowRunner_Tool
             Log.Debug("{guid} {version} {SRBackupDir}", guid, aVersion, SRBackupDir);
             Log.Debug("{guid} {version} }{SRSaveGameDir}", guid, aVersion, SRSaveGameDir);
 
-            // Get log settings and set icons for Menuitems
+            // Get log user settings and set icons for Menuitems
             if (Settings.Default.graylog == true || enableDebugLogging == true)
             {
                 MnEnableLog.Icon = new System.Windows.Controls.Image
@@ -141,18 +141,23 @@ namespace SnowRunner_Tool
                 };
             }
 
+            // Set value of some UI elements, load backup data
             if (!string.IsNullOrEmpty(SRProfile))
             {
-                sr_p.Content = SRBaseDir;
+                lblSnowRunnerPath.Content = SRBaseDir;
                 txtAmount.Text = getMoney();
                 this.Title = this.Title + " v" + aVersion;
 
                 // Fill Datagrid
                 dgBackups.AutoGenerateColumns = true;
-                _ = readBackups();
+                readBackups();
             }
         }
 
+        /// <summary>
+        /// Generates unique support-id for logging
+        /// </summary>
+        /// <returns></returns>
         private string genGuid()
         {
             if (Settings.Default.guid == "")
@@ -170,17 +175,25 @@ namespace SnowRunner_Tool
         }
 
         /// <summary>
-        /// Clear items in datagrid and (re)loads backups
+        /// Clear items in datagrid and (re)loads all backups
         /// </summary>
-        private bool readBackups()
+        private void readBackups()
         {
+            // Add SnowRunner backup directories
             var allBackups = getBackups();
+            // Add own zipped backups
             allBackups.AddRange(getOtherBackups(MyBackupDir, "Tool-Backup"));
+            // Add 3rd party zipped backups
             if (!string.IsNullOrEmpty(ThirdPartyBackupDir))
             {
                 if (Directory.Exists(ThirdPartyBackupDir))
                 {
                     allBackups.AddRange(getOtherBackups(ThirdPartyBackupDir, "3rd party -Backup"));
+                }
+                else
+                {
+                    _ = MetroMessage("Directory not found", "Directory with 3rd party backups " + ThirdPartyBackupDir + " doesn´t exist.");
+                    Log.Warning("{guid} {version} {NonExistant3rdPartyDir}", guid, aVersion, ThirdPartyBackupDir);
                 }
             }
             if (allBackups.Count > 0)
@@ -189,18 +202,11 @@ namespace SnowRunner_Tool
                 dgBackups.Items.SortDescriptions.Clear();
                 dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
                 dgBackups.Items.Refresh();
-                return true;
-            }
-            else
-            {
-                Log.Error("{guid} {version} No backups found!", guid, aVersion);
-                return false;
-            }
-            
+            }            
         }
 
         /// <summary>
-        /// Load backups made by SnorRunner-Tool
+        /// Load backups made by SnorRunner-Tool and 3rd party zipped backups
         /// </summary>
         /// <returns></returns>
         private List<Backup> getOtherBackups(string directory, string backupType)
@@ -223,17 +229,18 @@ namespace SnowRunner_Tool
             {
                 return null;
             }
-
         }
 
         /// <summary>
-        /// Collect save game backups in list
+        /// Collect SnowRunner save game backup directory names  in list
         /// </summary>
         /// <returns></returns>
         private List<Backup> getBackups()
         {
-            Log.Debug("{guid} {version} Reading game backups", guid, aVersion);
-            List<Backup> backups = new List<Backup>();
+            if (Directory.Exists(@SRBackupDir))
+            {
+                Log.Debug("{guid} {version} Reading game backups", guid, aVersion);
+                List<Backup> backups = new List<Backup>();
                 string[] subdirectoryEntries = Directory.GetDirectories(@SRBackupDir);
                 Log.Debug("{guid} {version} {SubDirCount}", guid, aVersion, subdirectoryEntries.Length.ToString());
 
@@ -242,8 +249,14 @@ namespace SnowRunner_Tool
                     string dir = new DirectoryInfo(subdirectory).Name;
                     DateTime timestamp = Directory.GetCreationTime(subdirectory);
                     backups.Add(new Backup() { BackupName = dir, Timestamp = timestamp, Type = "Game-Backup" });
-                }            
-            return backups;
+                }
+                return backups;
+            }
+            else
+            {
+                Log.Warning("{guid} {version} {NonExistantSRBackupDir}", guid, aVersion, SRBackupDir);
+                return null;
+            }
         }
 
         /// <summary>
@@ -282,18 +295,15 @@ namespace SnowRunner_Tool
             return null;
         }
 
+        /// <summary>
+        /// SnowRunner base directory, usually %userprofofile%\documents\my games\Snowrunner\base
+        /// </summary>
+        /// <returns></returns>
         private string findBaseDirectory()
         {
             string p = null;
-            try
-            {
                 p = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\My Games\SnowRunner\base";
                 return p;
-            }
-            catch
-            {
-                return null;
-            }
         }
 
 
@@ -309,18 +319,20 @@ namespace SnowRunner_Tool
         }
 
         /// <summary>
-        /// Restore a game backup (overwrites current save game)
+        /// Restores a game backup (overwrites current save game)
         /// </summary>
         /// <param name="backupItem"></param>
         private void restoreBackup(string backupItem, string type)
         {
             Log.Information("{guid} {version} Restores backup", guid, aVersion);
+            // SnowRunner Backup: Copy directory
             if (type == "Game-Backup")
             {
                 string source = SRBackupDir + @"\" + backupItem;
                 Log.Debug("{guid} {version} {RestoreSource} {RestoreDestination}", guid, aVersion, source, @SRSaveGameDir);
-                dCopy(source, SRSaveGameDir, false, true);
+                dCopy(source, SRSaveGameDir, true);
             }
+            // Zipped backup: Extract zip file, see ZipExtractHelperClass
             else
             {
                 string zipFile = MyBackupDir + @"\" + backupItem;
@@ -352,11 +364,50 @@ namespace SnowRunner_Tool
             catch (IOException ex)
             {
                 Log.Error("{guid} {version} {ZipCreateException}", guid, aVersion, ex.Message);
-                throw new IOException("Target file exists: " + zipPath + Environment.NewLine + Environment.NewLine + ex.Message);
             }
+            
+            // Reread all backups
             readBackups();
             return zipPath;
         }
+
+        /// <summary>
+        /// Cheat: Set amount of money in current save game
+        /// </summary>
+        private void saveMoney()
+        {
+            Log.Information("{guid} {version} Set money", guid, aVersion);
+            backupCurrentSavegame();
+            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+            string amount = txtAmount.Text;
+            File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + amount));
+        }
+
+        /// <summary>
+        /// Get amount of money from current save game
+        /// </summary>
+        /// <returns></returns>
+        private string getMoney()
+        {
+            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+            string s = File.ReadAllText(saveGameFile);
+            string sPattern = @"\""money\""\:\d+";
+            string moneyAmount = null;
+            if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
+            {
+                moneyAmount = Regex.Match(s, sPattern).Value;
+                moneyAmount = moneyAmount.Replace("\"money\":", null);
+                Log.Debug("{guid} {version} {MoneyFromSavegame}", guid, aVersion, moneyAmount);
+                return moneyAmount;
+            }
+            else
+            {
+                moneyAmount = "failed";
+                Log.Warning("{guid} {version} {MoneyNotFoundInFile}", guid, aVersion, saveGameFile);
+                return null;
+            }
+        }
+
         /// <summary>
         /// Copies a directory to another directory
         /// </summary>
@@ -364,12 +415,12 @@ namespace SnowRunner_Tool
         /// <param name="destDirName"></param>
         /// <param name="copySubDirs"></param>
         /// <param name="overwriteExisting"></param>
-        private void dCopy(string sourceDirName, string destDirName, bool copySubDirs, bool overwriteExisting)
+        private void dCopy(string sourceDirName, string destDirName, bool overwriteExisting)
         {
             foreach (string newPath in Directory.GetFiles(sourceDirName, "*.*", SearchOption.AllDirectories))
                 try
                 {
-                    File.Copy(newPath, newPath.Replace(sourceDirName, destDirName), true);
+                    File.Copy(newPath, newPath.Replace(sourceDirName, destDirName), overwriteExisting);
                 }
                 catch (IOException ex)
                 {
@@ -411,40 +462,11 @@ namespace SnowRunner_Tool
         }
 
         /// <summary>
-        /// Cheat: Set amount of money in current save game
+        /// Display message dialog
         /// </summary>
-        private void saveMoney()
-        {
-            Log.Information("{guid} {version} Set money", guid, aVersion);
-            backupCurrentSavegame();
-            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
-            string amount = txtAmount.Text;
-            File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + amount));
-        }
-        /// <summary>
-        /// Get amount of money from current save game
-        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
         /// <returns></returns>
-        private string getMoney()
-        {
-            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
-            string s = File.ReadAllText(saveGameFile);
-            string sPattern = @"\""money\""\:\d+";
-            string moneyAmount = null;
-            if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
-            {
-                moneyAmount = Regex.Match(s, sPattern).Value;
-                moneyAmount = moneyAmount.Replace("\"money\":", null);
-                Log.Debug("{guid} {version} {MoneyFromSavegame}", guid, aVersion, moneyAmount);
-                return moneyAmount;
-            }
-            else
-            {
-                moneyAmount = "failed";
-                Log.Warning("{guid} {version} {MoneyNotFoundInFile}", guid, aVersion, saveGameFile);
-                return null;
-            }
-        }
         private async Task<bool> MetroMessage(string title, string message)
         {
             string[] answers = { "Fine", "OK", "Make it so", "Hmmm", "Okay", "Hoot", "Ладно", "Хорошо", "d'accord", "Très bien", "Na gut", "Von mir aus" };

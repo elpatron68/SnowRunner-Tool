@@ -84,7 +84,7 @@
                      VerticalAlignment="Top" 
                      FontStyle="Italic"
                />
-        <Label x:Name="sr_p" 
+        <Label x:Name="lblSnowRunnerPath" 
                     Content="Path" 
                     Margin="130,28,20,0" 
                     VerticalAlignment="Top" Grid.ColumnSpan="2"

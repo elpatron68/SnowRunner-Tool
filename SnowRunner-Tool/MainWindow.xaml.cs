@@ -70,8 +70,8 @@ namespace SnowRunner_Tool
                 myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Graylog
                                     (new GraylogSinkOptions
                                     {
-                                        HostnameOrAddress = "markus.medisoftware.org",
-                                        Port = 12201
+                                        HostnameOrAddress = Settings.Default.LogHostName,
+                                        Port = Settings.Default.LogPort
                                     }
                                     ).CreateLogger();
                 enableDebugLogging = true;
@@ -81,8 +81,8 @@ namespace SnowRunner_Tool
                 myLog = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Graylog
                                     (new GraylogSinkOptions
                                     {
-                                        HostnameOrAddress = "markus.medisoftware.org",
-                                        Port = 12201
+                                        HostnameOrAddress = Settings.Default.LogHostName,
+                                        Port = Settings.Default.LogPort
                                     }
                                     ).CreateLogger();
             }

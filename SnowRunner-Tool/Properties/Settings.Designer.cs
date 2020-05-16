@@ -70,5 +70,29 @@ namespace SnowRunner_Tool.Properties {
                 this["SRbasedir"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("markus.medisoftware.org")]
+        public string LogHostName {
+            get {
+                return ((string)(this["LogHostName"]));
+            }
+            set {
+                this["LogHostName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12201")]
+        public int LogPort {
+            get {
+                return ((int)(this["LogPort"]));
+            }
+            set {
+                this["LogPort"] = value;
+            }
+        }
     }
 }

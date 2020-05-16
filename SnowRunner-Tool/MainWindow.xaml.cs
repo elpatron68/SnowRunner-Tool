@@ -583,6 +583,16 @@ namespace SnowRunner_Tool
             readBackups();
         }
 
+        private void MnProjectGithub_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://github.com/elpatron68/SnowRunner-Tool");
+        }
+
+        private void MnProjectModio_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://snowrunner.mod.io/snowrunner-tool");
+        }
+
         private void ShowInputPathDialog()
         {
             InputGamePath gamePath = new InputGamePath();

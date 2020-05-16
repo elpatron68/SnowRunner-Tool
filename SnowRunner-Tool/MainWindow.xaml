@@ -66,10 +66,22 @@
                                     Click="MnuSupportID_Click"
                           >
                 </MenuItem>
-                <MenuItem x:Name="MnIssues" 
+                <MenuItem Header="_Web">
+                    <MenuItem x:Name="MnProjectGithub" 
+                                    Header="_Github homepage"
+                                    Click="MnProjectGithub_Click"
+                          >
+                    </MenuItem>
+                    <MenuItem x:Name="MnProjectModio"
+                                Header="Project on _mod.io"
+                              Click="MnProjectModio_Click"
+                              >
+                    </MenuItem>
+                        <MenuItem x:Name="MnIssues" 
                                     Header="_Report a problem"
                                     Click="MnuIssues_Click"
                           >
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem x:Name="SRTLicense" 
                                     Header="_License"

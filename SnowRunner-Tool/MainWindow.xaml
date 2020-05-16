@@ -110,7 +110,7 @@
                      Margin="20,60,0,240" 
                      VerticalAlignment="Top" 
                      HorizontalAlignment="Left" 
-                     Width="215"
+                     Width="215" Foreground="Red"
                >
         </Label>
 

@@ -37,9 +37,14 @@ namespace SnowRunner_Tool
                 CheckPathExists = true,
             };
             if (ofd.ShowDialog() == true) {
-                string filepath = ofd.FileName;
-                string gamedir = Directory.GetParent(Directory.GetParent(Directory.GetParent(filepath).ToString()).ToString()).ToString();
-                TxSaveGamePath.Text = gamedir;
+                string filePath = ofd.FileName;
+                string gameDir = Directory.GetParent(Directory.GetParent(Directory.GetParent(filePath).ToString()).ToString()).ToString();
+                string profileName = new DirectoryInfo(Directory.GetParent(filePath).ToString()).Name;
+                string backupDir = gameDir + @"\storage\" + profileName;
+                TxSaveGamePath.Text = filePath;
+                TxSGBaseDir.Text = gameDir;
+                TxSGProfileName.Text= profileName;
+                TxSGBackupDir.Text = backupDir;
             }
         }
     }

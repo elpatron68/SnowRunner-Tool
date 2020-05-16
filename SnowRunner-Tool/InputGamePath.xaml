@@ -6,36 +6,81 @@
         xmlns:local="clr-namespace:SnowRunner_Tool"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="File not found!" Height="150" Width="600" >
+        Title="File not found!" Height="345" Width="586.616" >
     <Grid>
+        <Label Content="Select your save game file (CompleteSave.dat)" 
+                     HorizontalAlignment="Left" 
+                     Margin="10,6,0,0" 
+                     VerticalAlignment="Top" FontSize="16"
+               >
+        </Label>
         <TextBox x:Name="TxSaveGamePath" 
                          HorizontalAlignment="Left" 
-                         Height="23" Margin="10,54,0,0" 
+                         Height="23" Margin="10,42,0,0" 
                          TextWrapping="Wrap" 
                          Text="CompleteSave.dat" 
                          VerticalAlignment="Top" Width="470"
                  >
         </TextBox>
-        <Label Content="Select your save game file (CompleteSave.dat)" 
+        <Label Content="The file is usually located in C:\Users\[Username]\Documents\My Games\SnowRunner\base\storage\[Profiledirectory]." 
                      HorizontalAlignment="Left" 
-                     Margin="10,23,0,0" 
-                     VerticalAlignment="Top"
+                     Margin="10,68,0,0" 
+                     VerticalAlignment="Top" 
+                     FontSize="10" Foreground="#FFFE0000"
                >
         </Label>
         <Button x:Name="BtnBrowse" 
                        Content="Browse" 
                        HorizontalAlignment="Left" 
-                       Margin="494,53,0,0" 
+                       Margin="494,41,0,0" 
                        VerticalAlignment="Top" 
                        Width="75"
                        Click="BtnBrowse_Click"
                 >
         </Button>
-        <Label Content="The file is usually located in C:\Users\[Username]\Documents\My Games\SnowRunner\base\storage\[Profiledirectory]." 
+        <TextBox x:Name="TxSGBaseDir" 
+                         HorizontalAlignment="Left" 
+                         Height="23" Margin="10,108,0,0" 
+                         TextWrapping="Wrap" 
+                         Text="TxSGBaseDir" 
+                         VerticalAlignment="Top" Width="470"
+                         IsReadOnly="True"
+                 >
+        </TextBox>
+        <Label Content="SnowRunner base directory" 
                      HorizontalAlignment="Left" 
-                     Margin="10,85,0,0" 
-                     VerticalAlignment="Top" 
-                     FontSize="10"
+                     Margin="10,133,0,0" 
+                     VerticalAlignment="Top"
+               >
+        </Label>
+        <TextBox x:Name="TxSGProfileName" 
+                         HorizontalAlignment="Left" 
+                         Height="23" Margin="10,168,0,0" 
+                         TextWrapping="Wrap" 
+                         Text="TxSGProfileName" 
+                         VerticalAlignment="Top" Width="470"
+                         IsReadOnly="True"
+                 >
+        </TextBox>
+        <Label Content="SnowRunner profile name" 
+                     HorizontalAlignment="Left" 
+                     Margin="10,193,0,0" 
+                     VerticalAlignment="Top"
+               >
+        </Label>
+        <TextBox x:Name="TxSGBackupDir" 
+                         HorizontalAlignment="Left" 
+                         Height="46" Margin="10,228,0,0" 
+                         TextWrapping="Wrap" 
+                         Text="TxSGBackupDir" 
+                         VerticalAlignment="Top" Width="470"
+                         IsReadOnly="True"
+                 >
+        </TextBox>
+        <Label Content="SnowRunner backup directory" 
+                     HorizontalAlignment="Left" 
+                     Margin="10,273,0,0" 
+                     VerticalAlignment="Top"
                >
         </Label>
     </Grid>

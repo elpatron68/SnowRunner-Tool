@@ -89,11 +89,15 @@ namespace SnowRunner_Tool
             Log.Logger = myLog;
 
             SRBaseDir = findBaseDirectory();
+
+            // Test!
+            InputGamePath gamePath = new InputGamePath();
+
             if (!Directory.Exists(SRBaseDir)) 
             { 
                 if (string.IsNullOrEmpty(Settings.Default.SRbasedir))
                 {
-                    InputGamePath gamePath = new InputGamePath();
+                    // InputGamePath gamePath = new InputGamePath();
                     gamePath.ShowDialog();
                     SRBaseDir = gamePath.TxSaveGamePath.Text;
                     Settings.Default.SRbasedir = SRBaseDir;
@@ -554,6 +558,11 @@ namespace SnowRunner_Tool
             }
             Settings.Default.Save();
             _ = MetroMessage("Hey trucker", "You have to restart the app to activate the new setting.");
+        }
+
+        private void MnPaths_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -44,6 +44,11 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Settings">
+                <MenuItem x:Name="MnPaths"
+                                     Header="_Set game path"
+                                     Click="MnPaths_Click"
+                          >
+                </MenuItem>
                 <MenuItem x:Name="MnUsageLog"
                                      Header="_Report usage"
                                      Click="MnuReportUsage_Click"

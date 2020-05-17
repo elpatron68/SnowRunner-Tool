@@ -19,16 +19,16 @@ The *SnowRunner-Tool* does nothing that you could not do in a manual way, but it
 
 ## Installation
 
-### Installation From Zip File (Recommended)
+### Installation With Setup.exe
+
+1. Download the latest `SRT_setup.zip` from [Github Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) or [mod.io](https://snowrunner.mod.io/snowrunner-tool/#15370).
+2. Unzip the file and install *SnowRunner-Tool*  by starting `SRT_setup.exe`. The setup will install the required Microsoft .NET Framework 4.7.2 if it is not found on your system.
+
+### Manual Installation From Zip File
 
 1. Microsoft .NET Framework 4.7.2. **must be installed** for *SnowRunner-Tool* to start! It should deliver with Windows Updates, but it is not a mandatory update. You can manually download .NET Framework 4.7.2 [here](http://go.microsoft.com/fwlink/?linkid=863262) or update your Windows - see optional updates.
-2. Download the latest *Release.zip* from [Github Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) or [mod.io](https://snowrunner.mod.io/snowrunner-tool/#15370) and unzip the files to a location of your choice. **Never download the file from any other website**!
+2. Download the latest `SRT-portable.zip` from [Github Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) and unzip the files to a location of your choice. **Never download the file from any other website**!
 3. Start `SnowRunner-Tool.exe` or create a desktop shortcut. Windows will warn you about using suspicious software as this program is not signed with a valid certificate. You have to accept this at the first start.
-
-### Installation With Setup.exe (Experimental)
-
-1. Download the latest *Setup.exe* from [Github Releases](https://github.com/elpatron68/SnowRunner-Tool/releases)
-2. Install *SnowRunner-Tool*  by starting the setup. The setup will install the required Microsoft .NET Framework 4.7.2 if it is not found on your computer.
 
 ## Uninstall
 

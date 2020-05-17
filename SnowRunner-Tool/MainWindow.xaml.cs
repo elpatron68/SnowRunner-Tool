@@ -126,6 +126,11 @@ namespace SnowRunner_Tool
 
             // Set derived directories
             MyBackupDir = Directory.GetParent(SRBaseDir) + @"\SRToolBackup";
+            if (!Directory.Exists(MyBackupDir))
+            {
+                Directory.CreateDirectory(MyBackupDir);
+                Log.Debug("{guid} {version} {MyBackupDirCreated} ", guid, aVersion, MyBackupDir);
+            }
             SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
 
             // Check for existance

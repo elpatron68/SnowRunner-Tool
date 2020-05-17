@@ -24,6 +24,7 @@ using System.Drawing.Imaging;
 using System.Windows.Media;
 using MahApps.Metro.Converters;
 using SnowRunner_Tool.Properties;
+using System.Threading;
 
 namespace SnowRunner_Tool
 {
@@ -178,6 +179,9 @@ namespace SnowRunner_Tool
             // Fill Datagrid
             dgBackups.AutoGenerateColumns = true;
             readBackups();
+
+            // Test scheduled backup
+            BackupScheduler.startScheduledBackup("start", SRSaveGameDir, MyBackupDir);
         }
 
         /// <summary>

@@ -41,10 +41,26 @@ namespace SnowRunner_Tool
                 string gameDir = Directory.GetParent(Directory.GetParent(Directory.GetParent(filePath).ToString()).ToString()).ToString();
                 string profileName = new DirectoryInfo(Directory.GetParent(filePath).ToString()).Name;
                 string backupDir = gameDir + @"\storage\backupSlots\" + profileName;
-                TxSaveGamePath.Text = filePath;
+                if (Directory.Exists(gameDir)){
+                    TxSRBaseDir.Foreground = Brushes.Green;
+                }
+                else
+                {
+                    TxSRBaseDir.Foreground = Brushes.Red;
+                }
+                TxSaveGamePath.Text = Directory.GetParent(filePath).ToString();
+                TxSaveGamePath.Foreground = Brushes.Green;
                 TxSRBaseDir.Text = gameDir;
                 TxSRProfileName.Text= profileName;
                 TxSRBackupDir.Text = backupDir;
+                if (Directory.Exists(backupDir))
+                {
+                    TxSRBackupDir.Foreground = Brushes.Green;
+                }
+                else
+                {
+                    TxSRBackupDir.Foreground = Brushes.Red;
+                }
             }
         }
     }

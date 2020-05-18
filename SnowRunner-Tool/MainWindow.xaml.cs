@@ -181,7 +181,7 @@ namespace SnowRunner_Tool
             readBackups();
 
             // Test scheduled backup
-            BackupScheduler.startScheduledBackup("start", SRSaveGameDir, MyBackupDir);
+            // BackupScheduler.startScheduledBackup("start", SRSaveGameDir, MyBackupDir);
         }
 
         /// <summary>
@@ -605,6 +605,23 @@ namespace SnowRunner_Tool
         private void ShowInputPathDialog()
         {
             InputGamePath gamePath = new InputGamePath();
+            // Fill paths in settings window
+            if (!string.IsNullOrEmpty(SRBaseDir))
+            {
+                gamePath.TxSRBaseDir.Text = SRBaseDir;
+            }
+            if (!string.IsNullOrEmpty(SRBackupDir))
+            {
+                gamePath.TxSRBackupDir.Text = SRBackupDir;
+            }
+            if (!string.IsNullOrEmpty(SRSaveGameDir))
+            {
+                gamePath.TxSaveGamePath.Text = SRSaveGameDir;
+            }
+            if (!string.IsNullOrEmpty(SRProfile))
+            {
+                gamePath.TxSRProfileName.Text = SRProfile;
+            }
             gamePath.ShowDialog();
             if (!string.IsNullOrEmpty(gamePath.TxSRBaseDir.Text))
             {

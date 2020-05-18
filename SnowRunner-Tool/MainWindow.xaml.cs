@@ -516,11 +516,11 @@ namespace SnowRunner_Tool
         {
             if (saveMoney() == true)
             {
-                _ = MetroMessage("Congratulations", "You are rich now.");
+                _ = MetroMessage("Congratulations", "You are probably rich now.");
             }
             else
             {
-                _ = MetroMessage("Sorry", "Just give me the number! \"Extremely rich\" is no number.");
+                _ = MetroMessage("Still broke!", "Just give me the number! \"Extremely rich\" is no number.");
             }
         }
 
@@ -661,10 +661,6 @@ namespace SnowRunner_Tool
             var client = new GitHubClient(new ProductHeaderValue("SnowRunner-Tool"));
             var releases = await client.Repository.Release.GetAll("elpatron68", "SnowRunner-Tool");
             var latest = releases[0];
-            Console.WriteLine(
-                        "The latest release is tagged at {0} and is named {1}",
-                        latest.TagName,
-                        latest.Name);
             return latest.TagName;
         }
 

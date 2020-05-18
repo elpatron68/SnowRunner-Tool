@@ -42,6 +42,7 @@ namespace SnowRunner_Tool
         private string guid;
         private readonly string aVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private bool enableDebugLogging;
+        private int money;
 
         public MainWindow()
         {
@@ -405,11 +406,20 @@ namespace SnowRunner_Tool
         /// Cheat: Set amount of money in current save game
         /// </summary>
         private void saveMoney()
-        {
-            Log.Information("{guid} {version} Set money", guid, aVersion);
+        {            
             backupCurrentSavegame();
             string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
             string amount = txtAmount.Text;
+            try
+            {
+                int chashFlow = int.Parse(amount) - money;
+                money = int.Parse(amount);
+                Log.Information("{guid} {version} {cashflow}", guid, aVersion, chashFlow);
+            }
+            catch
+            {
+                Log.Debug("{guid} {version} Failed to parse int at saveMoney", guid, aVersion);
+            }
             File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + amount));
         }
 
@@ -422,12 +432,20 @@ namespace SnowRunner_Tool
             string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
             string s = File.ReadAllText(saveGameFile);
             string sPattern = @"\""money\""\:\d+";
-            string moneyAmount = null;
+            string moneyAmount;
             if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
             {
                 moneyAmount = Regex.Match(s, sPattern).Value;
                 moneyAmount = moneyAmount.Replace("\"money\":", null);
                 Log.Debug("{guid} {version} {MoneyFromSavegame}", guid, aVersion, moneyAmount);
+                try
+                {
+                    money = int.Parse(moneyAmount);
+                }
+                catch
+                {
+                    money = 0;
+                }
                 return moneyAmount;
             }
             else

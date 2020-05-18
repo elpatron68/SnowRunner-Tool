@@ -417,7 +417,7 @@ namespace SnowRunner_Tool
                 {
                     int chashFlow = int.Parse(amount) - money;
                     money = int.Parse(amount);
-                    Log.Information("{guid} {version} {cashflow}", guid, aVersion, chashFlow);
+                    Log.Information("{guid} {version} {moneyamount} {cashflow}", guid, aVersion, amount, chashFlow);
                 }
                 catch
                 {

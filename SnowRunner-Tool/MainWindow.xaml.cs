@@ -520,7 +520,7 @@ namespace SnowRunner_Tool
             }
             else
             {
-                _ = MetroMessage("Sorry", "Value has to be numerical!");
+                _ = MetroMessage("Sorry", "Enter numbers! \"Extremely rich\" is no number.");
             }
         }
 

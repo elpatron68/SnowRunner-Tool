@@ -25,6 +25,7 @@ using System.Windows.Media;
 using MahApps.Metro.Converters;
 using SnowRunner_Tool.Properties;
 using System.Threading;
+using Octokit;
 
 namespace SnowRunner_Tool
 {
@@ -459,7 +460,6 @@ namespace SnowRunner_Tool
             }
             else
             {
-                moneyAmount = "failed";
                 Log.Warning("{guid} {version} {MoneyNotFoundInFile}", guid, aVersion, saveGameFile);
                 return null;
             }
@@ -564,7 +564,7 @@ namespace SnowRunner_Tool
 
         private void MnuExit_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
         }
 
         private void MnuIssues_Click(object sender, RoutedEventArgs e)
@@ -633,6 +633,39 @@ namespace SnowRunner_Tool
         private void MnProjectModio_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("https://snowrunner.mod.io/snowrunner-tool");
+        }
+
+        private async void MnChkUpd_Click(object sender, RoutedEventArgs e)
+        {
+            var latest = await UpdateTestAsync();
+            var thisVersion = new Version(aVersion);
+            var latestVersion = new Version(latest);
+            var result = latestVersion.CompareTo(thisVersion);
+            if (result > 0)
+            {
+                _ = MetroMessage("Update check", "An update to version " + latest + " is available.\n\nThe download page will be opened after you clicked ok.");
+                Process.Start("https://github.com/elpatron68/SnowRunner-Tool/releases/latest");
+            }
+            else if (result < 0)
+            {
+                _ = MetroMessage("Update check", "You are in front of the rest of the world!");
+            }
+            else
+            {
+                _ = MetroMessage("Update check", "You are using the latest version.");
+            }
+        }
+
+        private async Task<string> UpdateTestAsync()
+        {
+            var client = new GitHubClient(new ProductHeaderValue("SnowRunner-Tool"));
+            var releases = await client.Repository.Release.GetAll("elpatron68", "SnowRunner-Tool");
+            var latest = releases[0];
+            Console.WriteLine(
+                        "The latest release is tagged at {0} and is named {1}",
+                        latest.TagName,
+                        latest.Name);
+            return latest.TagName;
         }
 
         private void ShowInputPathDialog()

@@ -405,22 +405,31 @@ namespace SnowRunner_Tool
         /// <summary>
         /// Cheat: Set amount of money in current save game
         /// </summary>
-        private void saveMoney()
-        {            
+        private bool saveMoney()
+        {
             backupCurrentSavegame();
             string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
             string amount = txtAmount.Text;
-            try
+            // Check if money value is numeric
+            if (Regex.IsMatch(amount, @"^\d+$"))
             {
-                int chashFlow = int.Parse(amount) - money;
-                money = int.Parse(amount);
-                Log.Information("{guid} {version} {cashflow}", guid, aVersion, chashFlow);
+                try
+                {
+                    int chashFlow = int.Parse(amount) - money;
+                    money = int.Parse(amount);
+                    Log.Information("{guid} {version} {cashflow}", guid, aVersion, chashFlow);
+                }
+                catch
+                {
+                    Log.Debug("{guid} {version} Failed to parse int at saveMoney", guid, aVersion);
+                }
+                File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + amount));
+                return true;
             }
-            catch
+            else
             {
-                Log.Debug("{guid} {version} Failed to parse int at saveMoney", guid, aVersion);
+                return false;
             }
-            File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + amount));
         }
 
         /// <summary>
@@ -505,8 +514,14 @@ namespace SnowRunner_Tool
         /// <param name="e"></param>
         private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            saveMoney();
-            _ = MetroMessage("Congratulations", "You are rich now.");
+            if (saveMoney() == true)
+            {
+                _ = MetroMessage("Congratulations", "You are rich now.");
+            }
+            else
+            {
+                _ = MetroMessage("Sorry", "Value has to be numerical!");
+            }
         }
 
         /// <summary>

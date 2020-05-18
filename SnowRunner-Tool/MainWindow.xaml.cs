@@ -520,7 +520,7 @@ namespace SnowRunner_Tool
             }
             else
             {
-                _ = MetroMessage("Still broke!", "Just give me the number! \"Extremely rich\" is no number.");
+                _ = MetroMessage("Still broke!", "Just give me a number! \"Extremely rich\" is no number.");
             }
         }
 

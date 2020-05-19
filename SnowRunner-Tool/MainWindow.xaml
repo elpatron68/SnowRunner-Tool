@@ -7,22 +7,11 @@
         xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
         Title="SnowRunner-Tool" 
-        Height="400" 
-        Width="700" 
+        Height="600" 
+        Width="1000" 
         WindowStyle="ToolWindow" 
-        ResizeMode="NoResize" Icon="baseline_restore_black_18dp.ico">
-    <Window.CommandBindings>
-        <CommandBinding Command="ApplicationCommands.New" 
-                                           Executed="BackupCommand_Executed" 
-                                           CanExecute="BackupCommand_CanExecute" 
-                        >
-        </CommandBinding>
-        <CommandBinding Command="ApplicationCommands.Save" 
-                                           CanExecute="SaveCommand_CanExecute" 
-                                           Executed="SaveCommand_Executed" 
-                        >
-        </CommandBinding>
-    </Window.CommandBindings>
+        ResizeMode="NoResize" 
+        Icon="baseline_restore_black_18dp.ico">
     <Grid>
 
         <Menu DockPanel.Dock="Top">
@@ -155,10 +144,10 @@
         <Button Content="Backup current save game" 
                        HorizontalAlignment="Left" 
                        VerticalAlignment="Top" 
-                       Margin="20,320,0,0"
+                       Margin="20,520,0,0"
                        Width="215"
                        RenderTransformOrigin="-0.29,0.04"
-                       Command="ApplicationCommands.New"
+                       Click="Button_Click"
                 >
         </Button>
     </Grid>

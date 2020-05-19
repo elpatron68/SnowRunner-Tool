@@ -53,10 +53,10 @@ namespace SnowRunner_Tool
             Parser.Default.ParseArguments<Options>(args)
                    .WithParsed<Options>(o =>
                    {
-                       if (!string.IsNullOrEmpty(o.ThirdPartyDirectory))
-                       {
-                           @ThirdPartyBackupDir = o.ThirdPartyDirectory;
-                       }
+                       //if (!string.IsNullOrEmpty(o.ThirdPartyDirectory))
+                       //{
+                       //    @ThirdPartyBackupDir = o.ThirdPartyDirectory;
+                       //}
                        if (o.EnableLogging == true)
                        {
                            enableDebugLogging = true;
@@ -183,7 +183,6 @@ namespace SnowRunner_Tool
 
             // Set value of some UI elements, load backup data
             lblSnowRunnerPath.Content = SRBaseDir;
-            txtAmount.Text = getMoney();
             this.Title = this.Title + " v" + aVersion;
 
             // Fill Datagrid
@@ -223,19 +222,7 @@ namespace SnowRunner_Tool
             var allBackups = getBackups();
             // Add own zipped backups
             allBackups.AddRange(getOtherBackups(MyBackupDir, "Tool-Backup"));
-            // Add 3rd party zipped backups
-            if (!string.IsNullOrEmpty(ThirdPartyBackupDir))
-            {
-                if (Directory.Exists(ThirdPartyBackupDir))
-                {
-                    allBackups.AddRange(getOtherBackups(ThirdPartyBackupDir, "3rd party -Backup"));
-                }
-                else
-                {
-                    _ = MetroMessage("Directory not found", "Directory with 3rd party backups " + ThirdPartyBackupDir + " doesn´t exist.");
-                    Log.Warning("Directory does not exist {NonExistant3rdPartyDir}", ThirdPartyBackupDir);
-                }
-            }
+                        
             if (allBackups.Count > 0)
             {
                 dgBackups.ItemsSource = allBackups;
@@ -261,7 +248,13 @@ namespace SnowRunner_Tool
                 {
                     string fName = new FileInfo(f).Name;
                     DateTime timestamp = File.GetCreationTime(f);
-                    backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = backupType });
+                    string saveGameFile = CheatGame.UnzipToTemp(f);
+                    if (File.Exists(saveGameFile))
+                    {
+                        string sgMoney = CheatGame.GetMoney(saveGameFile);
+                        string sgXp = CheatGame.GetXp(saveGameFile);
+                        backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = backupType, Money = sgMoney, Xp = sgXp });
+                    }
                 }
                 return backups;
             }
@@ -288,7 +281,13 @@ namespace SnowRunner_Tool
                 {
                     string dir = new DirectoryInfo(subdirectory).Name;
                     DateTime timestamp = Directory.GetCreationTime(subdirectory);
-                    backups.Add(new Backup() { BackupName = dir, Timestamp = timestamp, Type = "Game-Backup" });
+                    string saveGameFile = subdirectory + @"\CompleteSave.dat";
+                    if (File.Exists(saveGameFile))
+                    {
+                        string sgMoney = CheatGame.GetMoney(saveGameFile);
+                        string sgXp = CheatGame.GetXp(saveGameFile);
+                        backups.Add(new Backup() { BackupName = dir, Timestamp = timestamp, Type = "Game-Backup", Money = sgMoney, Xp = sgXp });
+                    }
                 }
                 return backups;
             }
@@ -414,32 +413,31 @@ namespace SnowRunner_Tool
         /// <summary>
         /// Cheat: Set amount of money in current save game
         /// </summary>
-        private bool saveMoney()
-        {
-            BackupCurrentSavegame();
-            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
-            string amount = txtAmount.Text;
-            // Check if money value is numeric
-            if (Regex.IsMatch(amount, @"^\d+$"))
-            {
-                try
-                {
-                    int chashFlow = int.Parse(amount) - money;
-                    money = int.Parse(amount);
-                    Log.Information("CashCheat {NewMoney} {Cashflow}", amount, chashFlow);
-                }
-                catch
-                {
-                    Log.Debug("Failed to parse int at saveMoney");
-                }
-                File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + amount));
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        //private bool saveMoney()
+        //{
+        //    BackupCurrentSavegame();
+        //    string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+        //    // Check if money value is numeric
+        //    if (Regex.IsMatch(amount, @"^\d+$"))
+        //    {
+        //        try
+        //        {
+        //            int chashFlow = int.Parse(amount) - money;
+        //            money = int.Parse(amount);
+        //            Log.Information("CashCheat {NewMoney} {Cashflow}", amount, chashFlow);
+        //        }
+        //        catch
+        //        {
+        //            Log.Debug("Failed to parse int at saveMoney");
+        //        }
+        //        File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + amount));
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
 
         /// <summary>
         /// Get amount of money from current save game
@@ -716,18 +714,25 @@ namespace SnowRunner_Tool
             {
                 _ = CheatGame.SaveMoney(SRSaveGameDir, result, money);
                 _ = MetroMessage("Congratulations", "You are probably rich now.");
+                money = int.Parse(CheatGame.GetMoney(SRSaveGameDir));
             }
-
         }
 
         private async void MnXp_Click(object sender, RoutedEventArgs e)
         {
-            string result = await MetroInputMessage("XP Cheat", "Enter the amount of XP you´d like to have", CheatGame.GetXp(SRSaveGameDir));
+            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+            string result = await MetroInputMessage("XP Cheat", "Enter the amount of XP you´d like to have",
+                                                    CheatGame.GetXp(saveGameFile));
             if (!string.IsNullOrEmpty(result))
             {
                 CheatGame.SaveXp(SRSaveGameDir, result);
                 _ = MetroMessage("Congratulations", "Nothing is better than experience!");
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

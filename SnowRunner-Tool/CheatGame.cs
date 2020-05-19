@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,9 +17,8 @@ namespace SnowRunner_Tool
         /// </summary>
         private readonly ILogger _log = Log.ForContext<CheatGame>();
 
-        public static string GetMoney(string SRSaveGameDir)
+        public static string GetMoney(string saveGameFile)
         {
-            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
             string s = File.ReadAllText(saveGameFile);
             string sPattern = @"\""money\""\:\d+";
             string moneyAmount;
@@ -65,9 +65,9 @@ namespace SnowRunner_Tool
             }
         }
 
-        public static string GetXp(string SRSaveGameDir)
+        public static string GetXp(string saveGameFile)
         {
-            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+            // string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
             string s = File.ReadAllText(saveGameFile);
             string sPattern = @"\""experience\""\:\d+";
             string xpAmount;
@@ -85,6 +85,7 @@ namespace SnowRunner_Tool
             }
 
         }
+
         public static bool SaveXp(string SRSaveGameDir, string newXP)
         {
             string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
@@ -96,9 +97,30 @@ namespace SnowRunner_Tool
             }
             catch (IOException ex)
             {
+                Log.Error(ex, "Error reading money in SaveXp");
                 return false;
             }
         }
+
+        public static string UnzipToTemp(string zipFile)
+        {
+            string tempDir = Path.GetTempPath();
+            using (ZipArchive archive = ZipFile.OpenRead(zipFile))
+            {
+                foreach (ZipArchiveEntry entry in archive.Entries)
+                {
+                    if (entry.FullName.Equals("CompleteSave.dat"))
+                    {
+                        string destinationPath = Path.GetFullPath(Path.Combine(tempDir, entry.FullName));
+                        entry.ExtractToFile(destinationPath, true);
+                        return destinationPath;
+                    }
+                }
+            }
+            return null;
+        }
+
+
 
     }
 }

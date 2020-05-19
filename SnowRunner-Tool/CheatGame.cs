@@ -36,24 +36,15 @@ namespace SnowRunner_Tool
             }
         }
 
-        public static bool SaveMoney(string saveGameFile, string newMoney, int oldMoney)
+        public static bool SaveMoney(string saveGameFile, string newMoney)
         {
 
             // backupCurrentSavegame();
-            // string amount = txtAmount.Text;
+
             // Check if money value is numeric
             Log.Information("SaveMoney");
             if (Regex.IsMatch(newMoney, @"^\d+$"))
             {
-                try
-                {
-                    int chashFlow = int.Parse(newMoney) - oldMoney;
-                    Log.Information("{MoneyAmount} {CashFlow}", newMoney, chashFlow);
-                }
-                catch
-                {
-                    Log.Debug("Failed to parse int at SaveMoney");
-                }
                 File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + newMoney));
                 return true;
             }

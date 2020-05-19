@@ -44,7 +44,6 @@ namespace SnowRunner_Tool
         private string guid;
         private readonly string aVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private bool enableDebugLogging;
-        private int money;
 
         public MainWindow()
         {
@@ -185,7 +184,8 @@ namespace SnowRunner_Tool
 
             // Set value of some UI elements, load backup data
             lblSnowRunnerPath.Content = SRBaseDir;
-            this.Title = this.Title + " v" + aVersion;
+            updateTitle();
+            
 
             // Fill Datagrid
             dgBackups.AutoGenerateColumns = true;
@@ -232,9 +232,9 @@ namespace SnowRunner_Tool
                 dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
                 dgBackups.Items.Refresh();
             }
-            money = int.Parse(CheatGame.GetMoney(SRsaveGameFile));
+            string m = CheatGame.GetMoney(SRsaveGameFile);
             string xp = CheatGame.GetXp(SRsaveGameFile);
-            this.Title += " | Money " + money.ToString() + " | XP: " + xp;
+            updateTitle(m, xp);
         }
 
         /// <summary>
@@ -492,14 +492,6 @@ namespace SnowRunner_Tool
         {
             readBackups();
             var m = CheatGame.GetMoney(SRsaveGameFile);
-            try
-            {
-                money = int.Parse(m);
-            }
-            catch
-            {
-                Log.Warning("Exception parsing money string at MnuReload_Click");
-            }
         }
 
         private void MnuToggleRemoteLog_Click(object sender, RoutedEventArgs e)
@@ -621,13 +613,24 @@ namespace SnowRunner_Tool
 
         private async void MnMoneyCheat_Click(object sender, RoutedEventArgs e)
         {
-            string m = CheatGame.GetXp(SRsaveGameFile);
+            string m = CheatGame.GetMoney(SRsaveGameFile);
             string result = await MetroInputMessage("Money Cheat", "Enter the amount of money you´d like to have", m);
             if (!string.IsNullOrEmpty(result))
             {
-                _ = CheatGame.SaveMoney(SRsaveGameFile, result, money);
+                _ = CheatGame.SaveMoney(SRsaveGameFile, result);
                 _ = MetroMessage("Congratulations", "You are probably rich now.");
-                money = int.Parse(CheatGame.GetMoney(SRSaveGameDir));
+                m = CheatGame.GetMoney(SRsaveGameFile);
+                string xp = CheatGame.GetXp(SRsaveGameFile);
+                updateTitle(m ,xp);
+            }
+        }
+
+        private void updateTitle(string money="", string xp="")
+        {
+            this.Title="SnowRunner-Tool v" + aVersion;
+            if (!string.IsNullOrEmpty(money))
+            {
+                Title += " | Money: " + money + " | XP: " + xp;
             }
         }
 

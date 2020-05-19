@@ -38,7 +38,7 @@ namespace SnowRunner_Tool
         private string SRProfile;
         private string @SRBackupDir;
         private string @MyBackupDir;
-        private string @ThirdPartyBackupDir;
+        // private string @ThirdPartyBackupDir;
         private string @SRSaveGameDir;
         private string guid;
         private readonly string aVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -443,33 +443,33 @@ namespace SnowRunner_Tool
         /// Get amount of money from current save game
         /// </summary>
         /// <returns></returns>
-        private string getMoney()
-        {
-            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
-            string s = File.ReadAllText(saveGameFile);
-            string sPattern = @"\""money\""\:\d+";
-            string moneyAmount;
-            if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
-            {
-                moneyAmount = Regex.Match(s, sPattern).Value;
-                moneyAmount = moneyAmount.Replace("\"money\":", null);
-                Log.Debug("Read money {MoneyFromSavegame}", moneyAmount);
-                try
-                {
-                    money = int.Parse(moneyAmount);
-                }
-                catch
-                {
-                    money = 0;
-                }
-                return moneyAmount;
-            }
-            else
-            {
-                Log.Warning("Money value not found in {SaveGameFile}", saveGameFile);
-                return null;
-            }
-        }
+        //private string getMoney()
+        //{
+        //    string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+        //    string s = File.ReadAllText(saveGameFile);
+        //    string sPattern = @"\""money\""\:\d+";
+        //    string moneyAmount;
+        //    if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
+        //    {
+        //        moneyAmount = Regex.Match(s, sPattern).Value;
+        //        moneyAmount = moneyAmount.Replace("\"money\":", null);
+        //        Log.Debug("Read money {MoneyFromSavegame}", moneyAmount);
+        //        try
+        //        {
+        //            money = int.Parse(moneyAmount);
+        //        }
+        //        catch
+        //        {
+        //            money = 0;
+        //        }
+        //        return moneyAmount;
+        //    }
+        //    else
+        //    {
+        //        Log.Warning("Money value not found in {SaveGameFile}", saveGameFile);
+        //        return null;
+        //    }
+        //}
 
         /// <summary>
         /// Copies a directory to another directory
@@ -491,27 +491,6 @@ namespace SnowRunner_Tool
                 }
         }
 
-        private void BackupCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        private void SaveCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        /// <summary>
-        /// "Backup" Button click event
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BackupCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            BackupCurrentSavegame();
-
-            _ = MetroMessage("Just for sure", "Your current save game was backed up to the folder " + MyBackupDir + ".");
-        }
 
         /// <summary>
         /// Display message dialog
@@ -576,7 +555,7 @@ namespace SnowRunner_Tool
         private void MnuSupportID_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(guid);
-            _ = MetroMessage("Support ID copied", "Your support ID has been copied to the clipboard. Make sure, \"Send log\" is activated when the problem occured before filing an issue.\n\nSupport ID: " + guid);
+            _ = MetroMessage("Support ID copied", "Your support ID has been copied to the clipboard. Make sure, \"Remote logging\" is activated when the problem occured before filing an issue.\n\nSupport ID: " + guid);
         }
 
 
@@ -588,7 +567,16 @@ namespace SnowRunner_Tool
         private void MnuReload_Click(object sender, RoutedEventArgs e)
         {
             readBackups();
-            getMoney();
+            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+            var m = CheatGame.GetMoney(saveGameFile);
+            try
+            {
+                money = int.Parse(m);
+            }
+            catch
+            {
+                Log.Warning("Exception parsing money string at MnuReload_Click");
+            }
         }
 
         private void MnuToggleRemoteLog_Click(object sender, RoutedEventArgs e)
@@ -732,7 +720,7 @@ namespace SnowRunner_Tool
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            _ = BackupCurrentSavegame();
         }
     }
 }

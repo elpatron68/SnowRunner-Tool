@@ -36,12 +36,10 @@ namespace SnowRunner_Tool
             }
         }
 
-        public static bool SaveMoney(string SRSaveGameDir, string newMoney, int oldMoney)
+        public static bool SaveMoney(string saveGameFile, string newMoney, int oldMoney)
         {
 
             // backupCurrentSavegame();
-            
-            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
             // string amount = txtAmount.Text;
             // Check if money value is numeric
             Log.Information("SaveMoney");

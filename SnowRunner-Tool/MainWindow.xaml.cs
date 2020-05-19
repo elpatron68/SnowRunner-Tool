@@ -36,10 +36,11 @@ namespace SnowRunner_Tool
     {
         private string SRBaseDir;
         private string SRProfile;
-        private string @SRBackupDir;
-        private string @MyBackupDir;
+        private string SRBackupDir;
+        private string MyBackupDir;
         // private string @ThirdPartyBackupDir;
-        private string @SRSaveGameDir;
+        private string SRSaveGameDir;
+        private string SRsaveGameFile;
         private string guid;
         private readonly string aVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private bool enableDebugLogging;
@@ -138,6 +139,7 @@ namespace SnowRunner_Tool
             // Set derived directories
             MyBackupDir = Directory.GetParent(SRBaseDir) + @"\SRToolBackup";
             SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
+            SRsaveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
 
             // Check for existance
             if (!Directory.Exists(SRSaveGameDir))
@@ -230,10 +232,9 @@ namespace SnowRunner_Tool
                 dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
                 dgBackups.Items.Refresh();
             }
-            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
-            string m = CheatGame.GetMoney(saveGameFile);
-            string xp = CheatGame.GetXp(saveGameFile);
-            this.Title += " | Money " + m + " | XP: " + xp;
+            money = int.Parse(CheatGame.GetMoney(SRsaveGameFile));
+            string xp = CheatGame.GetXp(SRsaveGameFile);
+            this.Title += " | Money " + money.ToString() + " | XP: " + xp;
         }
 
         /// <summary>
@@ -252,11 +253,11 @@ namespace SnowRunner_Tool
                 {
                     string fName = new FileInfo(f).Name;
                     DateTime timestamp = File.GetCreationTime(f);
-                    string saveGameFile = CheatGame.UnzipToTemp(f);
-                    if (File.Exists(saveGameFile))
+                    string tmpSaveGameFile = CheatGame.UnzipToTemp(f);
+                    if (File.Exists(tmpSaveGameFile))
                     {
-                        string sgMoney = CheatGame.GetMoney(saveGameFile);
-                        string sgXp = CheatGame.GetXp(saveGameFile);
+                        string sgMoney = CheatGame.GetMoney(tmpSaveGameFile);
+                        string sgXp = CheatGame.GetXp(tmpSaveGameFile);
                         backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = backupType, Money = sgMoney, Xp = sgXp });
                     }
                 }
@@ -285,11 +286,11 @@ namespace SnowRunner_Tool
                 {
                     string dir = new DirectoryInfo(subdirectory).Name;
                     DateTime timestamp = Directory.GetCreationTime(subdirectory);
-                    string saveGameFile = subdirectory + @"\CompleteSave.dat";
-                    if (File.Exists(saveGameFile))
+                    string backupSaveGameFile = subdirectory + @"\CompleteSave.dat";
+                    if (File.Exists(backupSaveGameFile))
                     {
-                        string sgMoney = CheatGame.GetMoney(saveGameFile);
-                        string sgXp = CheatGame.GetXp(saveGameFile);
+                        string sgMoney = CheatGame.GetMoney(backupSaveGameFile);
+                        string sgXp = CheatGame.GetXp(backupSaveGameFile);
                         backups.Add(new Backup() { BackupName = dir, Timestamp = timestamp, Type = "Game-Backup", Money = sgMoney, Xp = sgXp });
                     }
                 }
@@ -490,8 +491,7 @@ namespace SnowRunner_Tool
         private void MnuReload_Click(object sender, RoutedEventArgs e)
         {
             readBackups();
-            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
-            var m = CheatGame.GetMoney(saveGameFile);
+            var m = CheatGame.GetMoney(SRsaveGameFile);
             try
             {
                 money = int.Parse(m);
@@ -604,6 +604,7 @@ namespace SnowRunner_Tool
                 SRBackupDir = gamePath.TxSRBackupDir.Text;
                 MyBackupDir = Directory.GetParent(SRBaseDir) + @"\SRToolBackup";
                 SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
+                SRsaveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
                 Settings.Default.SRbasedir = SRBaseDir;
                 Settings.Default.SRprofile = SRProfile;
                 Settings.Default.Save();
@@ -620,10 +621,11 @@ namespace SnowRunner_Tool
 
         private async void MnMoneyCheat_Click(object sender, RoutedEventArgs e)
         {
-            string result = await MetroInputMessage("Money Cheat", "Enter the amount of money you´d like to have", CheatGame.GetMoney(SRSaveGameDir));
+            string m = CheatGame.GetXp(SRsaveGameFile);
+            string result = await MetroInputMessage("Money Cheat", "Enter the amount of money you´d like to have", m);
             if (!string.IsNullOrEmpty(result))
             {
-                _ = CheatGame.SaveMoney(SRSaveGameDir, result, money);
+                _ = CheatGame.SaveMoney(SRsaveGameFile, result, money);
                 _ = MetroMessage("Congratulations", "You are probably rich now.");
                 money = int.Parse(CheatGame.GetMoney(SRSaveGameDir));
             }
@@ -631,9 +633,9 @@ namespace SnowRunner_Tool
 
         private async void MnXp_Click(object sender, RoutedEventArgs e)
         {
-            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+            string xp = CheatGame.GetXp(SRsaveGameFile);
             string result = await MetroInputMessage("XP Cheat", "Enter the amount of XP you´d like to have",
-                                                    CheatGame.GetXp(saveGameFile));
+                                                    xp);
             if (!string.IsNullOrEmpty(result))
             {
                 CheatGame.SaveXp(SRSaveGameDir, result);

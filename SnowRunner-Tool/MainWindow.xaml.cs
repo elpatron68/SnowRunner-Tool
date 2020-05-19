@@ -229,7 +229,11 @@ namespace SnowRunner_Tool
                 dgBackups.Items.SortDescriptions.Clear();
                 dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
                 dgBackups.Items.Refresh();
-            }            
+            }
+            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+            string m = CheatGame.GetMoney(saveGameFile);
+            string xp = CheatGame.GetXp(saveGameFile);
+            this.Title += " | Money " + m + " | XP: " + xp;
         }
 
         /// <summary>
@@ -369,7 +373,7 @@ namespace SnowRunner_Tool
             {
                 string source = SRBackupDir + @"\" + backupItem;
                 Log.Debug("Copy directory from {Source} to {Destination}", source, @SRSaveGameDir);
-                DirCopy(source, SRSaveGameDir, true);
+                Backup.DirCopy(source, SRSaveGameDir, true);
             }
             // Zipped backup: Extract zip file, see ZipExtractHelperClass
             else
@@ -408,87 +412,6 @@ namespace SnowRunner_Tool
             // Reread all backups
             readBackups();
             return zipPath;
-        }
-
-        /// <summary>
-        /// Cheat: Set amount of money in current save game
-        /// </summary>
-        //private bool saveMoney()
-        //{
-        //    BackupCurrentSavegame();
-        //    string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
-        //    // Check if money value is numeric
-        //    if (Regex.IsMatch(amount, @"^\d+$"))
-        //    {
-        //        try
-        //        {
-        //            int chashFlow = int.Parse(amount) - money;
-        //            money = int.Parse(amount);
-        //            Log.Information("CashCheat {NewMoney} {Cashflow}", amount, chashFlow);
-        //        }
-        //        catch
-        //        {
-        //            Log.Debug("Failed to parse int at saveMoney");
-        //        }
-        //        File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + amount));
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
-
-        /// <summary>
-        /// Get amount of money from current save game
-        /// </summary>
-        /// <returns></returns>
-        //private string getMoney()
-        //{
-        //    string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
-        //    string s = File.ReadAllText(saveGameFile);
-        //    string sPattern = @"\""money\""\:\d+";
-        //    string moneyAmount;
-        //    if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
-        //    {
-        //        moneyAmount = Regex.Match(s, sPattern).Value;
-        //        moneyAmount = moneyAmount.Replace("\"money\":", null);
-        //        Log.Debug("Read money {MoneyFromSavegame}", moneyAmount);
-        //        try
-        //        {
-        //            money = int.Parse(moneyAmount);
-        //        }
-        //        catch
-        //        {
-        //            money = 0;
-        //        }
-        //        return moneyAmount;
-        //    }
-        //    else
-        //    {
-        //        Log.Warning("Money value not found in {SaveGameFile}", saveGameFile);
-        //        return null;
-        //    }
-        //}
-
-        /// <summary>
-        /// Copies a directory to another directory
-        /// </summary>
-        /// <param name="sourceDirName"></param>
-        /// <param name="destDirName"></param>
-        /// <param name="copySubDirs"></param>
-        /// <param name="overwriteExisting"></param>
-        private void DirCopy(string sourceDirName, string destDirName, bool overwriteExisting)
-        {
-            foreach (string newPath in Directory.GetFiles(sourceDirName, "*.*", SearchOption.AllDirectories))
-                try
-                {
-                    File.Copy(newPath, newPath.Replace(sourceDirName, destDirName), overwriteExisting);
-                }
-                catch (IOException ex)
-                {
-                    Log.Error(ex, "File copy failed: {NewPath} {DestDirName}", newPath, destDirName);
-                }
         }
 
 

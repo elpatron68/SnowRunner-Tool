@@ -96,6 +96,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BackupScheduler.cs" />
+    <Compile Include="CheatGame.cs" />
     <Compile Include="InputGamePath.xaml.cs">
       <DependentUpon>InputGamePath.xaml</DependentUpon>
     </Compile>

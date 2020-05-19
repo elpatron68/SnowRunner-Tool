@@ -70,7 +70,11 @@ namespace SnowRunner_Tool
 
             if (Settings.Default.graylog == true || enableDebugLogging == true)
             {
-                myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Graylog
+                myLog = new LoggerConfiguration().MinimumLevel.Debug().
+                    Enrich.WithProperty("Application", "SnowRunnerTool").
+                    Enrich.WithProperty("version", aVersion).
+                    Enrich.WithProperty("guid", guid).
+                    WriteTo.Graylog
                                     (new GraylogSinkOptions
                                     {
                                         HostnameOrAddress = Settings.Default.LogHostName,
@@ -81,7 +85,11 @@ namespace SnowRunner_Tool
             }
             else if (Settings.Default.usagelog == true)
             {
-                myLog = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Graylog
+                myLog = new LoggerConfiguration().MinimumLevel.Information().
+                    Enrich.WithProperty("Application", "SnowRunnerTool").
+                    Enrich.WithProperty("version", aVersion).
+                    Enrich.WithProperty("guid", guid).
+                    WriteTo.Graylog
                                     (new GraylogSinkOptions
                                     {
                                         HostnameOrAddress = Settings.Default.LogHostName,
@@ -90,7 +98,7 @@ namespace SnowRunner_Tool
                                     ).CreateLogger();
             }
             Log.Logger = myLog;
-            Log.Information("{guid} {version} App started", guid, aVersion);
+            Log.Information("App started");
 
             bool manualPaths = false;
 
@@ -139,7 +147,7 @@ namespace SnowRunner_Tool
 
             if (manualPaths == true)
             {
-                Log.Information("{guid} {version} Manual path input", guid, aVersion);
+                Log.Information("Manual path input required");
                 ShowInputPathDialog();
             }
 
@@ -147,15 +155,15 @@ namespace SnowRunner_Tool
             if (!Directory.Exists(MyBackupDir))
             {
                 Directory.CreateDirectory(MyBackupDir);
-                Log.Debug("{guid} {version} {MyBackupDirCreated} ", guid, aVersion, MyBackupDir);
+                Log.Debug("{MyBackupDir} created ", MyBackupDir);
             }
 
             // Send directories to log
-            Log.Debug("{guid} {version} {SRBaseDir} ", guid, aVersion, SRBaseDir);
-            Log.Information("{guid} {version} {SRProfile}", guid, aVersion, SRProfile);
-            Log.Debug("{guid} {version} {MyBackupDir}", guid, aVersion, MyBackupDir);
-            Log.Debug("{guid} {version} {SRBackupDir}", guid, aVersion, SRBackupDir);
-            Log.Debug("{guid} {version} }{SRSaveGameDir}", guid, aVersion, SRSaveGameDir);
+            Log.Debug("Set {SRBaseDir}", SRBaseDir);
+            Log.Information("Set {SRProfile}", SRProfile);
+            Log.Debug("Set {MyBackupDir}", MyBackupDir);
+            Log.Debug("Set {SRBackupDir}", SRBackupDir);
+            Log.Debug("Set {SRSaveGameDir}", SRSaveGameDir);
 
             // Get log user settings and set icons for Menuitems
             if (Settings.Default.graylog == true || enableDebugLogging == true)
@@ -225,7 +233,7 @@ namespace SnowRunner_Tool
                 else
                 {
                     _ = MetroMessage("Directory not found", "Directory with 3rd party backups " + ThirdPartyBackupDir + " doesn´t exist.");
-                    Log.Warning("{guid} {version} {NonExistant3rdPartyDir}", guid, aVersion, ThirdPartyBackupDir);
+                    Log.Warning("Directory does not exist {NonExistant3rdPartyDir}", ThirdPartyBackupDir);
                 }
             }
             if (allBackups.Count > 0)
@@ -243,12 +251,12 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         private List<Backup> getOtherBackups(string directory, string backupType)
         {
-            Log.Debug("{guid} {version} {OtherBackupDirectory} {BackupType}", guid, aVersion, directory, backupType);
+            Log.Debug("getOtherBackups: {OtherBackupDirectory} / {BackupType}", directory, backupType);
             List<Backup> backups = new List<Backup>();
             if (Directory.Exists(directory))
             {
                 string[] fileEntries = Directory.GetFiles(directory);
-                Log.Debug("{guid} {version} {BackupFilesFound}.", guid, aVersion, fileEntries.Length.ToString());
+                Log.Debug("Found {BackupFilesFound} backups.", fileEntries.Length);
                 foreach (string f in fileEntries)
                 {
                     string fName = new FileInfo(f).Name;
@@ -271,10 +279,10 @@ namespace SnowRunner_Tool
         {
             if (Directory.Exists(@SRBackupDir))
             {
-                Log.Debug("{guid} {version} Reading game backups", guid, aVersion);
+                Log.Debug("Reading game backups");
                 List<Backup> backups = new List<Backup>();
                 string[] subdirectoryEntries = Directory.GetDirectories(@SRBackupDir);
-                Log.Debug("{guid} {version} {SubDirCount}", guid, aVersion, subdirectoryEntries.Length.ToString());
+                Log.Debug("{SubDirCount} backups found.", subdirectoryEntries.Length.ToString());
 
                 foreach (string subdirectory in subdirectoryEntries)
                 {
@@ -286,7 +294,7 @@ namespace SnowRunner_Tool
             }
             else
             {
-                Log.Warning("{guid} {version} {NonExistantSRBackupDir}", guid, aVersion, SRBackupDir);
+                Log.Warning("Directory {SRBackupDir} does not exist", SRBackupDir);
                 return null;
             }
         }
@@ -305,7 +313,7 @@ namespace SnowRunner_Tool
                 string pattern = @"^[A-Fa-f0-9]+$";
                 foreach (string subdirectory in subdirectoryEntries)
                 {
-                    Log.Debug("{guid} {version} {ProfileCandidate}", guid, aVersion, subdirectory);
+                    Log.Debug("Profile candidate {ProfileCandidate}", subdirectory);
                     if (!subdirectory.Contains("backupSlots"))
                     {
                         // Check if subdirectory is hex string
@@ -313,7 +321,7 @@ namespace SnowRunner_Tool
                         if (Regex.IsMatch(dirName, pattern))
                         {
                             string profiledir = new DirectoryInfo(subdirectory).Name;
-                            Log.Debug("{guid} {version} {ProfileFound}", guid, aVersion, profiledir);
+                            Log.Debug("Profile {ProfileDir} found", profiledir);
                             return profiledir;
                         }
                     }
@@ -321,7 +329,7 @@ namespace SnowRunner_Tool
             }
             catch
             {
-                Log.Warning("{guid} {version} No profile directory found!", guid, aVersion);
+                Log.Warning("No profile directory found!");
                 return null;
             }
             return null;
@@ -356,19 +364,19 @@ namespace SnowRunner_Tool
         /// <param name="backupItem"></param>
         private void restoreBackup(string backupItem, string type)
         {
-            Log.Information("{guid} {version} Restores backup", guid, aVersion);
+            Log.Information("Restore backup {BackupItem} - {Type}", backupItem, type);
             // SnowRunner Backup: Copy directory
             if (type == "Game-Backup")
             {
                 string source = SRBackupDir + @"\" + backupItem;
-                Log.Debug("{guid} {version} {RestoreSource} {RestoreDestination}", guid, aVersion, source, @SRSaveGameDir);
-                dCopy(source, SRSaveGameDir, true);
+                Log.Debug("Copy directory from {Source} to {Destination}", source, @SRSaveGameDir);
+                DirCopy(source, SRSaveGameDir, true);
             }
             // Zipped backup: Extract zip file, see ZipExtractHelperClass
             else
             {
                 string zipFile = MyBackupDir + @"\" + backupItem;
-                Log.Debug("{guid} {version} {ZipRestoreSource} {ZipRestoreDestination}", guid, aVersion, zipFile, @SRSaveGameDir);
+                Log.Debug("Unzipping {Source} to {Destination}", zipFile, @SRSaveGameDir);
                 ZipExtractHelperClass.ZipFileExtractToDirectory(zipFile, SRSaveGameDir);
             }
         }
@@ -379,23 +387,23 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         private string backupCurrentSavegame()
         {
-            Log.Debug("{guid} {version}Starting backup of current save game", guid, aVersion);
+            Log.Debug("Backuping up current save game");
             if (!Directory.Exists(MyBackupDir))
             {
                 Directory.CreateDirectory(MyBackupDir);
             }
-            string startPath = SRSaveGameDir;
+            string sourcePath = SRSaveGameDir;
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss", CultureInfo.CurrentCulture);
             string zipPath = MyBackupDir + @"\backup" + timestamp + ".zip";
 
             try
             {
-                ZipFile.CreateFromDirectory(startPath, zipPath);
-                Log.Debug("{guid} {version} {ZipCreateSource} {ZipCreateTarget}", guid, aVersion, startPath, zipPath);
+                ZipFile.CreateFromDirectory(sourcePath, zipPath);
+                Log.Debug("{SaveGameDir} {ZipFileTarget}", sourcePath, zipPath);
             }
             catch (IOException ex)
             {
-                Log.Error("{guid} {version} {ZipCreateException}", guid, aVersion, ex.Message);
+                Log.Error(ex, "ZipFile.CreateFromDirectory failed");
             }
             
             // Reread all backups
@@ -418,11 +426,11 @@ namespace SnowRunner_Tool
                 {
                     int chashFlow = int.Parse(amount) - money;
                     money = int.Parse(amount);
-                    Log.Information("{guid} {version} {moneyamount} {cashflow}", guid, aVersion, amount, chashFlow);
+                    Log.Information("CashCheat {NewMoney} {Cashflow}", amount, chashFlow);
                 }
                 catch
                 {
-                    Log.Debug("{guid} {version} Failed to parse int at saveMoney", guid, aVersion);
+                    Log.Debug("Failed to parse int at saveMoney");
                 }
                 File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + amount));
                 return true;
@@ -447,7 +455,7 @@ namespace SnowRunner_Tool
             {
                 moneyAmount = Regex.Match(s, sPattern).Value;
                 moneyAmount = moneyAmount.Replace("\"money\":", null);
-                Log.Debug("{guid} {version} {MoneyFromSavegame}", guid, aVersion, moneyAmount);
+                Log.Debug("Read money {MoneyFromSavegame}", moneyAmount);
                 try
                 {
                     money = int.Parse(moneyAmount);
@@ -460,7 +468,7 @@ namespace SnowRunner_Tool
             }
             else
             {
-                Log.Warning("{guid} {version} {MoneyNotFoundInFile}", guid, aVersion, saveGameFile);
+                Log.Warning("Money value not found in {SaveGameFile}", saveGameFile);
                 return null;
             }
         }
@@ -472,7 +480,7 @@ namespace SnowRunner_Tool
         /// <param name="destDirName"></param>
         /// <param name="copySubDirs"></param>
         /// <param name="overwriteExisting"></param>
-        private void dCopy(string sourceDirName, string destDirName, bool overwriteExisting)
+        private void DirCopy(string sourceDirName, string destDirName, bool overwriteExisting)
         {
             foreach (string newPath in Directory.GetFiles(sourceDirName, "*.*", SearchOption.AllDirectories))
                 try
@@ -481,7 +489,7 @@ namespace SnowRunner_Tool
                 }
                 catch (IOException ex)
                 {
-                    Log.Warning("{guid} {version} {CopyFileToDestination} {Exception}", guid, aVersion, destDirName, ex.Message);
+                    Log.Error(ex, "File copy failed: {NewPath} {DestDirName}", newPath, destDirName);
                 }
         }
 

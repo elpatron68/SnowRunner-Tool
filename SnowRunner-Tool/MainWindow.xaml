@@ -43,7 +43,19 @@
                           >
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="_Settings">
+            <MenuItem Header="_Cheats">
+                <MenuItem x:Name="MnMoneyCheat"
+                          Header="_Money"
+                          Click="MnMoneyCheat_Click"
+                          >
+                </MenuItem>
+                <MenuItem x:Name="MnXp"
+                          Header="_XP"
+                          Click="MnXp_Click"
+                          >
+                </MenuItem>
+            </MenuItem>
+                <MenuItem Header="_Settings">
                 <MenuItem x:Name="MnPaths"
                                      Header="_Set game path"
                                      Click="MnPaths_Click"
@@ -147,24 +159,6 @@
                        Width="215"
                        RenderTransformOrigin="-0.29,0.04"
                        Command="ApplicationCommands.New"
-                >
-        </Button>
-        <TextBox x:Name="txtAmount" 
-                         HorizontalAlignment="Right" 
-                         Height="23" Margin="0,320,19.667,0" 
-                         TextWrapping="Wrap" 
-                         Text="Amount" 
-                         VerticalAlignment="Top" 
-                         Width="120" Grid.Column="1"
-                 >
-        </TextBox>
-        <Button Content="Set Money" 
-                       HorizontalAlignment="Right" 
-                       Margin="0,320,159.667,0" 
-                       VerticalAlignment="Top" 
-                       Width="75" 
-                       RenderTransformOrigin="-0.29,0.04"
-                       Command="ApplicationCommands.Save" Grid.Column="1"
                 >
         </Button>
     </Grid>

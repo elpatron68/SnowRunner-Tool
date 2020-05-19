@@ -353,7 +353,7 @@ namespace SnowRunner_Tool
             var contextMenu = (ContextMenu)menuItem.Parent;
             var item = (DataGrid)contextMenu.PlacementTarget;
             var restoreItem = (Backup)item.SelectedCells[0].Item;
-            backupCurrentSavegame();
+            BackupCurrentSavegame();
             restoreBackup(restoreItem.BackupName, restoreItem.Type);
             _ = MetroMessage("Next time better luck", "The selected save game backup has been restored. A backup of your former save game has been saved in " + MyBackupDir);
         }
@@ -385,7 +385,7 @@ namespace SnowRunner_Tool
         /// Create a zip compressed backup of the current save game
         /// </summary>
         /// <returns></returns>
-        private string backupCurrentSavegame()
+        private string BackupCurrentSavegame()
         {
             Log.Debug("Backuping up current save game");
             if (!Directory.Exists(MyBackupDir))
@@ -416,7 +416,7 @@ namespace SnowRunner_Tool
         /// </summary>
         private bool saveMoney()
         {
-            backupCurrentSavegame();
+            BackupCurrentSavegame();
             string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
             string amount = txtAmount.Text;
             // Check if money value is numeric
@@ -510,26 +510,9 @@ namespace SnowRunner_Tool
         /// <param name="e"></param>
         private void BackupCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            backupCurrentSavegame();
+            BackupCurrentSavegame();
 
             _ = MetroMessage("Just for sure", "Your current save game was backed up to the folder " + MyBackupDir + ".");
-        }
-
-        /// <summary>
-        /// "Set Money" Button click event
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (saveMoney() == true)
-            {
-                _ = MetroMessage("Congratulations", "You are probably rich now.");
-            }
-            else
-            {
-                _ = MetroMessage("Still broke!", "Just give me a number! \"Extremely rich\" is no number.");
-            }
         }
 
         /// <summary>
@@ -557,6 +540,18 @@ namespace SnowRunner_Tool
 
             return false;
         }
+
+        private async Task<string> MetroInputMessage(string title, string message, string defaultValue)
+        {
+            var dialogSettings = new MetroDialogSettings();
+            dialogSettings.AffirmativeButtonText = "Save";
+            dialogSettings.DefaultText = defaultValue;
+            dialogSettings.NegativeButtonText = "Cancel";
+
+            var result = await this.ShowInputAsync(title, message, dialogSettings);
+            return result;
+        }
+
 
         private void MnuAbout_Click(object sender, RoutedEventArgs e)
         {
@@ -711,6 +706,27 @@ namespace SnowRunner_Tool
                     _ = MetroMessage("Sorry!", "You can`t leave the settings without entering a valid path!");
                     ShowInputPathDialog();
                 }
+            }
+        }
+
+        private async void MnMoneyCheat_Click(object sender, RoutedEventArgs e)
+        {
+            string result = await MetroInputMessage("Money Cheat", "Enter the amount of money you´d like to have", CheatGame.GetMoney(SRSaveGameDir));
+            if (!string.IsNullOrEmpty(result))
+            {
+                _ = CheatGame.SaveMoney(SRSaveGameDir, result, money);
+                _ = MetroMessage("Congratulations", "You are probably rich now.");
+            }
+
+        }
+
+        private async void MnXp_Click(object sender, RoutedEventArgs e)
+        {
+            string result = await MetroInputMessage("XP Cheat", "Enter the amount of XP you´d like to have", CheatGame.GetXp(SRSaveGameDir));
+            if (!string.IsNullOrEmpty(result))
+            {
+                CheatGame.SaveXp(SRSaveGameDir, result);
+                _ = MetroMessage("Congratulations", "Nothing is better than experience!");
             }
         }
     }

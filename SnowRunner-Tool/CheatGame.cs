@@ -14,7 +14,29 @@ namespace SnowRunner_Tool
         /// <summary>
         /// Cheat: Set amount of money in current save game
         /// </summary>
-        public static bool saveMoney(string SRSaveGameDir, string amount)
+        private readonly ILogger _log = Log.ForContext<CheatGame>();
+
+        public static string GetMoney(string SRSaveGameDir)
+        {
+            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+            string s = File.ReadAllText(saveGameFile);
+            string sPattern = @"\""money\""\:\d+";
+            string moneyAmount;
+            if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
+            {
+                moneyAmount = Regex.Match(s, sPattern).Value;
+                moneyAmount = moneyAmount.Replace("\"money\":", null);
+                Log.Debug("Read money {MoneyFromSavegame}", moneyAmount);
+                return moneyAmount;
+            }
+            else
+            {
+                Log.Warning("Money value not found in {SaveGameFile}", saveGameFile);
+                return null;
+            }
+        }
+
+        public static bool SaveMoney(string SRSaveGameDir, string newMoney, int oldMoney)
         {
 
             // backupCurrentSavegame();
@@ -22,22 +44,57 @@ namespace SnowRunner_Tool
             string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
             // string amount = txtAmount.Text;
             // Check if money value is numeric
-            if (Regex.IsMatch(amount, @"^\d+$"))
+            Log.Information("SaveMoney");
+            if (Regex.IsMatch(newMoney, @"^\d+$"))
             {
-                //try
-                //{
-                //    int chashFlow = int.Parse(amount) - money;
-                //    money = int.Parse(amount);
-                //    Log.Information("{guid} {version} {moneyamount} {cashflow}", guid, aVersion, amount, chashFlow);
-                //}
-                //catch
-                //{
-                //    Log.Debug("{guid} {version} Failed to parse int at saveMoney", guid, aVersion);
-                //}
-                File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + amount));
+                try
+                {
+                    int chashFlow = int.Parse(newMoney) - oldMoney;
+                    Log.Information("{MoneyAmount} {CashFlow}", newMoney, chashFlow);
+                }
+                catch
+                {
+                    Log.Debug("Failed to parse int at SaveMoney");
+                }
+                File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + newMoney));
                 return true;
             }
             else
+            {
+                return false;
+            }
+        }
+
+        public static string GetXp(string SRSaveGameDir)
+        {
+            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+            string s = File.ReadAllText(saveGameFile);
+            string sPattern = @"\""experience\""\:\d+";
+            string xpAmount;
+            if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
+            {
+                xpAmount = Regex.Match(s, sPattern).Value;
+                xpAmount = xpAmount.Replace("\"experience\":", null);
+                Log.Debug("Read XP {XpFromSavegame}", xpAmount);
+                return xpAmount;
+            }
+            else
+            {
+                Log.Warning("Money value not found in {SaveGameFile}", saveGameFile);
+                return null;
+            }
+
+        }
+        public static bool SaveXp(string SRSaveGameDir, string newXP)
+        {
+            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+            Log.Information("SaveXp");
+            try
+            {
+                File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""experience\""\:\d+", "\"experience\":" + newXP));
+                return true;
+            }
+            catch (IOException ex)
             {
                 return false;
             }

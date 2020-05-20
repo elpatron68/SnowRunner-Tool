@@ -232,9 +232,7 @@ namespace SnowRunner_Tool
                 dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
                 dgBackups.Items.Refresh();
             }
-            string m = CheatGame.GetMoney(SRsaveGameFile);
-            string xp = CheatGame.GetXp(SRsaveGameFile);
-            updateTitle(m, xp);
+            updateTitle();
         }
 
         /// <summary>
@@ -613,26 +611,18 @@ namespace SnowRunner_Tool
 
         private async void MnMoneyCheat_Click(object sender, RoutedEventArgs e)
         {
-            string m = CheatGame.GetMoney(SRsaveGameFile);
+            int oldMoney = int.Parse(CheatGame.GetMoney(SRsaveGameFile));
             string result = await MetroInputMessage("Money Cheat", "Enter the amount of money you´d like to have", m);
             if (!string.IsNullOrEmpty(result))
             {
                 _ = CheatGame.SaveMoney(SRsaveGameFile, result);
+                int moneyUpgrade = int.Parse(result) - oldMoney;
+                Log.Information("MoneyUpgrade {MoneyUpgrade}", moneyUpgrade);
                 _ = MetroMessage("Congratulations", "You are probably rich now.");
-                m = CheatGame.GetMoney(SRsaveGameFile);
-                string xp = CheatGame.GetXp(SRsaveGameFile);
-                updateTitle(m ,xp);
+                updateTitle();
             }
         }
 
-        private void updateTitle(string money="", string xp="")
-        {
-            this.Title="SnowRunner-Tool v" + aVersion;
-            if (!string.IsNullOrEmpty(money))
-            {
-                Title += " | Money: " + money + " | XP: " + xp;
-            }
-        }
 
         private async void MnXp_Click(object sender, RoutedEventArgs e)
         {
@@ -643,6 +633,17 @@ namespace SnowRunner_Tool
             {
                 CheatGame.SaveXp(SRSaveGameDir, result);
                 _ = MetroMessage("Congratulations", "Nothing is better than experience!");
+            }
+        }
+
+        private void updateTitle()
+        {
+            this.Title = "SnowRunner-Tool v" + aVersion;
+            if (File.Exists(SRsaveGameFile))
+            {
+                string money = CheatGame.GetMoney(SRsaveGameFile);
+                string xp = CheatGame.GetXp(SRsaveGameFile);
+                Title += " | Money: " + money + " | XP: " + xp;
             }
         }
 

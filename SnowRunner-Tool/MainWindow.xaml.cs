@@ -253,6 +253,16 @@ namespace SnowRunner_Tool
             if (string.Equals(restoreItem.Type, "PAK-Backup"))
             {
                 // Restore initial.pak
+                try
+                {
+                    _ = MetroMessage("This function experimental!", "Please report any problems to Github issues, see Help - Web - Report a problem.");
+                    Backup.RestoreBackup(backupSource, SRPaksDir);
+                }
+                catch
+                {
+                    _ = MetroMessage("Something went wrong", "Your backup could not be restored, please restore it manually.");
+                    Process.Start("explorer.exe " + backupSource);
+                }
             }
             else
             {
@@ -493,6 +503,7 @@ namespace SnowRunner_Tool
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+            ReadBackups();
         }
 
         private async void MnPaths2_Click(object sender, RoutedEventArgs e)
@@ -506,7 +517,7 @@ namespace SnowRunner_Tool
             {
                 defaultPath = @"C:\Program Files\Epic Games\SnowRunner\en_us\preload\paks\client";
             }
-            var result = await MetroInputMessage("INITIAL.PAK", "Enter path to the file \"initial.pak\" (find the file and copy-paste the directory):", defaultPath);
+            var result = await MetroInputMessage("INITIAL.PAK", "Enter path to the file \"initial.pak\" (find the file and copy-paste the directory name):", defaultPath);
             // Make sure we have a directory, not a file
             FileAttributes attr = File.GetAttributes(result);
             if (!attr.HasFlag(FileAttributes.Directory))

@@ -180,22 +180,20 @@ namespace SnowRunner_Tool
         /// Restores a game backup (overwrites current save game)
         /// </summary>
         /// <param name="sourceFileOrDirectory"></param>
-        public static void RestoreBackup(string sourceFileOrDirectory, string saveGameDirectory)
+        public static void RestoreBackup(string sourceFileOrDirectory, string targetDirectory)
         {
             Log.Information("Restore backup {BackupItem}", sourceFileOrDirectory);
             // SnowRunner Backup: Copy directory
             if (!String.Equals(Path.GetExtension(sourceFileOrDirectory), ".zip", StringComparison.OrdinalIgnoreCase))
             {
-                // string source = SRBackupDir + @"\" + sourceDirectory;
-                Log.Debug("Copy directory from {Source} to {Destination}", sourceFileOrDirectory, saveGameDirectory);
-                Backup.DirCopy(sourceFileOrDirectory, saveGameDirectory, true);
+                Log.Debug("Copy directory from {Source} to {Destination}", sourceFileOrDirectory, targetDirectory);
+                Backup.DirCopy(sourceFileOrDirectory, targetDirectory, true);
             }
             // Zipped backup: Extract zip file, see ZipExtractHelperClass
             else
             {
-                // string zipFile = MyBackupDir + @"\" + sourceFileOrDirectory;
-                Log.Debug("Unzipping {Source} to {Destination}", sourceFileOrDirectory, saveGameDirectory);
-                ZipExtractHelperClass.ZipFileExtractToDirectory(sourceFileOrDirectory, saveGameDirectory);
+                Log.Debug("Unzipping save game {Source} to {Destination}", sourceFileOrDirectory, targetDirectory);
+                ZipExtractHelperClass.ZipFileExtractToDirectory(sourceFileOrDirectory, targetDirectory);
             }
         }
 

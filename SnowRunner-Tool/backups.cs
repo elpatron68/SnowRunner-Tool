@@ -130,26 +130,33 @@ namespace SnowRunner_Tool
             return zipPath;
         }
 
-        public static string BackupSingleFile(string backupSourceFileName, string backupDestination, string prefix)
+        public static string BackupSingleFile(string backupSourceFileName, string backupDestinationPath, string prefix)
         {
             string sourceFileExtension = Path.GetExtension(backupSourceFileName);
             Log.Debug("Backing up single file {SingeFileBackupSource}", backupSourceFileName);
-            if (!Directory.Exists(backupDestination))
+            if (!Directory.Exists(backupDestinationPath))
             {
-                Directory.CreateDirectory(backupDestination);
+                Directory.CreateDirectory(backupDestinationPath);
             }
-            string sourcePath = backupSourceFileName;
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss", CultureInfo.CurrentCulture);
-            string zipPath = backupDestination + @"\" + prefix + "_" + timestamp + "_" + sourceFileExtension + ".zip";
+            string zipPath = backupDestinationPath + @"\" + prefix + "_" + timestamp + sourceFileExtension + ".zip";
 
             try
             {
-                using (var zip = ZipFile.Open(zipPath, ZipArchiveMode.Create))
-                    zip.CreateEntryFromFile(backupSourceFileName, backupSourceFileName);
+                string tempDir = Path.GetTempPath() + "SRT";
+                string fName = Path.GetFileName(backupSourceFileName);
+                if (!Directory.Exists(tempDir))
+                {
+                    Directory.CreateDirectory(tempDir);
+                }
+                File.Copy(backupSourceFileName, tempDir + @"\" + fName, true);
+                ZipFile.CreateFromDirectory(tempDir, zipPath);
+                Directory.Delete(tempDir, true);
             }
             catch (IOException ex)
             {
                 Log.Error(ex, "ZipFile.BackupSingleFile failed");
+                return null;
             }
 
             return zipPath;

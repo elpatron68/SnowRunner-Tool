@@ -112,6 +112,7 @@ namespace SnowRunner_Tool
             {
                 SRProfile = Settings.Default.SRprofile;
             }
+            SRPaksDir = Settings.Default.SRPaksDir;
 
             // Check base directory for existance
             if (!Directory.Exists(SRBaseDir))
@@ -518,9 +519,10 @@ namespace SnowRunner_Tool
 
         private void MnBackupPak_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(SRPaksDir + @"\initial.pak"))
+            string f = SRPaksDir + @"\initial.pak";
+            if (File.Exists(f))
             {
-                //TODO: Call Method
+                string zipFileName = Backup.BackupSingleFile(f, MyBackupDir, "pakbackup");
             }
             else
             {

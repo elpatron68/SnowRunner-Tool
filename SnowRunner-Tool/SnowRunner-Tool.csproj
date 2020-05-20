@@ -97,6 +97,7 @@
     </ApplicationDefinition>
     <Compile Include="BackupScheduler.cs" />
     <Compile Include="CheatGame.cs" />
+    <Compile Include="DiscoverPaths.cs" />
     <Compile Include="InputGamePath.xaml.cs">
       <DependentUpon>InputGamePath.xaml</DependentUpon>
     </Compile>

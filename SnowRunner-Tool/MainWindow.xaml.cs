@@ -45,15 +45,10 @@ namespace SnowRunner_Tool
         public MainWindow()
         {
             // Command line options
-            // 3rd party backup directory
             string[] args = Environment.GetCommandLineArgs();
             Parser.Default.ParseArguments<Options>(args)
                    .WithParsed<Options>(o =>
                    {
-                       //if (!string.IsNullOrEmpty(o.ThirdPartyDirectory))
-                       //{
-                       //    @ThirdPartyBackupDir = o.ThirdPartyDirectory;
-                       //}
                        if (o.EnableLogging == true)
                        {
                            enableDebugLogging = true;
@@ -110,7 +105,7 @@ namespace SnowRunner_Tool
             }
             if (string.IsNullOrEmpty(Settings.Default.SRprofile))
             {
-                SRProfile = findProfileName();
+                SRProfile = DiscoverPaths.FindProfileName(SRBaseDir);
             }
             else
             {
@@ -238,36 +233,36 @@ namespace SnowRunner_Tool
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        private string findProfileName()
-        {
-            string searchPath = @SRBaseDir + @"\storage";
-            try
-            {
-                string[] subdirectoryEntries = Directory.GetDirectories(searchPath);
-                string pattern = @"^[A-Fa-f0-9]+$";
-                foreach (string subdirectory in subdirectoryEntries)
-                {
-                    Log.Debug("Profile candidate {ProfileCandidate}", subdirectory);
-                    if (!subdirectory.Contains("backupSlots"))
-                    {
-                        // Check if subdirectory is hex string
-                        string dirName = new DirectoryInfo(subdirectory).Name;
-                        if (Regex.IsMatch(dirName, pattern))
-                        {
-                            string profiledir = new DirectoryInfo(subdirectory).Name;
-                            Log.Debug("Profile {ProfileDir} found", profiledir);
-                            return profiledir;
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                Log.Warning("No profile directory found!");
-                return null;
-            }
-            return null;
-        }
+        //private string findProfileName(string snowRunnerBaseDirectory)
+        //{
+        //    string searchPath = @SRBaseDir + @"\storage";
+        //    try
+        //    {
+        //        string[] subdirectoryEntries = Directory.GetDirectories(searchPath);
+        //        string pattern = @"^[A-Fa-f0-9]+$";
+        //        foreach (string subdirectory in subdirectoryEntries)
+        //        {
+        //            Log.Debug("Profile candidate {ProfileCandidate}", subdirectory);
+        //            if (!subdirectory.Contains("backupSlots"))
+        //            {
+        //                // Check if subdirectory is hex string
+        //                string dirName = new DirectoryInfo(subdirectory).Name;
+        //                if (Regex.IsMatch(dirName, pattern))
+        //                {
+        //                    string profiledir = new DirectoryInfo(subdirectory).Name;
+        //                    Log.Debug("Profile {ProfileDir} found", profiledir);
+        //                    return profiledir;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        Log.Warning("No profile directory found!");
+        //        return null;
+        //    }
+        //    return null;
+        //}
 
         /// <summary>
         /// SnowRunner base directory, usually %userprofofile%\documents\my games\Snowrunner\base

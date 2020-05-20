@@ -150,7 +150,7 @@ namespace SnowRunner_Tool
                     Directory.CreateDirectory(tempDir);
                 }
                 File.Copy(backupSourceFileName, tempDir + @"\" + fName, true);
-                ZipFile.CreateFromDirectory(tempDir, zipPath, CompressionLevel.Optimal, false);
+                ZipFile.CreateFromDirectory(tempDir, zipPath, CompressionLevel.NoCompression, false);
                 Directory.Delete(tempDir, true);
             }
             catch (IOException ex)

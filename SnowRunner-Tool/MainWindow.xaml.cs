@@ -250,7 +250,7 @@ namespace SnowRunner_Tool
             
             if (string.Equals(restoreItem.Type, "PAK-Backup"))
             {
-
+                // Restore initial.pak
             }
             else
             {

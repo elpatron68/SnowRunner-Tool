@@ -10,7 +10,7 @@
         Height="600" 
         Width="1000" 
         WindowStyle="ToolWindow" 
-        ResizeMode="NoResize" 
+
         Icon="baseline_restore_black_18dp.ico">
     <Grid>
 
@@ -49,7 +49,7 @@
                           >
                 </MenuItem>
             </MenuItem>
-                <MenuItem Header="_Settings">
+            <MenuItem Header="_Settings">
                 <MenuItem x:Name="MnPaths1"
                                      Header="Set _save game path"
                                      Click="MnPaths_Click"
@@ -93,7 +93,7 @@
                               Click="MnProjectModio_Click"
                               >
                     </MenuItem>
-                        <MenuItem x:Name="MnIssues" 
+                    <MenuItem x:Name="MnIssues" 
                                     Header="_Report a problem"
                                     Click="MnuIssues_Click"
                           >
@@ -113,14 +113,16 @@
         </Menu>
 
         <Label Content="SnowRunner path" 
-                     Margin="20,28,135,0" 
+                     Margin="20,28,860,0" 
                      VerticalAlignment="Top" 
+                     HorizontalAlignment="Left"
                      FontStyle="Italic"
                />
         <Label x:Name="lblSnowRunnerPath" 
                     Content="Path" 
-                    Margin="130,28,20,0" 
-                    VerticalAlignment="Top" Grid.ColumnSpan="2"
+                    Margin="320,28,0,0" 
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left" Width="653"
                />
         <Label Content="Right click on backup item to restore it" 
                      Margin="20,60,0,240" 
@@ -135,7 +137,6 @@
                           RenderTransformOrigin="-0.429,0.15" 
                           IsReadOnly="True" 
                           SelectedItem="{Binding SelectedRow, Mode=TwoWay}"   
-                          HorizontalScrollBarVisibility="Disabled"
                           SelectionMode="Single"
                           ColumnWidth="220" Grid.ColumnSpan="2"
             >
@@ -153,8 +154,8 @@
         </DataGrid>
         <Button Content="Backup current save game" 
                        HorizontalAlignment="Left" 
-                       VerticalAlignment="Top" 
-                       Margin="20,520,0,0"
+                       VerticalAlignment="Bottom" 
+                       Margin="20,0,0,20"
                        Width="215"
                        RenderTransformOrigin="-0.29,0.04"
                        Click="Button_Click"

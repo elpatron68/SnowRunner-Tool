@@ -36,10 +36,9 @@ namespace SnowRunner_Tool
         private string SRProfile;
         private string SRBackupDir;
         private string MyBackupDir;
-        // private string @ThirdPartyBackupDir;
         private string SRSaveGameDir;
         private string SRsaveGameFile;
-        private string guid;
+        private readonly string guid;
         private readonly string aVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private bool enableDebugLogging;
 

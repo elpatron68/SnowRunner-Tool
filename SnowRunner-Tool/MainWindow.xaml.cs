@@ -538,5 +538,14 @@ namespace SnowRunner_Tool
                 _ = MetroMessage("Settings missing!", "To create a backup of \"initial.pak\" you have to set the path in the menu Settings - Set pak file path.");
             }
         }
+
+        private void RestoreWindow()
+        {
+            this.Height = Settings.Default.Heigth;
+            this.Width = Settings.Default.Width;
+            var location = new System.Windows.Point(Settings.Default.Xpos, Settings.Default.Ypos);
+            this.Left = location.X;
+            this.Top = location.Y - this.Height;
+        }
     }
 }

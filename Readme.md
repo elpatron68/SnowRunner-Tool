@@ -11,9 +11,11 @@ The *SnowRunner-Tool* does nothing that you could not do in a manual way, but it
 ## Features
 
 *SnowRunner-Tool* lets you
-- create backups of the current game state,
-- restore a saved game from the game´s backup repository, a backup made with this tool or a directory containing 3rd party backups as Zip files and
-- cheat the amount of money you have in your pocket.
+- create backups of the current game state and list them in a fancy style,
+- create backups of the file `initial.pak` (which has to be changed for some mods),
+- restore a saved game from the game´s backup repository, a backup made with this tool or a  former saved `initial.pak` file,
+- cheat the amount of money you have in your pocket and
+- cheat your experience points (XP).
 
 ![SnowRunner-Tool](images/SnowRunner-Tool_Screenshot.png)
 
@@ -42,43 +44,69 @@ Uninstall *SnowRunner-Tool* with the Windows *Programs and Functions* control.
 
 ## Usage
 
-After the start, *SnowRunner-Tool* reads all backup files created by the game, by itself or by a third party backup script and lists them with their time stamps. Right click on a row to restore the selected backup. Before restoring a backup to your save game slot, another backup of the current game state will be made.
+After the start, *SnowRunner-Tool* reads all backup files created by the game, by itself or by a third party backup script and lists them with their time stamps. Right click on a row to restore the selected backup. Before restoring anything, another backup of the current game state will be made.
 
-You can manually create a backup of the current game state by clicking on *Backup current save game*.
+### Save game backup
 
-Set the amount of money you´d like to have by entering a value and clicking the *Set money* button. Before changing the money in your save game file, another fresh backup will be created.
+You can manually create a backup of the current game state by clicking on *Backup save game* in the *File* menu.
+
+**Backups can be created while the game is running**. If you have to master a risky maneuver, just switch to your *SnowRunner-Tool* and make a backup before you fail.
+
+### PAK backup
+
+Create a backup of your `initial.pak` file before making changes to it! Open the *File* menu and select *Backup INITIAL.PAK*. The backup will be listed as *PAK-Backup* and can be restored as any other backup by right clicking on it.
+
+**This feature is experimental, handle with care!**
+
+### Cheats
+
+Set the amount of money or experience points you´d like to have by opening the *Cheats* menu. Before changing the money in your save game file, another fresh backup will be created.
+
+![Money cheat](images/SnowRunner-Tool_MoneyCheat.png)
 
 **See *Advanced* if you are asked for the path save game file after the first start.**
 
 ## Settings
 
-In the *Settings* menu usage reporting and remote logging can en- and disabled. A check mark will be displayed if the option is enabled.
+In the *Settings* menu, you can save a couple paths this tool needs to operate. Also,  usage reporting and remote logging can en- and disabled. A check mark will be displayed if the option is enabled.
+
+### Save Game Path
+
+*SnowRunner-Tool* tries to find your save game path automagically at the first start (which is not always a trivial task). If this fails, the *Set save game path* dialog will open. If you like to change this setting at a later time, open the menu *Settings* -  *Set save game path*.
+
+![Save game path setup](images/Path_settings_save_game.png)
+
+Click *Browse*, navigate to the file `CompleteSave.dat` and open it.
+
+Usually, the file is located under your documents folder -> my games -> snowrunner -> base -> storage -> (profile directory, long name of random characters).
+
+Example:
+```
+C:\Users\mbusc\Documents\My Games\SnowRunner\base\storage\f2555667235d4dbd899a5670674d88b0
+```
+
+All other path fields in the dialog are read only and will be filled by the app.
+
+### Logging
 
 Remote logging sends debug information to a private log server. Enable it if you have a problem with *SnowRunner-Tool*. If you need help from the developer, open an issue at [Github](https://github.com/elpatron68/SnowRunner-Tool/issues), describe the problem and post your Support ID (shown under *Help* - *Support ID*).
 
-Usage reporting sends small datagrams when one of these events occur:
+Usage reporting sends small datagrams whenever one of these events occur:
+
 - User starts *SnowRunner-Tool* 
-- User Restores a Backup
-- User changes money (just the event, not the value you entered)
+- User changes money or XP
 - Critical errors
-- This version only: Your SnowRunner game profile directory
 
 Both reporting options require an active internet connection. No personal data will be sent. Usage reporting helps the developer to decide, if this tool will be expanded in the future.
 
-Debug logging is disabled by default. Usage reporting is enabled by default.
+Debug logging is **disabled** by default. Usage reporting is **enabled** by default.
 
 ## Notes
 
 * If *SnowRunner-Tool* does not start after double clicking, install Microsoft .NET Framework 4.7.2 (see *Installation* above).
 * After restoring a save game from a backup or after altering the money, the *Epic Launcher* detects locally changed files. You are asked if you want to upload local files into the cloud or download cloud files to your local disk. Choose *Upload local files*.![Epic Launcher](images/epic-cloud.png)
 
-## Advanced
-
-### Command Line Arguments
-
-*SnowRunner-Tool* has a few command line arguments. Just create a desktop shortcut for `SnowRunner-Tool.exe`, edit the properties and append the command line parameters to the field *Target* (see Screenshot).
-
-![Shortcut Properties](images/DesktopShortcutSettings.png)
+## Advanced, Troubleshooting
 
 ### Save Game Path Not Found
 
@@ -86,24 +114,14 @@ If *SnowRunner-Tool* cannot find your game profile directory, you are asked to e
 
 ![](images/File_not_found.png)
 
-Click on *Browse* and navigate to your SnowRunner save game directory. Usually, it is located under your documents folder -> my games -> snowrunner -> base -> storage -> (profile directory, long name of random characters).
-
-Example:
-```
-C:\Users\mbusc\Documents\My Games\SnowRunner\base\storage\f2555667235d4dbd899a5670674d88b0
-```
 
 Select the file *CompleteSave.dat* in that folder, click *Open* and close the *FILE NOT FOUND!* dialog.
 
 ### Command line arguments
 
-`-i <Path-to-3rd-Party-Backup>`
-
-Imports 3rd party backups. The directory must contain backups from the save game directory as **Zip files**. You can use a *Powershell* [script](https://forums.focus-home.com/user/grimdanfango) to create backups in regular intervals while you are playing the game. *SnowRunner-Tool* lists these backups and lets you restore them with one click.
-
 `-l`
 
-Enables remote logging and makes the dev happy.
+Enables remote logging.
 
 ## Useful links
 

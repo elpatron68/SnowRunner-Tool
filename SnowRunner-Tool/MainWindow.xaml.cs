@@ -56,7 +56,9 @@ namespace SnowRunner_Tool
                        }
                    });
             guid = GenGuid();
+            
             InitializeComponent();
+            ((App)System.Windows.Application.Current).WindowPlace.Register(this);
 
             // Initialize Logging
             var myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
@@ -539,13 +541,6 @@ namespace SnowRunner_Tool
             }
         }
 
-        private void RestoreWindow()
-        {
-            this.Height = Settings.Default.Heigth;
-            this.Width = Settings.Default.Width;
-            var location = new System.Windows.Point(Settings.Default.Xpos, Settings.Default.Ypos);
-            this.Left = location.X;
-            this.Top = location.Y - this.Height;
-        }
+
     }
 }

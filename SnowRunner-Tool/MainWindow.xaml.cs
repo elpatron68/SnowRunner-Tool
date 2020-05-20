@@ -54,7 +54,7 @@ namespace SnowRunner_Tool
                            enableDebugLogging = true;
                        }
                    });
-            guid = genGuid();
+            guid = GenGuid();
             InitializeComponent();
 
             // Initialize Logging
@@ -181,7 +181,7 @@ namespace SnowRunner_Tool
 
             // Fill Datagrid
             dgBackups.AutoGenerateColumns = true;
-            readBackups();
+            ReadBackups();
 
             // Test scheduled backup
             // BackupScheduler.startScheduledBackup("start", SRSaveGameDir, MyBackupDir);
@@ -191,7 +191,7 @@ namespace SnowRunner_Tool
         /// Generates unique support-id for logging
         /// </summary>
         /// <returns></returns>
-        private string genGuid()
+        private string GenGuid()
         {
             if (Settings.Default.guid == "")
             {
@@ -210,7 +210,7 @@ namespace SnowRunner_Tool
         /// <summary>
         /// Clear items in datagrid and (re)loads all backups
         /// </summary>
-        private void readBackups()
+        private void ReadBackups()
         {
             // Add SnowRunner backup directories
             var allBackups = Backup.GetBackups(SRBackupDir);
@@ -235,7 +235,7 @@ namespace SnowRunner_Tool
             var item = (DataGrid)contextMenu.PlacementTarget;
             var restoreItem = (Backup)item.SelectedCells[0].Item;
             Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
-            readBackups();
+            ReadBackups();
             string backupSource = string.Empty;
             if (string.Equals(restoreItem.Type,"Game-Backup", StringComparison.OrdinalIgnoreCase))
             {
@@ -248,7 +248,7 @@ namespace SnowRunner_Tool
             Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
             Backup.RestoreBackup(backupSource, SRSaveGameDir);
             _ = MetroMessage("Next time better luck", "The selected saved game has been restored. A backup of your former save game has been saved.");
-            readBackups();
+            ReadBackups();
         }
 
 
@@ -319,7 +319,7 @@ namespace SnowRunner_Tool
 
         private void MnuReload_Click(object sender, RoutedEventArgs e)
         {
-            readBackups();
+            ReadBackups();
             var m = CheatGame.GetMoney(SRsaveGameFile);
         }
 
@@ -355,7 +355,7 @@ namespace SnowRunner_Tool
         private void MnPaths_Click(object sender, RoutedEventArgs e)
         {
             ShowSettingsDialog();
-            readBackups();
+            ReadBackups();
         }
 
         private void MnProjectGithub_Click(object sender, RoutedEventArgs e)
@@ -437,24 +437,29 @@ namespace SnowRunner_Tool
             string result = await MetroInputMessage("Money Cheat", "Enter the amount of money you´d like to have", oldMoney.ToString());
             if (!string.IsNullOrEmpty(result))
             {
+                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
                 _ = CheatGame.SaveMoney(SRsaveGameFile, result);
                 int moneyUpgrade = int.Parse(result) - oldMoney;
                 Log.Information("MoneyUpgrade {MoneyUpgrade}", moneyUpgrade);
                 _ = MetroMessage("Congratulations", "You won " + moneyUpgrade.ToString() + " coins.");
+                ReadBackups();
                 UpdateTitle();
             }
         }
 
 
-        private async void MnXp_Click(object sender, RoutedEventArgs e)
+        private async void MnXpCheat_Click(object sender, RoutedEventArgs e)
         {
             string xp = CheatGame.GetXp(SRsaveGameFile);
             string result = await MetroInputMessage("XP Cheat", "Enter the amount of XP you´d like to have",
                                                     xp);
             if (!string.IsNullOrEmpty(result))
             {
+                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
                 CheatGame.SaveXp(SRSaveGameDir, result);
                 _ = MetroMessage("Congratulations", "Nothing is better than experience!");
+                ReadBackups();
+                UpdateTitle();
             }
         }
 

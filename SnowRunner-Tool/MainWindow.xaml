@@ -35,7 +35,7 @@
                 </MenuItem>
                 <MenuItem x:Name="MnXp"
                           Header="_XP"
-                          Click="MnXp_Click"
+                          Click="MnXpCheat_Click"
                           >
                 </MenuItem>
             </MenuItem>

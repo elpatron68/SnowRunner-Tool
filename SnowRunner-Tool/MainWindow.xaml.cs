@@ -234,43 +234,50 @@ namespace SnowRunner_Tool
         
         private void RestoreBackup_Click(object sender, RoutedEventArgs e)
         {
-            var menuItem = (MenuItem)sender;
-            var contextMenu = (ContextMenu)menuItem.Parent;
-            var item = (DataGrid)contextMenu.PlacementTarget;
-            var restoreItem = (Backup)item.SelectedCells[0].Item;
-            Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
-            ReadBackups();
-            string backupSource = string.Empty;
-            if (string.Equals(restoreItem.Type,"Game-Backup", StringComparison.OrdinalIgnoreCase))
+            if (BackupScheduler.IsActive())
             {
-                backupSource = SRBackupDir + @"\" + restoreItem.BackupName;
+                _ = MetroMessage("Attention!", "The game has to be closed before a backup can be restored.");
             }
             else
             {
-                backupSource = MyBackupDir + @"\" + restoreItem.BackupName;
-            }
-            
-            if (string.Equals(restoreItem.Type, "PAK-Backup"))
-            {
-                // Restore initial.pak
-                try
-                {
-                    _ = MetroMessage("This function experimental!", "Please report any problems to Github issues, see Help - Web - Report a problem.");
-                    Backup.RestoreBackup(backupSource, SRPaksDir);
-                }
-                catch
-                {
-                    _ = MetroMessage("Something went wrong", "Your backup could not be restored, please restore it manually.");
-                    Process.Start("explorer.exe " + backupSource);
-                }
-            }
-            else
-            {
+                var menuItem = (MenuItem)sender;
+                var contextMenu = (ContextMenu)menuItem.Parent;
+                var item = (DataGrid)contextMenu.PlacementTarget;
+                var restoreItem = (Backup)item.SelectedCells[0].Item;
                 Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
-                Backup.RestoreBackup(backupSource, SRSaveGameDir);
+                ReadBackups();
+                string backupSource = string.Empty;
+                if (string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase))
+                {
+                    backupSource = SRBackupDir + @"\" + restoreItem.BackupName;
+                }
+                else
+                {
+                    backupSource = MyBackupDir + @"\" + restoreItem.BackupName;
+                }
+
+                if (string.Equals(restoreItem.Type, "PAK-Backup"))
+                {
+                    // Restore initial.pak
+                    try
+                    {
+                        _ = MetroMessage("This function experimental!", "Please report any problems to Github issues, see Help - Web - Report a problem.");
+                        Backup.RestoreBackup(backupSource, SRPaksDir);
+                    }
+                    catch
+                    {
+                        _ = MetroMessage("Something went wrong", "Your backup could not be restored, please restore it manually.");
+                        Process.Start("explorer.exe " + backupSource);
+                    }
+                }
+                else
+                {
+                    Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+                    Backup.RestoreBackup(backupSource, SRSaveGameDir);
+                }
+                _ = MetroMessage("Next time better luck", "The selected saved game has been restored. A backup of your former save game has been saved.");
+                ReadBackups();
             }
-            _ = MetroMessage("Next time better luck", "The selected saved game has been restored. A backup of your former save game has been saved.");
-            ReadBackups();
         }
 
 

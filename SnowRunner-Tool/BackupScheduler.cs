@@ -54,9 +54,10 @@ namespace SnowRunner_Tool
 
         }
 
-        public static bool isActive()
+        public static bool IsActive()
         {
-            Process[] pname = Process.GetProcessesByName("notepad");
+            // Process[] pname = Process.GetProcessesByName("snowrunner.exe");
+            Process[] pname = Process.GetProcessesByName("SnowRunner");
             if (pname.Length == 0)
             {
                 return true;

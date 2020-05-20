@@ -106,5 +106,17 @@ namespace SnowRunner_Tool.Properties {
                 this["SRprofile"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SRPaksDir {
+            get {
+                return ((string)(this["SRPaksDir"]));
+            }
+            set {
+                this["SRPaksDir"] = value;
+            }
+        }
     }
 }

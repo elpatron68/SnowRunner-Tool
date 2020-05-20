@@ -33,6 +33,7 @@ namespace SnowRunner_Tool
     public partial class MainWindow : MetroWindow
     {
         private string SRBaseDir;
+        private string SRPaksDir;
         private string SRProfile;
         private string SRBackupDir;
         private string MyBackupDir;
@@ -481,6 +482,48 @@ namespace SnowRunner_Tool
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+        }
+
+        private async void MnPaths2_Click(object sender, RoutedEventArgs e)
+        {
+            string defaultPath = string.Empty;
+            if (!string.IsNullOrEmpty(SRPaksDir))
+            {
+                defaultPath = SRPaksDir;
+            }
+            else
+            {
+                defaultPath = @"C:\Program Files\Epic Games\SnowRunner\en_us\preload\paks\client";
+            }
+            var result = await MetroInputMessage("INITIAL.PAK", "Enter path to the file \"initial.pak\" (find the file and copy-paste the directory):", defaultPath);
+            // Make sure we have a directory, not a file
+            FileAttributes attr = File.GetAttributes(result);
+            if (!attr.HasFlag(FileAttributes.Directory))
+            {
+                result = Directory.GetParent(result).ToString();
+            }
+
+            // Make sure we have the correct directory
+            if (File.Exists(result + @"\initial.pak"))
+            {
+                SRPaksDir = result;
+                Settings.Default.SRPaksDir = SRPaksDir;
+                Settings.Default.Save();
+            }
+            else
+            {
+                _ = MetroMessage("File not found!", "The file \"initial.pak\" was not found in " + @result + "!");
+            }
+        }
+
+        private void MnBackupSaveGame_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MnBackupPak_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

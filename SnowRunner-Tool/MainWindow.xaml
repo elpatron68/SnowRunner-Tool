@@ -16,6 +16,16 @@
 
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
+                <MenuItem x:Name="MnBackupSaveGame"
+                          Header="Backup _save game"
+                          Click="Button_Click"
+                          >
+                </MenuItem>
+                <MenuItem x:Name="MnBackupPak"
+                          Header="Backup INITIAL._PAK file"
+                          Click="MnBackupPak_Click"
+                          >
+                </MenuItem>
                 <MenuItem x:Name="MnReload" 
                           Header="_Reload backup table"
                           Click="MnuReload_Click"
@@ -40,9 +50,14 @@
                 </MenuItem>
             </MenuItem>
                 <MenuItem Header="_Settings">
-                <MenuItem x:Name="MnPaths"
-                                     Header="_Set game path"
+                <MenuItem x:Name="MnPaths1"
+                                     Header="Set _save game path"
                                      Click="MnPaths_Click"
+                          >
+                </MenuItem>
+                <MenuItem x:Name="MnPaths2"
+                                     Header="Set _game installation path"
+                                     Click="MnPaths2_Click"
                           >
                 </MenuItem>
                 <MenuItem x:Name="MnUsageLog"

@@ -472,6 +472,10 @@ namespace SnowRunner_Tool
                 string xp = CheatGame.GetXp(SRsaveGameFile);
                 Title += " | Money: " + money + " | XP: " + xp;
             }
+            else
+            {
+                Title = "SnowRunner-Tool v" + aVersion;
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

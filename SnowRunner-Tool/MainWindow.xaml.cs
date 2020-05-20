@@ -217,7 +217,7 @@ namespace SnowRunner_Tool
             // Add SnowRunner backup directories
             var allBackups = Backup.GetBackups(SRBackupDir);
             // Add own zipped backups
-            allBackups.AddRange(Backup.GetOtherBackups(MyBackupDir, "Tool-Backup"));
+            allBackups.AddRange(Backup.GetOtherBackups(MyBackupDir));
                         
             if (allBackups.Count > 0)
             {
@@ -247,8 +247,16 @@ namespace SnowRunner_Tool
             {
                 backupSource = MyBackupDir + @"\" + restoreItem.BackupName;
             }
-            Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
-            Backup.RestoreBackup(backupSource, SRSaveGameDir);
+            
+            if (string.Equals(restoreItem.Type, "PAK-Backup"))
+            {
+
+            }
+            else
+            {
+                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+                Backup.RestoreBackup(backupSource, SRSaveGameDir);
+            }
             _ = MetroMessage("Next time better luck", "The selected saved game has been restored. A backup of your former save game has been saved.");
             ReadBackups();
         }
@@ -523,6 +531,7 @@ namespace SnowRunner_Tool
             if (File.Exists(f))
             {
                 string zipFileName = Backup.BackupSingleFile(f, MyBackupDir, "pakbackup");
+                ReadBackups();
             }
             else
             {

@@ -40,10 +40,13 @@ namespace SnowRunner_Tool
         /// Load backups made by SnorRunner-Tool and 3rd party zipped backups
         /// </summary>
         /// <returns></returns>
-        public static List<Backup> GetOtherBackups(string directory, string backupType)
+        public static List<Backup> GetOtherBackups(string directory)
         {
-            Log.Debug("getOtherBackups: {OtherBackupDirectory} / {BackupType}", directory, backupType);
+            Log.Debug("getOtherBackups: {OtherBackupDirectory}", directory);
             List<Backup> backups = new List<Backup>();
+            string backupType = string.Empty;
+            string sgMoney = string.Empty;
+            string sgXp = string.Empty;
             if (Directory.Exists(directory))
             {
                 string[] fileEntries = Directory.GetFiles(directory);
@@ -51,14 +54,32 @@ namespace SnowRunner_Tool
                 foreach (string f in fileEntries)
                 {
                     string fName = new FileInfo(f).Name;
-                    DateTime timestamp = File.GetCreationTime(f);
-                    string tmpSaveGameFile = CheatGame.UnzipToTemp(f);
-                    if (File.Exists(tmpSaveGameFile))
+                    if (fName.EndsWith(".pak.zip", StringComparison.OrdinalIgnoreCase))
                     {
-                        string sgMoney = CheatGame.GetMoney(tmpSaveGameFile);
-                        string sgXp = CheatGame.GetXp(tmpSaveGameFile);
-                        backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = backupType, Money = sgMoney, Xp = sgXp });
+                        backupType = "PAK-Backup";
                     }
+                    else
+                    {
+                        backupType = "SRT-Backup";
+                    }
+                    DateTime timestamp = File.GetCreationTime(f);
+                    if (string.Equals(backupType, "SRT-Backup"))
+                    {
+                        string tmpSaveGameFile = CheatGame.UnzipToTemp(f);
+                        if (File.Exists(tmpSaveGameFile))
+                        {
+                            sgMoney = CheatGame.GetMoney(tmpSaveGameFile);
+                            sgXp = CheatGame.GetXp(tmpSaveGameFile);
+                        }
+                        
+                    }
+                    else
+                    // PAK backup
+                    {
+                            sgMoney = "n/a";
+                            sgXp = "n/a";
+                    }
+                    backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = backupType, Money = sgMoney, Xp = sgXp });
                 }
                 return backups;
             }

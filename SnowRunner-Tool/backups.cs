@@ -44,8 +44,8 @@ namespace SnowRunner_Tool
         {
             Log.Debug("getOtherBackups: {OtherBackupDirectory}", directory);
             List<Backup> backups = new List<Backup>();
-            string backupType = string.Empty;
             string sgMoney = string.Empty;
+            string backupType = string.Empty;
             string sgXp = string.Empty;
             if (Directory.Exists(directory))
             {
@@ -57,28 +57,20 @@ namespace SnowRunner_Tool
                     if (fName.EndsWith(".pak.zip", StringComparison.OrdinalIgnoreCase))
                     {
                         backupType = "PAK-Backup";
+                        sgMoney = "n/a";
+                        sgXp = "n/a";
                     }
                     else
                     {
                         backupType = "SRT-Backup";
-                    }
-                    DateTime timestamp = File.GetCreationTime(f);
-                    if (string.Equals(backupType, "SRT-Backup"))
-                    {
                         string tmpSaveGameFile = CheatGame.UnzipToTemp(f);
                         if (File.Exists(tmpSaveGameFile))
                         {
                             sgMoney = CheatGame.GetMoney(tmpSaveGameFile);
                             sgXp = CheatGame.GetXp(tmpSaveGameFile);
                         }
-                        
                     }
-                    else
-                    // PAK backup
-                    {
-                            sgMoney = "n/a";
-                            sgXp = "n/a";
-                    }
+                    DateTime timestamp = File.GetCreationTime(f);
                     backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = backupType, Money = sgMoney, Xp = sgXp });
                 }
                 return backups;

@@ -12,6 +12,18 @@ namespace SnowRunner_Tool
     class DiscoverPaths
     {
         private readonly ILogger _log = Log.ForContext<DiscoverPaths>();
+
+        /// <summary>
+        /// SnowRunner base directory, usually %userprofofile%\documents\my games\Snowrunner\base
+        /// </summary>
+        /// <returns></returns>
+        public static string FindBaseDirectory()
+        {
+            string p = string.Empty;
+            p = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\My Games\SnowRunner\base";
+            return p;
+        }
+
         /// <summary>
         /// Try to find the profile directory name
         /// </summary>

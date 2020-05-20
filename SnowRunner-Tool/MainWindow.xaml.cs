@@ -516,14 +516,16 @@ namespace SnowRunner_Tool
             }
         }
 
-        private void MnBackupSaveGame_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void MnBackupPak_Click(object sender, RoutedEventArgs e)
         {
-
+            if (File.Exists(SRPaksDir + @"\initial.pak"))
+            {
+                //TODO: Call Method
+            }
+            else
+            {
+                _ = MetroMessage("Settings missing!", "To create a backup of \"initial.pak\" you have to set the path in the menu Settings - Set pak file path.");
+            }
         }
     }
 }

@@ -56,7 +56,7 @@
                           >
                 </MenuItem>
                 <MenuItem x:Name="MnPaths2"
-                                     Header="Set _game installation path"
+                                     Header="Set _pak file path"
                                      Click="MnPaths2_Click"
                           >
                 </MenuItem>

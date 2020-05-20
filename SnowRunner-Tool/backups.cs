@@ -108,28 +108,53 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         public static string BackupCurrentSavegame(string backupSource, string backupDestination)
         {
-            Log.Debug("Backuping up current save game");
+            Log.Debug("Backing up current save game");
             if (!Directory.Exists(backupDestination))
             {
                 Directory.CreateDirectory(backupDestination);
             }
             string sourcePath = backupSource;
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss", CultureInfo.CurrentCulture);
-            string zipPath = backupDestination + @"\backup" + timestamp + ".zip";
+            string zipPath = backupDestination + @"\backup_" + timestamp + ".zip";
 
             try
             {
                 ZipFile.CreateFromDirectory(sourcePath, zipPath);
-                Log.Debug("{SaveGameDir} {ZipFileTarget}", sourcePath, zipPath);
+                Log.Debug("Zipped {SaveGameDir} to {ZipFileTarget}", sourcePath, zipPath);
             }
             catch (IOException ex)
             {
                 Log.Error(ex, "ZipFile.CreateFromDirectory failed");
             }
 
-            // Reread all backups
             return zipPath;
         }
+
+        public static string BackupSingleFile(string backupSourceFileName, string backupDestination, string prefix)
+        {
+            string sourceFileExtension = Path.GetExtension(backupSourceFileName);
+            Log.Debug("Backing up single file {SingeFileBackupSource}", backupSourceFileName);
+            if (!Directory.Exists(backupDestination))
+            {
+                Directory.CreateDirectory(backupDestination);
+            }
+            string sourcePath = backupSourceFileName;
+            string timestamp = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss", CultureInfo.CurrentCulture);
+            string zipPath = backupDestination + @"\" + prefix + "_" + timestamp + "_" + sourceFileExtension + ".zip";
+
+            try
+            {
+                using (var zip = ZipFile.Open(zipPath, ZipArchiveMode.Create))
+                    zip.CreateEntryFromFile(backupSourceFileName, backupSourceFileName);
+            }
+            catch (IOException ex)
+            {
+                Log.Error(ex, "ZipFile.BackupSingleFile failed");
+            }
+
+            return zipPath;
+        }
+
 
         /// <summary>
         /// Restores a game backup (overwrites current save game)

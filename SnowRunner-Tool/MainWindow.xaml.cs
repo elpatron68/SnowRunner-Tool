@@ -182,7 +182,7 @@ namespace SnowRunner_Tool
 
             // Set value of some UI elements, load backup data
             lblSnowRunnerPath.Content = SRBaseDir;
-            updateTitle();
+            UpdateTitle();
             
 
             // Fill Datagrid
@@ -230,7 +230,7 @@ namespace SnowRunner_Tool
                 dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
                 dgBackups.Items.Refresh();
             }
-            updateTitle();
+            UpdateTitle();
         }
 
 
@@ -299,9 +299,10 @@ namespace SnowRunner_Tool
             {
                 backupSource = MyBackupDir + @"\" + restoreItem.BackupName;
             }
-
-                Backup.RestoreBackup(backupSource, SRSaveGameDir);
-            _ = MetroMessage("Next time better luck", "The selected save game backup has been restored. A backup of your former save game has been saved.");
+            Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+            Backup.RestoreBackup(backupSource, SRSaveGameDir);
+            _ = MetroMessage("Next time better luck", "The selected saved game has been restored. A backup of your former save game has been saved.");
+            readBackups();
         }
 
 
@@ -346,13 +347,6 @@ namespace SnowRunner_Tool
         private void MnuAbout_Click(object sender, RoutedEventArgs e)
         {
             _ = MetroMessage("About", "SnowRunner-Tool\n\nVersion " + aVersion + "\n(c) 2020 elpatron68\nhttps://github.com/elpatron68/SnowRunner-Tool/");
-        }
-
-        private void MnuLatestVersion_Click(object sender, RoutedEventArgs e)
-        {
-            // /owner/name/releases/latest/download/asset-name.zip
-            // https://github.com/elpatron68/SnowRunner-Tool/releases/latest/Release.zip
-            Process.Start("https://github.com/elpatron68/SnowRunner-Tool/releases/latest");
         }
 
         private void MnuExit_Click(object sender, RoutedEventArgs e)
@@ -501,7 +495,7 @@ namespace SnowRunner_Tool
                 int moneyUpgrade = int.Parse(result) - oldMoney;
                 Log.Information("MoneyUpgrade {MoneyUpgrade}", moneyUpgrade);
                 _ = MetroMessage("Congratulations", "You won " + moneyUpgrade.ToString() + " coins.");
-                updateTitle();
+                UpdateTitle();
             }
         }
 
@@ -518,7 +512,7 @@ namespace SnowRunner_Tool
             }
         }
 
-        private void updateTitle()
+        private void UpdateTitle()
         {
             this.Title = "SnowRunner-Tool v" + aVersion;
             if (File.Exists(SRsaveGameFile))

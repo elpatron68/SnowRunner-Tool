@@ -21,11 +21,6 @@
                           Click="MnuReload_Click"
                           >
                 </MenuItem>
-                <MenuItem x:Name="MnUpdate" 
-                          Header="_Latest version"
-                          Click="MnuLatestVersion_Click"
-                          >
-                </MenuItem>
                 <MenuItem x:Name="MnExit" 
                           Header="_Exit"
                           Click="MnuExit_Click"

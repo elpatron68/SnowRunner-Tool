@@ -5,7 +5,7 @@
 * Cheat experience points (XP).
 * Backup and restore `initial.pak`.
 * Create a backup while you are playing the game (just hit `F2`).
-* Rearrange menus.
+* Rearranged menus.
 * Delete backups (via right click)
 * Overhaul UI.
 * Remove support for 3rd party backups.

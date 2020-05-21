@@ -137,7 +137,7 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Delete this backup"
-                              Click="MenuItem_Click"
+                              Click="MnDeleteBackup_Click"
                             >
                         <MenuItem.Icon>
                             <Image Source="images/baseline_delete_outline_black_18dp.png"></Image>

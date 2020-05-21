@@ -575,7 +575,7 @@ namespace SnowRunner_Tool
             }
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void MnDeleteBackup_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = (MenuItem)sender;
             var contextMenu = (ContextMenu)menuItem.Parent;
@@ -604,5 +604,6 @@ namespace SnowRunner_Tool
         {
             Process.Start("https://github.com/elpatron68/SnowRunner-Tool/blob/master/Readme.md");
         }
+
     }
 }

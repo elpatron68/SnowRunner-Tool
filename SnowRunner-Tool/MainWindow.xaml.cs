@@ -570,8 +570,32 @@ namespace SnowRunner_Tool
             if (e.KeyCode == System.Windows.Forms.Keys.F2)
             {
                 Log.Debug("Start backup from hotkey");
-                Console.WriteLine("Start backup from hotkey");
                 Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+                ReadBackups();
+            }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+            var contextMenu = (ContextMenu)menuItem.Parent;
+            var item = (DataGrid)contextMenu.PlacementTarget;
+            var restoreItem = (Backup)item.SelectedCells[0].Item;
+            if (restoreItem.Type == "Game-Backup")
+            {
+                _ = MetroMessage("Nope", "You selected a backup the game made by itself. These backups cannot be deleted. Select another type of backup.");
+            }
+            else
+            {
+                string f = MyBackupDir + @"\" + restoreItem.BackupName;
+                try
+                {
+                    File.Delete(f);
+                }
+                catch (IOException ex)
+                {
+                    Log.Error(ex, "Failed to delete backup {BackupFile}", f);
+                }
                 ReadBackups();
             }
         }

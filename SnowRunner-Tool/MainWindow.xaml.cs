@@ -337,6 +337,7 @@ namespace SnowRunner_Tool
 
         private void MnuIssues_Click(object sender, RoutedEventArgs e)
         {
+            WebLinkMessage();
             Process.Start("https://github.com/elpatron68/SnowRunner-Tool/issues");
         }
 
@@ -395,11 +396,13 @@ namespace SnowRunner_Tool
 
         private void MnProjectGithub_Click(object sender, RoutedEventArgs e)
         {
+            WebLinkMessage();
             Process.Start("https://github.com/elpatron68/SnowRunner-Tool");
         }
 
         private void MnProjectModio_Click(object sender, RoutedEventArgs e)
         {
+            WebLinkMessage();
             Process.Start("https://snowrunner.mod.io/snowrunner-tool");
         }
 
@@ -410,7 +413,7 @@ namespace SnowRunner_Tool
             string url = r.Item2;
             if (result > 0)
             {
-                _ = MetroMessage("Update check", "An update is available.\n\nThe download will start after you clicked ok.");
+                _ = MetroMessage("Update check", "An update is available.\n\nThe download will start in your web browser after you clicked ok.");
                 Process.Start(url);
             }
             else if (result < 0)
@@ -565,16 +568,6 @@ namespace SnowRunner_Tool
             }
         }
 
-        private void OnHookKeyDown(object sender, HookEventArgs e)
-        {
-            if (e.KeyCode == System.Windows.Forms.Keys.F2)
-            {
-                Log.Debug("Start backup from hotkey");
-                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
-                ReadBackups();
-            }
-        }
-
         private void MnDeleteBackup_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = (MenuItem)sender;
@@ -583,7 +576,7 @@ namespace SnowRunner_Tool
             var restoreItem = (Backup)item.SelectedCells[0].Item;
             if (restoreItem.Type == "Game-Backup")
             {
-                _ = MetroMessage("Nope", "You selected a backup the game made by itself. These backups cannot be deleted. Select another type of backup.");
+                _ = MetroMessage("Sorry, I won´t do that", "You selected a backup the game made by itself. These backups cannot be deleted.");
             }
             else
             {
@@ -602,8 +595,28 @@ namespace SnowRunner_Tool
 
         private void MnReadme_Click(object sender, RoutedEventArgs e)
         {
+            WebLinkMessage();
             Process.Start("https://github.com/elpatron68/SnowRunner-Tool/blob/master/Readme.md");
         }
 
+        /// <summary>
+        /// Create backup when hotkey F2 is pressed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnHookKeyDown(object sender, HookEventArgs e)
+        {
+            if (e.KeyCode == System.Windows.Forms.Keys.F2)
+            {
+                Log.Debug("Start backup from hotkey");
+                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+                ReadBackups();
+            }
+        }
+
+        private void WebLinkMessage()
+        {
+            _ = MetroMessage("Just to let you know", "This will open a new page in your web browser.");
+        }
     }
 }

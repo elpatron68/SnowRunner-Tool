@@ -121,7 +121,7 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         public static string BackupCurrentSavegame(string backupSource, string backupDestination)
         {
-            Log.Debug("Backing up current save game");
+            Log.Information("Backing up current save game");
             if (!Directory.Exists(backupDestination))
             {
                 Directory.CreateDirectory(backupDestination);

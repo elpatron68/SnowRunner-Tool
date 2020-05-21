@@ -10,12 +10,15 @@ The *SnowRunner-Tool* does nothing that you could not do in a manual way, but it
 
 ## Features
 
-*SnowRunner-Tool* lets you
-- create backups of the current game state and list them in a fancy style,
-- create backups of the file `initial.pak` (which has to be changed for some mods),
-- restore a saved game from the game´s backup repository, a backup made with this tool or a  former saved `initial.pak` file,
-- cheat the amount of money you have in your pocket and
-- cheat your experience points (XP).
+*SnowRunner-Tool* Features
+
+- Create backups of the current game state and list them in a fancy style
+- Activates hotkey for in-game-backups
+- Create backups of the file `initial.pak` (which has to be changed for some mods)
+- Restore a saved game from the game´s backup repository, a backup made with this tool or a restore former saved `initial.pak` file
+- Delete backups from the list and your storage
+- Cheat the amount of money you have in your pocket
+- Cheat your experience points (XP).
 
 ![SnowRunner-Tool](images/SnowRunner-Tool_Screenshot.png)
 
@@ -44,13 +47,13 @@ Uninstall *SnowRunner-Tool* with the Windows *Programs and Functions* control.
 
 ## Usage
 
-After the start, *SnowRunner-Tool* reads all backup files created by the game, by itself or by a third party backup script and lists them with their time stamps. Right click on a row to restore the selected backup. Before restoring anything, another backup of the current game state will be made.
+After the start, *SnowRunner-Tool* reads all backup files created by the game or by itself and lists them with their time stamps and further information as the amount of money and XP. *Right click* on a row to restore or delete the selected backup. Before restoring anything, another backup of the current game state will be made.
 
 ### Save game backup
 
 You can manually create a backup of the current game state by clicking on *Backup save game* in the *File* menu.
 
-**Backups can be created while the game is running**. If you have to master a risky maneuver, just switch to your *SnowRunner-Tool* and make a backup before you fail.
+**Backups can be created while the game is running**. If you have to master a risky maneuver, just switch to your *SnowRunner-Tool* and make a backup before you fail. Or just press function key `F2` while you play the game. *The `F2` backup function only works while the game is running*!
 
 ### PAK backup
 
@@ -60,15 +63,13 @@ Create a backup of your `initial.pak` file before making changes to it! Open the
 
 ### Cheats
 
-Set the amount of money or experience points you´d like to have by opening the *Cheats* menu. Before changing the money in your save game file, another fresh backup will be created.
+Set the amount of money or experience points you´d like to have by opening the *Cheats* menu. Before changing the money or XP points in your save game file, another fresh backup will be made.
 
 ![Money cheat](images/SnowRunner-Tool_MoneyCheat.png)
 
-**See *Advanced* if you are asked for the path save game file after the first start.**
-
 ## Settings
 
-In the *Settings* menu, you can save a couple paths this tool needs to operate. Also,  usage reporting and remote logging can en- and disabled. A check mark will be displayed if the option is enabled.
+In the *Settings* menu, you can enter a couple paths this tool needs to operate. Also,  usage reporting and remote logging can en- and disabled. A check mark will be displayed if an option is enabled.
 
 ### Save Game Path
 
@@ -104,7 +105,8 @@ Debug logging is **disabled** by default. Usage reporting is **enabled** by defa
 ## Notes
 
 * If *SnowRunner-Tool* does not start after double clicking, install Microsoft .NET Framework 4.7.2 (see *Installation* above).
-* After restoring a save game from a backup or after altering the money, the *Epic Launcher* detects locally changed files. You are asked if you want to upload local files into the cloud or download cloud files to your local disk. Choose *Upload local files*.![Epic Launcher](images/epic-cloud.png)
+* After you have restored a saved game from a backup or after altering money or XP, the *Epic Launcher* detects locally changed files at the next game start. You are asked if you want to upload local files into the cloud or download cloud files to your local disk. Choose *Upload local files*.![Epic Launcher](images/epic-cloud.png)
+* It is not possible to change money or XP while the game is running.
 
 ## Advanced, Troubleshooting
 
@@ -149,7 +151,7 @@ Version 2, December 2004
   0. You just DO WHAT THE FUCK YOU WANT TO.
  ```
  
- ## 3rd party Licenses
+ ## Third party Licenses
  
  - Icons from https://material.io/ ([Apache License](https://github.com/google/material-design-icons/blob/master/LICENSE))
  - WPF theme from https://mahapps.com/ ([MIT License](https://github.com/MahApps/MahApps.Metro/blob/develop/LICENSE))

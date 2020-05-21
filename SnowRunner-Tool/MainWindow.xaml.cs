@@ -604,9 +604,12 @@ namespace SnowRunner_Tool
         {
             if (e.KeyCode == System.Windows.Forms.Keys.F2)
             {
-                Log.Debug("Start backup from hotkey");
-                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
-                ReadBackups();
+                if (BackupScheduler.IsActive())
+                {
+                    Log.Debug("Start backup from hotkey");
+                    Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+                    ReadBackups();
+                }
             }
         }
 

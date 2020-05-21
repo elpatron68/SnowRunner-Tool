@@ -119,6 +119,7 @@
     <Compile Include="InputGamePath.xaml.cs">
       <DependentUpon>InputGamePath.xaml</DependentUpon>
     </Compile>
+    <Compile Include="KeyboardHook.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="UpdateCheck.cs" />
     <Compile Include="ZipExtractHelperClass.cs" />

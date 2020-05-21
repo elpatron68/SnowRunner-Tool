@@ -42,6 +42,8 @@ namespace SnowRunner_Tool
         private readonly string guid;
         private readonly string aVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private bool enableDebugLogging;
+        private KeyboardHook _hook;
+
 
         public MainWindow()
         {
@@ -189,6 +191,10 @@ namespace SnowRunner_Tool
 
             // Test scheduled backup
             // BackupScheduler.startScheduledBackup("start", SRSaveGameDir, MyBackupDir);
+
+            // Register global hotkey
+            _hook = new KeyboardHook();
+            _hook.KeyDown += new KeyboardHook.HookEventHandler(OnHookKeyDown);
         }
 
         /// <summary>
@@ -559,6 +565,15 @@ namespace SnowRunner_Tool
             }
         }
 
-
+        private void OnHookKeyDown(object sender, HookEventArgs e)
+        {
+            if (e.KeyCode == System.Windows.Forms.Keys.F2)
+            {
+                Log.Debug("Start backup from hotkey");
+                Console.WriteLine("Start backup from hotkey");
+                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+                ReadBackups();
+            }
+        }
     }
 }

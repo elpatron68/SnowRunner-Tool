@@ -118,5 +118,17 @@ namespace SnowRunner_Tool.Properties {
                 this["SRPaksDir"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnableHotkey {
+            get {
+                return ((bool)(this["EnableHotkey"]));
+            }
+            set {
+                this["EnableHotkey"] = value;
+            }
+        }
     }
 }

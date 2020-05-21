@@ -60,11 +60,11 @@ namespace SnowRunner_Tool
             Process[] pname = Process.GetProcessesByName("SnowRunner");
             if (pname.Length == 0)
             {
-                return true;
+                return false;
             }
             else
             {
-                return false;
+                return true;
             }
         }
 

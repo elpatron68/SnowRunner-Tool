@@ -337,8 +337,7 @@ namespace SnowRunner_Tool
 
         private void MnuIssues_Click(object sender, RoutedEventArgs e)
         {
-            WebLinkMessage();
-            Process.Start("https://github.com/elpatron68/SnowRunner-Tool/issues");
+            WebLinkMessage("https://github.com/elpatron68/SnowRunner-Tool/issues");
         }
 
         private void MnuSupportID_Click(object sender, RoutedEventArgs e)
@@ -396,14 +395,12 @@ namespace SnowRunner_Tool
 
         private void MnProjectGithub_Click(object sender, RoutedEventArgs e)
         {
-            WebLinkMessage();
-            Process.Start("https://github.com/elpatron68/SnowRunner-Tool");
+            WebLinkMessage("https://github.com/elpatron68/SnowRunner-Tool");
         }
 
         private void MnProjectModio_Click(object sender, RoutedEventArgs e)
         {
-            WebLinkMessage();
-            Process.Start("https://snowrunner.mod.io/snowrunner-tool");
+            WebLinkMessage("https://snowrunner.mod.io/snowrunner-tool");
         }
 
         private async void MnChkUpd_Click(object sender, RoutedEventArgs e)
@@ -595,8 +592,7 @@ namespace SnowRunner_Tool
 
         private void MnReadme_Click(object sender, RoutedEventArgs e)
         {
-            WebLinkMessage();
-            Process.Start("https://github.com/elpatron68/SnowRunner-Tool/blob/master/Readme.md");
+            WebLinkMessage("https://github.com/elpatron68/SnowRunner-Tool/blob/master/Readme.md");
         }
 
         /// <summary>
@@ -614,9 +610,10 @@ namespace SnowRunner_Tool
             }
         }
 
-        private void WebLinkMessage()
+        private void WebLinkMessage(string url)
         {
             _ = MetroMessage("Just to let you know", "This will open a new page in your web browser.");
+            Process.Start(url);
         }
     }
 }

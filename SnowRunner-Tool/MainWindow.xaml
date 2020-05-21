@@ -68,11 +68,11 @@
                           >
                 </MenuItem>
                 <MenuItem x:Name="MnChkUpd" 
-                                    Header="Check _update"
+                                    Header="Check for _update"
                                     Click="MnChkUpd_Click"
                           />
                 <MenuItem x:Name="MnSupportID" 
-                                    Header="_Copy Support-ID"
+                                    Header="_Copy support-ID"
                                     Click="MnuSupportID_Click"
                           />
                 <MenuItem Header="_Web">

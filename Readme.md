@@ -61,13 +61,13 @@ Create a backup of your `initial.pak` file before making changes to it! Open the
 
 **This feature is experimental, handle with care!**
 
-### Cheats
+### Menu Cheats
 
 Set the amount of money or experience points you´d like to have by opening the *Cheats* menu. Before changing the money or XP points in your save game file, another fresh backup will be made.
 
 ![Money cheat](images/SnowRunner-Tool_MoneyCheat.png)
 
-## Settings
+## Menu Settings
 
 In the *Settings* menu, you can enter a couple paths this tool needs to operate. Also,  usage reporting and remote logging can en- and disabled. A check mark will be displayed if an option is enabled.
 
@@ -102,6 +102,18 @@ Both reporting options require an active internet connection. No personal data w
 
 Debug logging is **disabled** by default. Usage reporting is **enabled** by default.
 
+## Menu Help
+
+Pretty self-explanatory:
+
+* Link to this Readme (online)
+* Check for new version
+* Copy support-ID
+* Project web links
+* License
+* About
+
+
 ## Notes
 
 * If *SnowRunner-Tool* does not start after double clicking, install Microsoft .NET Framework 4.7.2 (see *Installation* above).
@@ -129,6 +141,7 @@ Enables remote logging.
 
 - User [grimdanfango](https://forums.focus-home.com/user/grimdanfango) made a Powershell Script that creates Backups in a configurable interval while the game is running. Instructions can be found <a href="https://forums.focus-home.com/topic/47932/backup-save-game-script" target="_blank">here</a>.
 - Thread on <a href="https://www.reddit.com/r/snowrunner/comments/gdf1jt/pc_snowrunner_backs_up_your_saved_games_heres_how/" target="_blank">Reddit</a> discussing the games´s backups and how to restore them manually.
+- This tool on [Github](https://github.com/elpatron68/SnowRunner-Tool)
 - This tool on [mod.io](https://snowrunner.mod.io/snowrunner-tool/#15370)
 
 ## License

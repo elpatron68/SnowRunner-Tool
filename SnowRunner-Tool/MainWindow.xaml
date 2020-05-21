@@ -62,6 +62,11 @@
                           />
             </MenuItem>
             <MenuItem Header="_Help">
+                <MenuItem x:Name="MnReadme"
+                          Header="_Readme!"
+                          Click="MnReadme_Click"
+                          >
+                </MenuItem>
                 <MenuItem x:Name="MnChkUpd" 
                                     Header="Check _update"
                                     Click="MnChkUpd_Click"

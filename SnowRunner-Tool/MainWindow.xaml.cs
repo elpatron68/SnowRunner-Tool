@@ -599,5 +599,10 @@ namespace SnowRunner_Tool
                 ReadBackups();
             }
         }
+
+        private void MnReadme_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://github.com/elpatron68/SnowRunner-Tool/blob/master/Readme.md");
+        }
     }
 }

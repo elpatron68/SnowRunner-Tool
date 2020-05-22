@@ -113,10 +113,10 @@
                     HorizontalAlignment="Left" Width="653"
                />
         <Label Content="Right click on backup item to restore or delete it" 
-                     Margin="20,60,0,240" 
+                     Margin="20,60,0,0" 
                      VerticalAlignment="Top" 
                      HorizontalAlignment="Left" 
-                     Width="215" Foreground="Red"
+                     Width="953" Foreground="Red"
                />
 
         <DataGrid x:Name="dgBackups" 

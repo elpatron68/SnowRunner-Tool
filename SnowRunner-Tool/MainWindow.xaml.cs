@@ -23,7 +23,6 @@ using System.Windows.Media;
 using MahApps.Metro.Converters;
 using SnowRunner_Tool.Properties;
 using System.Threading;
-using Octokit;
 
 namespace SnowRunner_Tool
 {
@@ -43,7 +42,8 @@ namespace SnowRunner_Tool
         private readonly string aVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private bool enableDebugLogging;
         private KeyboardHook _hook;
-
+        private FileSystemWatcher fswGameBackup;
+        private static int autoSaveCounter = 0;
 
         public MainWindow()
         {
@@ -189,8 +189,14 @@ namespace SnowRunner_Tool
             dgBackups.AutoGenerateColumns = true;
             ReadBackups();
 
-            // Test scheduled backup
-            // BackupScheduler.startScheduledBackup("start", SRSaveGameDir, MyBackupDir);
+            // Autobackup
+            fswGameBackup = new FileSystemWatcher
+            {
+                Path = SRSaveGameDir,
+                Filter = "CompleteSave.dat"
+            };
+            fswGameBackup.Changed += FileSystemWatcher_Changed;
+            SetAutobackup(Settings.Default.autobackupinterval);
 
             // Register global hotkey
             _hook = new KeyboardHook();
@@ -250,7 +256,7 @@ namespace SnowRunner_Tool
                 var contextMenu = (ContextMenu)menuItem.Parent;
                 var item = (DataGrid)contextMenu.PlacementTarget;
                 var restoreItem = (Backup)item.SelectedCells[0].Item;
-                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
                 ReadBackups();
                 string backupSource = string.Empty;
                 if (string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase))
@@ -278,7 +284,7 @@ namespace SnowRunner_Tool
                 }
                 else
                 {
-                    Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+                    Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
                     Backup.RestoreBackup(backupSource, SRSaveGameDir);
                 }
                 _ = MetroMessage("Next time better luck", "The selected saved game has been restored. A backup of your former save game has been saved.");
@@ -490,7 +496,7 @@ namespace SnowRunner_Tool
             string result = await MetroInputMessage("Money Cheat", "Enter the amount of money you´d like to have", oldMoney.ToString());
             if (!string.IsNullOrEmpty(result))
             {
-                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
                 _ = CheatGame.SaveMoney(SRsaveGameFile, result);
                 int moneyUpgrade = int.Parse(result) - oldMoney;
                 Log.Information("MoneyUpgrade {MoneyUpgrade}", moneyUpgrade);
@@ -508,7 +514,7 @@ namespace SnowRunner_Tool
                                                     xp);
             if (!string.IsNullOrEmpty(result))
             {
-                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
                 CheatGame.SaveXp(SRSaveGameDir, result);
                 _ = MetroMessage("Congratulations", "Nothing is better than experience!");
                 ReadBackups();
@@ -533,7 +539,7 @@ namespace SnowRunner_Tool
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+            _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
             ReadBackups();
         }
 
@@ -625,7 +631,7 @@ namespace SnowRunner_Tool
                 if (BackupScheduler.IsActive())
                 {
                     Log.Debug("Start backup from hotkey");
-                    Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir);
+                    Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
                     ReadBackups();
                 }
             }
@@ -635,6 +641,85 @@ namespace SnowRunner_Tool
         {
             _ = MetroMessage("Just to let you know", "This will open a new page in your web browser.");
             Process.Start(url);
+        }
+
+        private void SetAutobackup(int interval)
+        {
+            // Remove icon from all menu items
+            MnAutoOff.Icon = null;
+            MnAuto2.Icon = null;
+            MnAuto5.Icon = null;
+            MnAuto10.Icon = null;
+            // Save new setting if changed
+            Settings.Default.autobackupinterval = interval;
+            Settings.Default.Save();
+            // Set check mark icon
+            switch (interval)
+            {
+                case 0:
+                    MnAutoOff.Icon = new System.Windows.Controls.Image
+                    {
+                        Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
+                    };
+                    break;
+                case 2:
+                    MnAuto2.Icon = new System.Windows.Controls.Image
+                    {
+                        Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
+                    };
+                    break;
+                case 5:
+                    MnAuto5.Icon = new System.Windows.Controls.Image
+                    {
+                        Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
+                    };
+                    break;
+                case 10:
+                    MnAuto10.Icon = new System.Windows.Controls.Image
+                    {
+                        Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
+                    };
+                    break;
+            }
+            if (interval > 0)
+            {
+                fswGameBackup.EnableRaisingEvents = true;
+            }
+            else
+            {
+                fswGameBackup.EnableRaisingEvents = false;
+            }
+        }
+
+        private void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            autoSaveCounter += 1;
+            if (autoSaveCounter == Settings.Default.autobackupinterval)
+            {
+                autoSaveCounter = 0;
+                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "autobak");
+                Log.Debug("FSW-backup created");
+            }
+        }
+
+        private void MnAutoOff_Click(object sender, RoutedEventArgs e)
+        {
+            SetAutobackup(0);
+        }
+
+        private void MnAuto2_Click(object sender, RoutedEventArgs e)
+        {
+            SetAutobackup(2);
+        }
+
+        private void MnAuto5_Click(object sender, RoutedEventArgs e)
+        {
+            SetAutobackup(5);
+        }
+
+        private void MnAuto10_Click(object sender, RoutedEventArgs e)
+        {
+            SetAutobackup(10);
         }
     }
 }

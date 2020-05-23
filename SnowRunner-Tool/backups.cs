@@ -119,7 +119,7 @@ namespace SnowRunner_Tool
         /// Create a zip compressed backup of the current save game
         /// </summary>
         /// <returns></returns>
-        public static string BackupCurrentSavegame(string backupSource, string backupDestination)
+        public static string BackupCurrentSavegame(string backupSource, string backupDestination, string prefix)
         {
             Log.Information("Backing up current save game");
             if (!Directory.Exists(backupDestination))
@@ -127,8 +127,9 @@ namespace SnowRunner_Tool
                 Directory.CreateDirectory(backupDestination);
             }
             string sourcePath = backupSource;
+            string p = @"\" + prefix + "_";
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss", CultureInfo.CurrentCulture);
-            string zipPath = backupDestination + @"\backup_" + timestamp + ".zip";
+            string zipPath = backupDestination + p + timestamp + ".zip";
 
             try
             {

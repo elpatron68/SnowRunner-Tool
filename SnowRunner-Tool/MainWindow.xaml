@@ -52,7 +52,30 @@
                                      Header="Set _pak file path"
                                      Click="MnPaths2_Click"
                           />
-                <MenuItem x:Name="MnUsageLog"
+                <MenuItem Header="_Autobackup">
+                    <MenuItem x:Name="MnAutoOff"
+                              Header="_Off"
+                              Click="MnAutoOff_Click"
+                              >
+                    </MenuItem>
+                    <MenuItem x:Name="MnAuto2"
+                              Header="_2 minutes"
+                              Click="MnAuto2_Click"
+                              >
+                    </MenuItem>
+                    <MenuItem x:Name="MnAuto5"
+                              Header="_5 minutes"
+                              Click="MnAuto5_Click"
+                              >
+                    </MenuItem>
+                    <MenuItem x:Name="MnAuto10"
+                              Header="_10 minutes"
+                              Click="MnAuto10_Click"
+                              >
+                    </MenuItem>
+                </MenuItem>
+
+                    <MenuItem x:Name="MnUsageLog"
                                      Header="_Report usage"
                                      Click="MnuReportUsage_Click"
                           />

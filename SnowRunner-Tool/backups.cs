@@ -131,16 +131,22 @@ namespace SnowRunner_Tool
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss", CultureInfo.CurrentCulture);
             string zipPath = backupDestination + p + timestamp + ".zip";
 
-            try
+            if (!File.Exists(zipPath))
             {
-                ZipFile.CreateFromDirectory(sourcePath, zipPath);
-                Log.Debug("Zipped {SaveGameDir} to {ZipFileTarget}", sourcePath, zipPath);
+                try
+                {
+                    ZipFile.CreateFromDirectory(sourcePath, zipPath);
+                    Log.Debug("Zipped {SaveGameDir} to {ZipFileTarget}", sourcePath, zipPath);
+                }
+                catch (IOException ex)
+                {
+                    Log.Error(ex, "ZipFile.CreateFromDirectory failed");
+                }
             }
-            catch (IOException ex)
+            else
             {
-                Log.Error(ex, "ZipFile.CreateFromDirectory failed");
+                return null;
             }
-
             return zipPath;
         }
 

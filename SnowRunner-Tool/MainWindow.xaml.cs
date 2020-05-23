@@ -284,7 +284,6 @@ namespace SnowRunner_Tool
                 }
                 else
                 {
-                    Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
                     Backup.RestoreBackup(backupSource, SRSaveGameDir);
                 }
                 _ = MetroMessage("Next time better luck", "The selected saved game has been restored. A backup of your former save game has been saved.");

@@ -256,8 +256,8 @@ namespace SnowRunner_Tool
                 var contextMenu = (ContextMenu)menuItem.Parent;
                 var item = (DataGrid)contextMenu.PlacementTarget;
                 var restoreItem = (Backup)item.SelectedCells[0].Item;
+                // Create a backup before restore
                 Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
-                ReadBackups();
                 string backupSource = string.Empty;
                 if (string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase))
                 {
@@ -495,6 +495,7 @@ namespace SnowRunner_Tool
             string result = await MetroInputMessage("Money Cheat", "Enter the amount of money you´d like to have", oldMoney.ToString());
             if (!string.IsNullOrEmpty(result))
             {
+                // Create a backup before changing the file
                 Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
                 _ = CheatGame.SaveMoney(SRsaveGameFile, result);
                 int moneyUpgrade = int.Parse(result) - oldMoney;
@@ -513,6 +514,7 @@ namespace SnowRunner_Tool
                                                     xp);
             if (!string.IsNullOrEmpty(result))
             {
+                // Create a backup before changing the file
                 Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
                 CheatGame.SaveXp(SRSaveGameDir, result);
                 _ = MetroMessage("Congratulations", "Nothing is better than experience!");

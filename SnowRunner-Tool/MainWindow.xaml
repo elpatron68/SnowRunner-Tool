@@ -143,6 +143,11 @@
                             <Image Source="images/baseline_delete_outline_black_18dp.png"></Image>
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem x:Name="MnRevealExplorer"
+                              Header="Reveal this backup in explorer"
+                              Click="MnRevealExplorer_Click"
+                              >
+                    </MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>

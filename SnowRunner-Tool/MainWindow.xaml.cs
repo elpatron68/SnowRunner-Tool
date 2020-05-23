@@ -286,6 +286,24 @@ namespace SnowRunner_Tool
             }
         }
 
+        private void MnRevealExplorer_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+            var contextMenu = (ContextMenu)menuItem.Parent;
+            var item = (DataGrid)contextMenu.PlacementTarget;
+            var restoreItem = (Backup)item.SelectedCells[0].Item;
+            string backupSource = string.Empty;
+            if (string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase))
+            {
+                backupSource = SRBackupDir + @"\" + restoreItem.BackupName;
+            }
+            else
+            {
+                backupSource = MyBackupDir + @"\" + restoreItem.BackupName;
+            }
+            Process.Start("explorer.exe", backupSource);
+        }
+
 
         /// <summary>
         /// Display message dialog

@@ -159,6 +159,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="..\Changelog.md">
+      <Link>Changelog.md</Link>
+    </None>
     <None Include="..\copying">
       <Link>copying</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -1,5 +1,10 @@
 ﻿# SnowRunner-Tool Changes
 
+
+## v1.0.3.1 (xx.xx.2020)
+- Reveal backup in explorer (right click)
+
+
 ## v1.0.3.0 (21.05.2020)
 
 * Cheat experience points (XP).

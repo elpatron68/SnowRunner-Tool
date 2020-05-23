@@ -257,8 +257,8 @@ namespace SnowRunner_Tool
                 var item = (DataGrid)contextMenu.PlacementTarget;
                 var restoreItem = (Backup)item.SelectedCells[0].Item;
                 // Create a backup before restore
-                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
-                string backupSource = string.Empty;
+                _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
+                string backupSource;
                 if (string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase))
                 {
                     backupSource = SRBackupDir + @"\" + restoreItem.BackupName;
@@ -496,7 +496,7 @@ namespace SnowRunner_Tool
             if (!string.IsNullOrEmpty(result))
             {
                 // Create a backup before changing the file
-                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
+                _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
                 _ = CheatGame.SaveMoney(SRsaveGameFile, result);
                 int moneyUpgrade = int.Parse(result) - oldMoney;
                 Log.Information("MoneyUpgrade {MoneyUpgrade}", moneyUpgrade);
@@ -515,8 +515,8 @@ namespace SnowRunner_Tool
             if (!string.IsNullOrEmpty(result))
             {
                 // Create a backup before changing the file
-                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
-                CheatGame.SaveXp(SRSaveGameDir, result);
+                _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
+                _ = CheatGame.SaveXp(SRSaveGameDir, result);
                 _ = MetroMessage("Congratulations", "Nothing is better than experience!");
                 ReadBackups();
                 UpdateTitle();
@@ -632,7 +632,7 @@ namespace SnowRunner_Tool
                 if (BackupScheduler.IsActive())
                 {
                     Log.Debug("Start backup from hotkey");
-                    Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
+                    _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "backup");
                     ReadBackups();
                 }
             }
@@ -698,7 +698,7 @@ namespace SnowRunner_Tool
             if (autoSaveCounter == Settings.Default.autobackupinterval)
             {
                 autoSaveCounter = 0;
-                Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "autobak");
+                _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "autobak");
                 Log.Debug("FSW-backup created");
             }
         }

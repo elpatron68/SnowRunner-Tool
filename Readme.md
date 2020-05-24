@@ -111,11 +111,13 @@ All other path fields in the dialog are read only and will be filled by the app.
 ### Autobackup
 
 The *Autobackup* option automatically creates backups while the game is running. The function ist triggered 
-by the game itself: After the game saved it´s state (when a message is displayed to the player), *SnowRunner-Tool* 
-creates a backup of the files. You can disable this function or set it to 2, 5 or 10 "minutes". The actual time 
-intervals depend on the intervals, the game saves it´s state. They vary from ~ 20 seconds to ~ 60 seconds. 
-So, if you activate an interval of 5 minutes, the game state is backuped every fifth time the game itself saves, 
-which usually results in one backup per less than 5 minutes.
+by the game itself: After the game saved it´s state (when a "saving" message is displayed to the player), 
+*SnowRunner-Tool* creates a backup of the files. You can disable this function or set it to 
+2, 5 or 10 "minutes" - or exact: *cycles*. The actual time intervals depend on the intervals, the game saves 
+it´s state. 
+They vary from ~ 20 seconds to ~ 60 seconds. So, if you activate an interval of 5 minutes, the game state is backuped every fifth time the game itself saves, 
+which usually results in one backup per less than 5 minutes. You have to reload the backup list 
+(*File* - *Reload backup table*) or restart *SnowRunner-Tool* to see these backups appear in the list.
 
 ### Logging
 

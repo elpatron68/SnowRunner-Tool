@@ -720,6 +720,8 @@ namespace SnowRunner_Tool
 
         private void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
         {
+            //Wait a second, just to be sure
+            Thread.Sleep(1000);
             autoSaveCounter += 1;
             if (autoSaveCounter == Settings.Default.autobackupinterval)
             {

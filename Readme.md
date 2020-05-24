@@ -1,24 +1,35 @@
 ﻿# SnowRunner-Tool
 
-The game *SnowRunner* is a pain! Don´t play it. But if you do, you will sooner or later get stuck with your truck in the deepest mud, lose all your payload and your best trailer. That is the very moment, when this small tool comes into the game.
+The game *SnowRunner* is a pain! Don´t play it. But if you do, you will sooner or later get stuck with your truck 
+in the deepest mud, lose all your payload and your best trailer. That is the very moment, when this small tool 
+comes into the game.
 
-So, if you feel that restoring a saved game would sometimes be nice to have, here is the good news: The game creates backups from time to time, and it´s easy to restore them.
+So, if you feel that restoring a saved game would sometimes be nice to have, here is the good news: The game 
+creates backups from time to time, and it´s easy to restore them.
 
-The *SnowRunner-Tool* does nothing that you could not do in a manual way, but it makes it safe and easy and it´s looking nice.
+The *SnowRunner-Tool* does nothing that you could not do in a manual way, but it makes it safe and easy and it´s 
+looking nice.
 
-**Use this software with caution! I have tested a lot, but only on my own machine. I recommend to make manual backups until you are sure that everything works as expected.**
+In addition, this tool lets you change (cheat) the money and experience points of the current game state. So, 
+if you feel, you are broke, don´t hesitate to rob the bank!
+
+**Use this software with caution! I have tested a lot, but only on my own machine. I recommend to make manual 
+backups until you are sure that everything works as expected.**
 
 ## Features
 
-*SnowRunner-Tool* Features
+*SnowRunner-Tool* Features in details
 
 - Create backups of the current game state and list them in a fancy style
-- Activates hotkey for in-game-backups
-- Create backups of the file `initial.pak` (which has to be changed for some mods)
-- Restore a saved game from the game´s backup repository, a backup made with this tool or a restore former saved `initial.pak` file
+- Hotkey `F2` for instant in-game-backups without leaving the game
+- Automatically create backups afer the game itself saves it´s status
+- Restore a saved game from the game´s backup repository or a backup made with this tool
 - Delete backups from the list and your storage
+- Rename backup files from the UI
 - Cheat the amount of money you have in your pocket
-- Cheat your experience points (XP).
+- Cheat your experience points (XP)
+- Create backups of the file `initial.pak` (which has to be changed for some mods)
+- Restore former saved `initial.pak` file
 
 ![SnowRunner-Tool](images/SnowRunner-Tool_Screenshot.png)
 
@@ -47,13 +58,22 @@ Uninstall *SnowRunner-Tool* with the Windows *Programs and Functions* control.
 
 ## Usage
 
-After the start, *SnowRunner-Tool* reads all backup files created by the game or by itself and lists them with their time stamps and further information as the amount of money and XP. *Right click* on a row to restore or delete the selected backup. Before restoring anything, another backup of the current game state will be made.
+After the start, *SnowRunner-Tool* reads all backup files created by the game or by itself and lists them with their 
+time stamps and further information as the amount of money and XP. *Right click* on a row to restore or delete the 
+selected backup. Before restoring anything, another backup of the current game state will be made.
 
 ### Save game backup
 
-You can manually create a backup of the current game state by clicking on *Backup save game* in the *File* menu.
+1. Manually create a backup of the current game state by clicking on *Backup save game* in the *File* menu or clicking the button *Backup current save game*.   
+2. Hit the function key `F2` for an instant backup while you play the game without leaving the game.
+3. Let the tool create *regular backups* in the background while playing the game.
 
-**Backups can be created while the game is running**. If you have to master a risky maneuver, just switch to your *SnowRunner-Tool* and make a backup before you fail. Or just press function key `F2` while you play the game. *The `F2` backup function only works while the game is running*!
+#### Notes
+
+- **Backups can usually be created while the game is running**. If you have to master a risky maneuver, just 
+switch to your *SnowRunner-Tool* and make a backup before you fail. Or even easier: Let the tool run in the backgroud and use the instant-hotkey-backup (`F2`).
+- The `F2` backup function only works while the game is running!
+- Activate *regular backups* in the settings menu to automatically let the tool create backups in the background.
 
 ### PAK backup
 
@@ -87,6 +107,15 @@ C:\Users\mbusc\Documents\My Games\SnowRunner\base\storage\f2555667235d4dbd899a56
 ```
 
 All other path fields in the dialog are read only and will be filled by the app.
+
+### Autobackup
+
+The *Autobackup* option automatically creates backups while the game is running. The function ist triggered 
+by the game itself: After the game saved it´s state (when a message is displayed to the player), *SnowRunner-Tool* 
+creates a backup of the files. You can disable this function or set it to 2, 5 or 10 "minutes". The actual time 
+intervals depend on the intervals, the game saves it´s state. They vary from ~ 20 seconds to ~ 60 seconds. 
+So, if you activate an interval of 5 minutes, the game state is backuped every fifth time the game itself saves, 
+which usually results in one backup per less than 5 minutes.
 
 ### Logging
 

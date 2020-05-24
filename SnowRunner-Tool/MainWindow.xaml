@@ -135,7 +135,7 @@
                     VerticalAlignment="Top"
                     HorizontalAlignment="Left" Width="653"
                />
-        <Label Content="Right click on backup item to restore or delete it" 
+        <Label Content="Right click on a backup item to restore, rename or delete it" 
                      Margin="20,60,0,0" 
                      VerticalAlignment="Top" 
                      HorizontalAlignment="Left" 
@@ -159,7 +159,7 @@
                             <Image Source="Resources/baseline_restore_black_18dp.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Delete this backup"
+                    <MenuItem Header="_Delete this backup"
                               Click="MnDeleteBackup_Click"
                             >
                         <MenuItem.Icon>
@@ -167,8 +167,13 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem x:Name="MnRevealExplorer"
-                              Header="Reveal this backup in explorer"
+                              Header="Reveal this backup in _explorer"
                               Click="MnRevealExplorer_Click"
+                              >
+                    </MenuItem>
+                    <MenuItem x:Name="MnRename"
+                              Header="_Rename the backup"
+                              Click="MnRename_Click"
                               >
                     </MenuItem>
                 </ContextMenu>

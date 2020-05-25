@@ -5,7 +5,7 @@
 - Reveal backup in explorer (right click)
 - Rename backup in the list
 - Autobackup feature, see Readme
-- Fixed a bug that led to duplicate backup attempts when changin money or XP
+- Fixed a bug that led to duplicate backup attempts when changing money or XP
 
 
 ## v1.0.3.0 (21.05.2020)

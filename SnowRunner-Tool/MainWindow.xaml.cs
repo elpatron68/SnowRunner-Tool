@@ -235,10 +235,12 @@ namespace SnowRunner_Tool
                         
             if (allBackups.Count > 0)
             {
-                dgBackups.ItemsSource = allBackups;
-                dgBackups.Items.SortDescriptions.Clear();
-                dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
-                dgBackups.Items.Refresh();
+                this.Dispatcher.Invoke(() => {
+                    dgBackups.ItemsSource = allBackups;
+                    dgBackups.Items.SortDescriptions.Clear();
+                    dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
+                    dgBackups.Items.Refresh();
+                });
             }
             UpdateTitle();
         }
@@ -524,17 +526,19 @@ namespace SnowRunner_Tool
 
         private void UpdateTitle()
         {
-            this.Title = "SnowRunner-Tool v" + aVersion;
-            if (File.Exists(SRsaveGameFile))
-            {
-                string money = CheatGame.GetMoney(SRsaveGameFile);
-                string xp = CheatGame.GetXp(SRsaveGameFile);
-                Title += " | Money: " + money + " | XP: " + xp;
-            }
-            else
-            {
-                Title = "SnowRunner-Tool v" + aVersion;
-            }
+            this.Dispatcher.Invoke(() => {
+                this.Title = "SnowRunner-Tool v" + aVersion;
+                if (File.Exists(SRsaveGameFile))
+                {
+                    string money = CheatGame.GetMoney(SRsaveGameFile);
+                    string xp = CheatGame.GetXp(SRsaveGameFile);
+                    Title += " | Money: " + money + " | XP: " + xp;
+                }
+                else
+                {
+                    Title = "SnowRunner-Tool v" + aVersion;
+                }
+            });
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -723,6 +727,7 @@ namespace SnowRunner_Tool
             //Wait a second, just to be sure
             Thread.Sleep(1000);
             autoSaveCounter += 1;
+            ReadBackups();
             if (autoSaveCounter == Settings.Default.autobackupinterval)
             {
                 autoSaveCounter = 0;

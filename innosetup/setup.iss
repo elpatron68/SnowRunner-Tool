@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 #include <idp.iss>
 #define MyAppName "SnowRunner-Tool"
-#define MyAppVersion "1.0.3.1"
+#define MyAppVersion "1.0.3.2"
 #define MyAppPublisher "elpatron68"
 #define MyAppURL "https://github.com/elpatron68/SnowRunner-Tool"
 #define MyAppExeName "SnowRunner-Tool.exe"

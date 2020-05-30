@@ -59,25 +59,5 @@ namespace SnowRunner_Tool.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap baseline_delete_outline_black_18dp {
-            get {
-                object obj = ResourceManager.GetObject("baseline_delete_outline_black_18dp", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap baseline_restore_black_18dp_2x {
-            get {
-                object obj = ResourceManager.GetObject("baseline_restore_black_18dp_2x", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

@@ -242,25 +242,32 @@
                                           Click="RestoreBackup_Click" 
                                           CommandParameter="{Binding Parent, RelativeSource={RelativeSource Self}}">
                         <MenuItem.Icon>
-                            <Image Source="Resources/baseline_restore_black_18dp.png"/>
+                            <iconPacks:PackIconMaterial Kind="BackupRestore" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="_Delete this backup"
                               Click="MnDeleteBackup_Click"
                             >
                         <MenuItem.Icon>
-                            <Image Source="images/baseline_delete_outline_black_18dp.png"></Image>
+                            <iconPacks:PackIconMaterial Kind="DeleteOutline" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem x:Name="MnRevealExplorer"
                               Header="Reveal this backup in _explorer"
                               Click="MnRevealExplorer_Click"
                               >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial Kind="FolderOutline" />
+                        </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem x:Name="MnRename"
                               Header="_Rename the backup"
                               Click="MnRename_Click"
                               >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial Kind="FormTextbox" />
+                        </MenuItem.Icon>
+
                     </MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>

@@ -189,7 +189,7 @@ namespace SnowRunner_Tool
             dgBackups.AutoGenerateColumns = true;
             ReadBackups();
 
-            // Autobackup
+            // Initialize Autobackup FileSystemWatcher
             fswGameBackup = new FileSystemWatcher
             {
                 Path = SRSaveGameDir,
@@ -201,6 +201,9 @@ namespace SnowRunner_Tool
             // Register global hotkey
             _hook = new KeyboardHook();
             _hook.KeyDown += new KeyboardHook.HookEventHandler(OnHookKeyDown);
+
+            // Check for update
+            CheckUpdate();
         }
 
         /// <summary>
@@ -446,6 +449,17 @@ namespace SnowRunner_Tool
             {
                 _ = MetroMessage("Update check", "You are using the latest version.");
             }
+        }
+
+        private async void CheckUpdate()
+        {
+            var r = await UpdateCheck.CheckGithubReleses(aVersion);
+            int result = r.Item1;
+            if (result > 0)
+            {
+                ToastNote.Notify("Update available", "A new version of SnowRunner-Tool is available. See menu Help - Check for update to download the new version.");
+            }
+
         }
 
         private void ShowSettingsDialog()

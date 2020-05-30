@@ -236,6 +236,7 @@
     </EmbeddedResource>
     <None Include="..\Changelog.md">
       <Link>Changelog.md</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\copying">
       <Link>copying</Link>

@@ -210,14 +210,14 @@
         </Menu>
 
         <Label Content="SnowRunner path" 
-                     Margin="20,28,860,0" 
+                     Margin="20,28,0,0" 
                      VerticalAlignment="Top" 
                      HorizontalAlignment="Left"
-                     FontStyle="Italic"
+                     FontStyle="Italic" Width="154"
                />
         <Label x:Name="lblSnowRunnerPath" 
                     Content="Path" 
-                    Margin="320,28,0,0" 
+                    Margin="200,28,0,0" 
                     VerticalAlignment="Top"
                     HorizontalAlignment="Left" Width="653"
                />

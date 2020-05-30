@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SnowRunner_Tool"
         xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:Properties="clr-namespace:SnowRunner_Tool.Properties" x:Class="SnowRunner_Tool.MainWindow"
         mc:Ignorable="d"
         Title="SnowRunner-Tool" 
@@ -16,43 +17,88 @@
 
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
+                <MenuItem.Icon>
+                    <iconPacks:PackIconMaterial Kind="Menu" />
+                </MenuItem.Icon>
                 <MenuItem x:Name="MnBackupSaveGame"
                           Header="Backup _save game"
                           Click="Button_Click"
-                          />
+                          >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="ContentSaveOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem x:Name="MnBackupPak"
                           Header="Backup INITIAL._PAK file"
                           Click="MnBackupPak_Click"
-                          />
+                          >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="ContentSaveAllOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem x:Name="MnReload" 
                           Header="_Reload backup table"
                           Click="MnuReload_Click"
-                          />
+                          >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="Reload" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem x:Name="MnExit" 
                           Header="_Exit"
                           Click="MnuExit_Click"
-                          />
+                          >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="ExitToApp" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_Cheats">
+                <MenuItem.Icon>
+                    <iconPacks:PackIconMaterial Kind="ContentSaveEditOutline" />
+                </MenuItem.Icon>
                 <MenuItem x:Name="MnMoneyCheat"
                           Header="_Money"
-                          Click="MnMoneyCheat_Click"
-                          />
+                          Click="MnMoneyCheat_Click"                             
+                          >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconBoxIcons Kind="RegularMoney" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem x:Name="MnXp"
                           Header="_XP"
                           Click="MnXpCheat_Click"
-                          />
+                          >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="CircleExpand" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_Settings">
+                <MenuItem.Icon>
+                    <iconPacks:PackIconMaterial Kind="Cog" />
+                </MenuItem.Icon>
+
                 <MenuItem x:Name="MnPaths1"
                                      Header="Set _save game path"
                                      Click="MnPaths_Click"
-                          />
+                          >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="FileTreeOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem x:Name="MnPaths2"
                                      Header="Set _pak file path"
                                      Click="MnPaths2_Click"
-                          />
+                          >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconPicolIcons Kind="Path" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="_Autobackup">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="AvTimer" />
+                    </MenuItem.Icon>
                     <MenuItem x:Name="MnAutoOff"
                               Header="_Off"
                               Click="MnAutoOff_Click"
@@ -75,51 +121,91 @@
                     </MenuItem>
                 </MenuItem>
 
-                    <MenuItem x:Name="MnUsageLog"
+                <MenuItem x:Name="MnUsageLog"
                                      Header="_Report usage"
                                      Click="MnuReportUsage_Click"
-                          />
+                          >
+                </MenuItem>
                 <MenuItem x:Name="MnEnableLog"
                                      Header="_Remote logging"
                                      Click="MnuToggleRemoteLog_Click"
-                          />
+                          >
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_Help">
+                <MenuItem.Icon>
+                    <iconPacks:PackIconMaterial Kind="HelpCircleOutline" />
+                </MenuItem.Icon>
+
                 <MenuItem x:Name="MnReadme"
                           Header="_Readme!"
                           Click="MnReadme_Click"
                           >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="InformationOutline" />
+                    </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="MnChkUpd" 
                                     Header="Check for _update"
                                     Click="MnChkUpd_Click"
-                          />
+                          >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="DownloadOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem x:Name="MnSupportID" 
                                     Header="_Copy support-ID"
                                     Click="MnuSupportID_Click"
-                          />
+                          >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="Lifebuoy" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="_Web">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="Web" />
+                    </MenuItem.Icon>
                     <MenuItem x:Name="MnProjectGithub" 
                                     Header="_Github homepage"
                                     Click="MnProjectGithub_Click"
-                          />
+                          >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial Kind="Github" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem x:Name="MnProjectModio"
                                 Header="Project on _mod.io"
                               Click="MnProjectModio_Click"
-                              />
+                              >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial Kind="HomeCircleOutline" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem x:Name="MnIssues" 
                                     Header="_Report a problem"
                                     Click="MnuIssues_Click"
-                          />
+                          >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial Kind="AlertCircleOutline" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem x:Name="SRTLicense" 
                                     Header="_License"
                                     Click="MnuSRTLicense_Click"
-                                  />
+                                  >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="License" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem x:Name="MnAbout" 
                           Header="_About"
                           Click="MnuAbout_Click" 
-                          />
+                          >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="InformationVariant" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
 

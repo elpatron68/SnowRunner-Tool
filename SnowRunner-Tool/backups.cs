@@ -1,9 +1,11 @@
-﻿using Serilog;
+﻿using MahApps.Metro.Controls.Dialogs;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
+using System.Threading.Tasks;
 
 namespace SnowRunner_Tool
 {
@@ -203,6 +205,5 @@ namespace SnowRunner_Tool
                 ZipExtractHelperClass.ZipFileExtractToDirectory(sourceFileOrDirectory, targetDirectory);
             }
         }
-
     }
 }

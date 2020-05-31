@@ -148,7 +148,8 @@ Pretty self-explanatory:
 ## Notes
 
 * If *SnowRunner-Tool* does not start after double clicking, install Microsoft .NET Framework 4.7.2 (see *Installation* above).
-* After you have restored a saved game from a backup or after altering money or XP, the *Epic Launcher* detects locally changed files at the next game start. You are asked if you want to upload local files into the cloud or download cloud files to your local disk. Choose *Upload local files*.![Epic Launcher](images/epic-cloud.png)
+* After you have restored a saved game from a backup or after altering money or XP, the *Epic Launcher* detects locally changed files at the next game start. You are asked if you want to upload local files into the cloud or download cloud files to your local disk. Choose *Upload local files*.
+![Epic Launcher](images/epic-cloud.png)
 * It is not possible to change money or XP while the game is running.
 
 ## Advanced, Troubleshooting

@@ -311,6 +311,11 @@ namespace SnowRunner_Tool
 
         private void MnRevealExplorer_Click(object sender, RoutedEventArgs e)
         {
+            if (dgBackups.SelectedItems.Count > 1)
+            {
+                _ = MetroMessage("Multiple rows selected", "Select a singe row to be revealed.");
+                return;
+            }
             var menuItem = (MenuItem)sender;
             var contextMenu = (ContextMenu)menuItem.Parent;
             var item = (DataGrid)contextMenu.PlacementTarget;
@@ -654,7 +659,7 @@ namespace SnowRunner_Tool
                 }
                 if (wontDelete == true)
                 {
-                    _ = MetroMessage("Skipped deletion", "You have selected a backup the game made by itself. These backups have not been deleted.");
+                    _ = MetroMessage("Skipped deletion", "You have selected a backup the game made by itself. These backups will not be deleted.");
                 }
             }
             if (changedList == true) { ReadBackups(); }       
@@ -662,6 +667,11 @@ namespace SnowRunner_Tool
 
         private async void MnRename_Click(object sender, RoutedEventArgs e)
         {
+            if (dgBackups.SelectedItems.Count > 1)
+            {
+                _ = MetroMessage("Multiple rows selected", "You have selected more than one row. To rename a backup, select one single row.");
+                return;
+            }
             var menuItem = (MenuItem)sender;
             var contextMenu = (ContextMenu)menuItem.Parent;
             var item = (DataGrid)contextMenu.PlacementTarget;

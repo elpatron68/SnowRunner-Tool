@@ -203,7 +203,7 @@ namespace SnowRunner_Tool
             _hook.KeyDown += new KeyboardHook.HookEventHandler(OnHookKeyDown);
 
             // Check for update (Win8+)
-            string os = OsInfo.getOSInfo();
+            string os = OsInfo.GetOSInfo();
             Log.Information("{Os}", os);
             if (!os.ToLower().Contains("windows 7"))
             {
@@ -451,7 +451,7 @@ namespace SnowRunner_Tool
 
         private async void MnChkUpd_Click(object sender, RoutedEventArgs e)
         {
-            string os = OsInfo.getOSInfo();
+            string os = OsInfo.GetOSInfo();
             if (os.ToLower().Contains("windows 7"))
             {
                 _ = MetroMessage("OS not fully supported", "You are using " + os + ". Update check is not supported, all other functions are not tested!");

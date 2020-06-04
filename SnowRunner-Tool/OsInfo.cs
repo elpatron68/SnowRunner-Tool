@@ -8,7 +8,7 @@ namespace SnowRunner_Tool
 {
     class OsInfo
     {
-        public static string getOSInfo()
+        public static string GetOSInfo()
         {
             //Get Operating system information.
             OperatingSystem os = Environment.OSVersion;

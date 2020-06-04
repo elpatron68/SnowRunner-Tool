@@ -1,6 +1,6 @@
 ﻿# SnowRunner-Tool Changes
 
-## v1.0.3.4 ()
+## v1.0.3.4 (04.06.2020)
 
 - Select multiple rows in backup list for deletion
 - Detect Windows 7 and disable update check

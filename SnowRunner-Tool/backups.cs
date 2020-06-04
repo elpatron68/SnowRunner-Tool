@@ -13,8 +13,8 @@ namespace SnowRunner_Tool
     public class Backup
     {
         public string BackupName { get; set; }
-        // public DateTime Timestamp { get; set; }
-        public string Timestamp { get; set; }
+        public DateTime Timestamp { get; set; }
+        // public string Timestamp { get; set; }
         public string Type { get; set; }
         public string Money { get; set; }
         public string Xp { get; set; }
@@ -75,8 +75,8 @@ namespace SnowRunner_Tool
                         }
                     }
                     DateTime timestamp = File.GetCreationTime(f);
-                    string ts = timestamp.ToString();
-                    backups.Add(new Backup() { BackupName = fName, Timestamp = ts, Type = backupType, Money = sgMoney, Xp = sgXp });
+                    // string ts = timestamp.ToString();
+                    backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = backupType, Money = sgMoney, Xp = sgXp });
                 }
                 return backups;
             }
@@ -103,13 +103,13 @@ namespace SnowRunner_Tool
                 {
                     string dir = new DirectoryInfo(subdirectory).Name;
                     DateTime timestamp = Directory.GetCreationTime(subdirectory);
-                    string ts = timestamp.ToString();
+                    // string ts = timestamp.ToString();
                     string backupSaveGameFile = subdirectory + @"\CompleteSave.dat";
                     if (File.Exists(backupSaveGameFile))
                     {
                         string sgMoney = CheatGame.GetMoney(backupSaveGameFile);
                         string sgXp = CheatGame.GetXp(backupSaveGameFile);
-                        backups.Add(new Backup() { BackupName = dir, Timestamp = ts, Type = "Game-Backup", Money = sgMoney, Xp = sgXp });
+                        backups.Add(new Backup() { BackupName = dir, Timestamp = timestamp, Type = "Game-Backup", Money = sgMoney, Xp = sgXp });
                     }
                 }
                 return backups;

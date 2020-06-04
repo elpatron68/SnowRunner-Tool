@@ -4,6 +4,8 @@
 
 - Select multiple rows in backup list for deletion
 - Detect Windows 7 and disable update check
+- Display file creation time (backup table) in local culture format
+- Set default window position to 0/0 and reduce default size
 
 ## v1.0.3.2 (30.5.2020)
 

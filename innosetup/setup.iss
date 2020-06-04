@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 #include <idp.iss>
 #define MyAppName "SnowRunner-Tool"
-#define MyAppVersion "1.0.3.2"
+#define MyAppVersion "1.0.3.4"
 #define MyAppPublisher "elpatron68"
 #define MyAppURL "https://github.com/elpatron68/SnowRunner-Tool"
 #define MyAppExeName "SnowRunner-Tool.exe"
@@ -11,7 +11,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{F0EF2255-CBAB-4D38-8700-976877EA7320}
+AppId={#MyAppName}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}

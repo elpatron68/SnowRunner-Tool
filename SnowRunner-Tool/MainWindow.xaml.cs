@@ -60,7 +60,7 @@ namespace SnowRunner_Tool
             guid = GenGuid();
             
             InitializeComponent();
-            ((App)System.Windows.Application.Current).WindowPlace.Register(this);
+            ((App)Application.Current).WindowPlace.Register(this);
 
             // Initialize Logging
             var myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
@@ -249,6 +249,12 @@ namespace SnowRunner_Tool
                     dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
                     dgBackups.Items.Refresh();
                 });
+            }
+            else
+            {
+                dgBackups.ItemsSource = allBackups;
+                dgBackups.Items.SortDescriptions.Clear();
+                dgBackups.Items.Refresh();
             }
             UpdateTitle();
         }

@@ -240,7 +240,7 @@
     </EmbeddedResource>
     <None Include="..\Changelog.md">
       <Link>Changelog.md</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\copying">
       <Link>copying</Link>

@@ -204,14 +204,11 @@ namespace SnowRunner_Tool
 
             // Check for update (Win8+)
             string os = OsInfo.getOSInfo();
-            if (os.ToLower() == "windows 7")
-            {
-                _ = MetroMessage("OS Info", "You are using " + os +". Update check is not supported, all other functions are not tested!");
-            }
-            else
+            Log.Information("{Os}", os);
+            if (!os.ToLower().Contains("windows 7"))
             {
                 CheckUpdate();
-            }            
+            }
         }
 
         /// <summary>
@@ -454,11 +451,10 @@ namespace SnowRunner_Tool
 
         private async void MnChkUpd_Click(object sender, RoutedEventArgs e)
         {
-
             string os = OsInfo.getOSInfo();
-            if (os.ToLower() == "windows 7")
+            if (os.ToLower().Contains("windows 7"))
             {
-                _ = MetroMessage("OS Info", "You are using " + os + ". Update check is not supported, all other functions are not tested!");
+                _ = MetroMessage("OS not fully supported", "You are using " + os + ". Update check is not supported, all other functions are not tested!");
                 return;
             }
             else
@@ -469,7 +465,7 @@ namespace SnowRunner_Tool
                     string url = r.Item2;
                     if (result > 0)
                     {
-                        _ = MetroMessage("Update check", "An update is available.\n\nThe download will start in your web browser after you clicked ok.");
+                        _ = MetroMessage("Update check", "An update is available.\n\nThe download will start in your web browser immediately after you clicked ok.");
                         Process.Start(url);
                     }
                     else if (result < 0)

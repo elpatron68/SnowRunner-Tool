@@ -233,7 +233,6 @@
                           RenderTransformOrigin="-0.429,0.15" 
                           IsReadOnly="True" 
                           SelectedItem="{Binding SelectedRow, Mode=TwoWay}"   
-                          SelectionMode="Single"
                           ColumnWidth="220" Grid.ColumnSpan="2"
             >
             <DataGrid.ContextMenu>

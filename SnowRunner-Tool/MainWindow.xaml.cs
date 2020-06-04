@@ -202,8 +202,13 @@ namespace SnowRunner_Tool
             _hook = new KeyboardHook();
             _hook.KeyDown += new KeyboardHook.HookEventHandler(OnHookKeyDown);
 
-            // Check for update
-            CheckUpdate();
+            // Check for update (Win8+)
+            string osVer = System.Environment.OSVersion.Version.Major.ToString() + "." + System.Environment.OSVersion.Version.Minor.ToString();
+            Log.Information("{Osversion}", osVer);
+            if (osVer.CompareTo("6.2") < 0)
+            {
+                CheckUpdate();
+            }
         }
 
         /// <summary>
@@ -260,39 +265,47 @@ namespace SnowRunner_Tool
                 var menuItem = (MenuItem)sender;
                 var contextMenu = (ContextMenu)menuItem.Parent;
                 var item = (DataGrid)contextMenu.PlacementTarget;
-                var restoreItem = (Backup)item.SelectedCells[0].Item;
-                // Create a backup before restore
-                _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "safety-bak");
-                string backupSource;
-                if (string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase))
+                if (dgBackups.SelectedItems.Count > 1)
                 {
-                    backupSource = SRBackupDir + @"\" + restoreItem.BackupName;
+                    _ = MetroMessage("Restore item", "You can only restore one item, please select a single row.");
                 }
                 else
                 {
-                    backupSource = MyBackupDir + @"\" + restoreItem.BackupName;
-                }
+                    var restoreItem = (Backup)item.SelectedCells[0].Item;
 
-                if (string.Equals(restoreItem.Type, "PAK-Backup"))
-                {
-                    // Restore initial.pak
-                    try
+                    // Create a backup before restore
+                    _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "safety-bak");
+                    string backupSource;
+                    if (string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase))
                     {
-                        _ = MetroMessage("This function experimental!", "Please report any problems to Github issues, see Help - Web - Report a problem.");
-                        Backup.RestoreBackup(backupSource, SRPaksDir);
+                        backupSource = SRBackupDir + @"\" + restoreItem.BackupName;
                     }
-                    catch
+                    else
                     {
-                        _ = MetroMessage("Something went wrong", "Your backup could not be restored, please restore it manually.");
-                        Process.Start("explorer.exe " + backupSource);
+                        backupSource = MyBackupDir + @"\" + restoreItem.BackupName;
                     }
+
+                    if (string.Equals(restoreItem.Type, "PAK-Backup"))
+                    {
+                        // Restore initial.pak
+                        try
+                        {
+                            _ = MetroMessage("This function experimental!", "Please report any problems to Github issues, see Help - Web - Report a problem.");
+                            Backup.RestoreBackup(backupSource, SRPaksDir);
+                        }
+                        catch
+                        {
+                            _ = MetroMessage("Something went wrong", "Your backup could not be restored, please restore it manually.");
+                            Process.Start("explorer.exe " + backupSource);
+                        }
+                    }
+                    else
+                    {
+                        Backup.RestoreBackup(backupSource, SRSaveGameDir);
+                    }
+                    _ = MetroMessage("Next time better luck", "The selected saved game has been restored. A backup of your former save game has been saved.");
+                    ReadBackups();
                 }
-                else
-                {
-                    Backup.RestoreBackup(backupSource, SRSaveGameDir);
-                }
-                _ = MetroMessage("Next time better luck", "The selected saved game has been restored. A backup of your former save game has been saved.");
-                ReadBackups();
             }
         }
 
@@ -433,22 +446,31 @@ namespace SnowRunner_Tool
 
         private async void MnChkUpd_Click(object sender, RoutedEventArgs e)
         {
-            var r = await UpdateCheck.CheckGithubReleses(aVersion);
-            int result = r.Item1;
-            string url = r.Item2;
-            if (result > 0)
+            string osVer = System.Environment.OSVersion.Version.Major.ToString() + "." + System.Environment.OSVersion.Version.Minor.ToString();
+            if (osVer.CompareTo("6.2") < 0)
             {
-                _ = MetroMessage("Update check", "An update is available.\n\nThe download will start in your web browser after you clicked ok.");
-                Process.Start(url);
-            }
-            else if (result < 0)
-            {
-                _ = MetroMessage("Update check", "You are in front of the rest of the world!");
+                var r = await UpdateCheck.CheckGithubReleses(aVersion);
+                int result = r.Item1;
+                string url = r.Item2;
+                if (result > 0)
+                {
+                    _ = MetroMessage("Update check", "An update is available.\n\nThe download will start in your web browser after you clicked ok.");
+                    Process.Start(url);
+                }
+                else if (result < 0)
+                {
+                    _ = MetroMessage("Update check", "You are in front of the rest of the world!");
+                }
+                else
+                {
+                    _ = MetroMessage("Update check", "You are using the latest version.");
+                }
             }
             else
             {
-                _ = MetroMessage("Update check", "You are using the latest version.");
+                _ = MetroMessage("Update check", "This funtion is only available with Windows 8 or newer. See Help - Web - Github or mod.io Homepage.");
             }
+
         }
 
         private async void CheckUpdate()
@@ -459,7 +481,6 @@ namespace SnowRunner_Tool
             {
                 ToastNote.Notify("Update available", "A new version of SnowRunner-Tool is available. See menu Help - Check for update to download the new version.");
             }
-
         }
 
         private void ShowSettingsDialog()
@@ -609,27 +630,34 @@ namespace SnowRunner_Tool
 
         private void MnDeleteBackup_Click(object sender, RoutedEventArgs e)
         {
-            var menuItem = (MenuItem)sender;
-            var contextMenu = (ContextMenu)menuItem.Parent;
-            var item = (DataGrid)contextMenu.PlacementTarget;
-            var restoreItem = (Backup)item.SelectedCells[0].Item;
-            if (restoreItem.Type == "Game-Backup")
+            var rows = dgBackups.SelectedItems;
+            bool wontDelete = false;
+            bool changedList = false;
+            foreach(var row in rows)
             {
-                _ = MetroMessage("Sorry, I won´t do that", "You selected a backup the game made by itself. These backups cannot be deleted.");
-            }
-            else
-            {
-                string f = MyBackupDir + @"\" + restoreItem.BackupName;
-                try
+                if (((Backup)row).Type == "Game-Backup")
                 {
-                    File.Delete(f);
+                    wontDelete = true;
                 }
-                catch (IOException ex)
+                else
                 {
-                    Log.Error(ex, "Failed to delete backup {BackupFile}", f);
+                    string f = MyBackupDir + @"\" + ((Backup)row).BackupName;
+                    try
+                    {
+                        File.Delete(f);
+                        changedList = true;
+                    }
+                    catch (IOException ex)
+                    {
+                        Log.Error(ex, "Failed to delete backup {BackupFile}", f);
+                    }
                 }
-                ReadBackups();
+                if (wontDelete == true)
+                {
+                    _ = MetroMessage("Skipped deletion", "You have selected a backup the game made by itself. These backups have not been deleted.");
+                }
             }
+            if (changedList == true) { ReadBackups(); }       
         }
 
         private async void MnRename_Click(object sender, RoutedEventArgs e)

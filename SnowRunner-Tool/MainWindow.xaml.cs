@@ -203,12 +203,15 @@ namespace SnowRunner_Tool
             _hook.KeyDown += new KeyboardHook.HookEventHandler(OnHookKeyDown);
 
             // Check for update (Win8+)
-            string osVer = System.Environment.OSVersion.Version.Major.ToString() + "." + System.Environment.OSVersion.Version.Minor.ToString();
-            Log.Information("{Osversion}", osVer);
-            if (osVer.CompareTo("6.2") < 0)
+            string os = OsInfo.getOSInfo();
+            if (os.ToLower() == "windows 7")
+            {
+                _ = MetroMessage("OS Info", "You are using " + os +". Update check is not supported, all other functions are not tested!");
+            }
+            else
             {
                 CheckUpdate();
-            }
+            }            
         }
 
         /// <summary>
@@ -451,31 +454,34 @@ namespace SnowRunner_Tool
 
         private async void MnChkUpd_Click(object sender, RoutedEventArgs e)
         {
-            string osVer = System.Environment.OSVersion.Version.Major.ToString() + "." + System.Environment.OSVersion.Version.Minor.ToString();
-            if (osVer.CompareTo("6.2") < 0)
+
+            string os = OsInfo.getOSInfo();
+            if (os.ToLower() == "windows 7")
             {
-                var r = await UpdateCheck.CheckGithubReleses(aVersion);
-                int result = r.Item1;
-                string url = r.Item2;
-                if (result > 0)
-                {
-                    _ = MetroMessage("Update check", "An update is available.\n\nThe download will start in your web browser after you clicked ok.");
-                    Process.Start(url);
-                }
-                else if (result < 0)
-                {
-                    _ = MetroMessage("Update check", "You are in front of the rest of the world!");
-                }
-                else
-                {
-                    _ = MetroMessage("Update check", "You are using the latest version.");
-                }
+                _ = MetroMessage("OS Info", "You are using " + os + ". Update check is not supported, all other functions are not tested!");
+                return;
             }
             else
             {
-                _ = MetroMessage("Update check", "This funtion is only available with Windows 8 or newer. See Help - Web - Github or mod.io Homepage.");
+                {
+                    var r = await UpdateCheck.CheckGithubReleses(aVersion);
+                    int result = r.Item1;
+                    string url = r.Item2;
+                    if (result > 0)
+                    {
+                        _ = MetroMessage("Update check", "An update is available.\n\nThe download will start in your web browser after you clicked ok.");
+                        Process.Start(url);
+                    }
+                    else if (result < 0)
+                    {
+                        _ = MetroMessage("Update check", "You are in front of the rest of the world!");
+                    }
+                    else
+                    {
+                        _ = MetroMessage("Update check", "You are using the latest version.");
+                    }
+                }
             }
-
         }
 
         private async void CheckUpdate()

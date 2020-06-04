@@ -1,5 +1,8 @@
 ﻿# SnowRunner-Tool Changes
 
+## v1.0.3.4 ()
+- Select multiple rows in backup list for deletion
+
 ## v1.0.3.2 (30.5.2020)
 - Add icons to all menu items
 - Refresh table and title after automatic backup

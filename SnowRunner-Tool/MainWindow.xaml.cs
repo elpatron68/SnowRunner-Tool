@@ -597,7 +597,7 @@ namespace SnowRunner_Tool
 
         private async void MnPaths2_Click(object sender, RoutedEventArgs e)
         {
-            string defaultPath = string.Empty;
+            string defaultPath;
             if (!string.IsNullOrEmpty(SRPaksDir))
             {
                 defaultPath = SRPaksDir;
@@ -632,7 +632,7 @@ namespace SnowRunner_Tool
             string f = SRPaksDir + @"\initial.pak";
             if (File.Exists(f))
             {
-                string zipFileName = Backup.BackupSingleFile(f, MyBackupDir, "pakbackup");
+                _ = Backup.BackupSingleFile(f, MyBackupDir, "pakbackup");
                 ReadBackups();
             }
             else

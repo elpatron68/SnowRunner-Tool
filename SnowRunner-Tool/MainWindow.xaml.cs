@@ -240,23 +240,30 @@ namespace SnowRunner_Tool
             var allBackups = Backup.GetBackups(SRBackupDir);
             // Add own zipped backups
             allBackups.AddRange(Backup.GetOtherBackups(MyBackupDir));
-                        
-            if (allBackups.Count > 0)
+
+            try
             {
-                this.Dispatcher.Invoke(() => {
+                if (allBackups.Count > 0)
+                {
+                    this.Dispatcher.Invoke(() => {
+                        dgBackups.ItemsSource = allBackups;
+                        dgBackups.Items.SortDescriptions.Clear();
+                        dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
+                        dgBackups.Items.Refresh();
+                    });
+                }
+                else
+                {
                     dgBackups.ItemsSource = allBackups;
                     dgBackups.Items.SortDescriptions.Clear();
-                    dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
                     dgBackups.Items.Refresh();
-                });
+                }
+                UpdateTitle();
             }
-            else
+            catch
             {
-                dgBackups.ItemsSource = allBackups;
-                dgBackups.Items.SortDescriptions.Clear();
-                dgBackups.Items.Refresh();
+                _ = MetroMessage("No Backups", "Sorry, no backups found. Did you play the game, yet? Otherwise: Check path settings.");
             }
-            UpdateTitle();
         }
 
         

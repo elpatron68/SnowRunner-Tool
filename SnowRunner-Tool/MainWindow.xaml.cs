@@ -237,9 +237,9 @@ namespace SnowRunner_Tool
         private void ReadBackups()
         {
             // Add SnowRunner backup directories
-            var allBackups = Backup.GetBackups(SRBackupDir);
+            var allBackups = Backup.GetGameBackups(SRBackupDir);
             // Add own zipped backups
-            allBackups.AddRange(Backup.GetOtherBackups(MyBackupDir));
+            allBackups.AddRange(Backup.GetSrtBackups(MyBackupDir));
 
             try
             {

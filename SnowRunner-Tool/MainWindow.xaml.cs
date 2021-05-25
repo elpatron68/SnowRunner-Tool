@@ -10,7 +10,6 @@ using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using Serilog;
-using CommandLine;
 using System.Linq;
 using System.Windows.Documents;
 using System.Diagnostics;

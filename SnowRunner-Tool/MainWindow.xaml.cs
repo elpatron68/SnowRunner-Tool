@@ -1,24 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using MahApps.Metro.Controls;
-using System.Text.RegularExpressions;
 using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using Serilog;
-using System.Linq;
-using System.Windows.Documents;
 using System.Diagnostics;
-using Serilog.Events;
 using System.Windows.Media.Imaging;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Windows.Media;
-using MahApps.Metro.Converters;
 using SnowRunner_Tool.Properties;
 using System.Threading;
 

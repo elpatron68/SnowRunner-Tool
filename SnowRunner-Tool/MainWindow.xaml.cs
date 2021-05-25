@@ -39,25 +39,14 @@ namespace SnowRunner_Tool
         private string SRsaveGameFile;
         private readonly string guid;
         private readonly string aVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        private bool enableDebugLogging;
         private KeyboardHook _hook;
         private FileSystemWatcher fswGameBackup;
         private static int autoSaveCounter = 0;
 
         public MainWindow()
         {
-            // Command line options
-            string[] args = Environment.GetCommandLineArgs();
-            Parser.Default.ParseArguments<Options>(args)
-                   .WithParsed<Options>(o =>
-                   {
-                       if (o.EnableLogging == true)
-                       {
-                           enableDebugLogging = true;
-                       }
-                   });
             guid = GenGuid();
-            
+
             InitializeComponent();
             ((App)Application.Current).WindowPlace.Register(this);
 

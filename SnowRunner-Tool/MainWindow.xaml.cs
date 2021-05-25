@@ -10,7 +10,6 @@ using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using Serilog;
-using Serilog.Sinks.Graylog;
 using CommandLine;
 using System.Linq;
 using System.Windows.Documents;
@@ -64,38 +63,7 @@ namespace SnowRunner_Tool
 
             // Initialize Logging
             var myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
-
-            if (Settings.Default.graylog == true || enableDebugLogging == true)
-            {
-                myLog = new LoggerConfiguration().MinimumLevel.Debug().
-                    Enrich.WithProperty("Application", "SnowRunnerTool").
-                    Enrich.WithProperty("version", aVersion).
-                    Enrich.WithProperty("guid", guid).
-                    WriteTo.Graylog
-                                    (new GraylogSinkOptions
-                                    {
-                                        HostnameOrAddress = Settings.Default.LogHostName,
-                                        Port = Settings.Default.LogPort
-                                    }
-                                    ).CreateLogger();
-                enableDebugLogging = true;
-            }
-            else if (Settings.Default.usagelog == true)
-            {
-                myLog = new LoggerConfiguration().MinimumLevel.Information().
-                    Enrich.WithProperty("Application", "SnowRunnerTool").
-                    Enrich.WithProperty("version", aVersion).
-                    Enrich.WithProperty("guid", guid).
-                    WriteTo.Graylog
-                                    (new GraylogSinkOptions
-                                    {
-                                        HostnameOrAddress = Settings.Default.LogHostName,
-                                        Port = Settings.Default.LogPort
-                                    }
-                                    ).CreateLogger();
-            }
-            Log.Logger = myLog;
-            Log.Information("App started");
+            myLog.Information("App started");
 
             bool manualPaths = false;
 
@@ -163,22 +131,6 @@ namespace SnowRunner_Tool
             Log.Debug("Set {MyBackupDir}", MyBackupDir);
             Log.Debug("Set {SRBackupDir}", SRBackupDir);
             Log.Debug("Set {SRSaveGameDir}", SRSaveGameDir);
-
-            // Get log user settings and set icons for Menuitems
-            if (Settings.Default.graylog == true || enableDebugLogging == true)
-            {
-                MnEnableLog.Icon = new System.Windows.Controls.Image
-                {
-                    Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
-                };
-            }
-            if (Settings.Default.usagelog == true)
-            {
-                MnUsageLog.Icon = new System.Windows.Controls.Image
-                {
-                    Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
-                };
-            }
 
             // Set value of some UI elements, load backup data
             lblSnowRunnerPath.Content = SRBaseDir;
@@ -408,35 +360,6 @@ namespace SnowRunner_Tool
         {
             ReadBackups();
             var m = CheatGame.GetMoney(SRsaveGameFile);
-        }
-
-        private void MnuToggleRemoteLog_Click(object sender, RoutedEventArgs e)
-        {
-            if (Settings.Default.graylog == false)
-            {
-                enableDebugLogging = true;
-                Settings.Default.graylog = true;
-                MnEnableLog.Icon = new System.Windows.Controls.Image
-                {
-                    Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
-                };
-            }
-            Settings.Default.Save();
-            _ = MetroMessage("Hey trucker", "You have to restart the app to activate the new setting.");
-        }
-
-        private void MnuReportUsage_Click(object sender, RoutedEventArgs e)
-        {
-            if (Settings.Default.usagelog == false)
-            {
-                Settings.Default.usagelog = true;
-                MnUsageLog.Icon = new System.Windows.Controls.Image
-                {
-                    Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
-                };
-            }
-            Settings.Default.Save();
-            _ = MetroMessage("Hey trucker", "You have to restart the app to activate the new setting.");
         }
 
         private void MnPaths_Click(object sender, RoutedEventArgs e)

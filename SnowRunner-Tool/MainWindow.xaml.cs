@@ -10,7 +10,7 @@ using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using Serilog;
-using CommandLine;
+// using CommandLine;
 using System.Linq;
 using System.Windows.Documents;
 using System.Diagnostics;
@@ -48,14 +48,14 @@ namespace SnowRunner_Tool
         {
             // Command line options
             string[] args = Environment.GetCommandLineArgs();
-            Parser.Default.ParseArguments<Options>(args)
-                   .WithParsed<Options>(o =>
-                   {
-                       if (o.EnableLogging == true)
-                       {
-                           enableDebugLogging = true;
-                       }
-                   });
+            //Parser.Default.ParseArguments<Options>(args)
+            //       .WithParsed<Options>(o =>
+            //       {
+            //           if (o.EnableLogging == true)
+            //           {
+            //               enableDebugLogging = true;
+            //           }
+            //       });
             guid = GenGuid();
             
             InitializeComponent();

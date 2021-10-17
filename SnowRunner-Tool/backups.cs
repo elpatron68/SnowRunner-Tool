@@ -44,7 +44,7 @@ namespace SnowRunner_Tool
         /// Load backups made by SnorRunner-Tool and 3rd party zipped backups
         /// </summary>
         /// <returns></returns>
-        public static List<Backup> GetOtherBackups(string directory)
+        public static List<Backup> GetSrtBackups(string directory)
         {
             Log.Debug("getOtherBackups: {OtherBackupDirectory}", directory);
             List<Backup> backups = new List<Backup>();
@@ -90,7 +90,7 @@ namespace SnowRunner_Tool
         /// Collect SnowRunner save game backup directory names  in list
         /// </summary>
         /// <returns></returns>
-        public static List<Backup> GetBackups(string directory)
+        public static List<Backup> GetGameBackups(string directory)
         {
             if (Directory.Exists(directory))
             {

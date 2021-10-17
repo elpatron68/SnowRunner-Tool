@@ -38,9 +38,6 @@ namespace SnowRunner_Tool
 
         public static bool SaveMoney(string saveGameFile, string newMoney)
         {
-
-            // backupCurrentSavegame();
-
             // Check if money value is numeric
             Log.Information("SaveMoney");
             if (Regex.IsMatch(newMoney, @"^\d+$"))
@@ -56,7 +53,6 @@ namespace SnowRunner_Tool
 
         public static string GetXp(string saveGameFile)
         {
-            // string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
             string s = File.ReadAllText(saveGameFile);
             string sPattern = @"\""experience\""\:\d+";
             string xpAmount;
@@ -75,9 +71,9 @@ namespace SnowRunner_Tool
 
         }
 
-        public static bool SaveXp(string SRSaveGameDir, string newXP)
+        public static bool SaveXp(string SRSaveGameDir, string newXP, string saveGameSlot="")
         {
-            string saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+            string saveGameFile = SRSaveGameDir + @"\CompleteSave" + saveGameSlot + ".dat";
             Log.Information("SaveXp");
             try
             {

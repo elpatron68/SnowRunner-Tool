@@ -120,17 +120,6 @@
                               >
                     </MenuItem>
                 </MenuItem>
-
-                <MenuItem x:Name="MnUsageLog"
-                                     Header="_Report usage"
-                                     Click="MnuReportUsage_Click"
-                          >
-                </MenuItem>
-                <MenuItem x:Name="MnEnableLog"
-                                     Header="_Remote logging"
-                                     Click="MnuToggleRemoteLog_Click"
-                          >
-                </MenuItem>
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem.Icon>

@@ -306,7 +306,8 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         private async Task<bool> MetroMessage(string title, string message)
         {
-            string[] answers = { "Fine", "OK", "Make it so", "Hmmm", "Okay", "Hoot", "Ладно", "Хорошо", "d'accord", "Très bien", "Na gut", "Von mir aus" };
+            string[] answers = { "Fine", "OK", "Make it so", "Hmmm", "Okay", "Hoot", "Ладно", "Хорошо", "d'accord",
+                "Très bien", "Na gut", "Von mir aus", "Let´s go", "Lad os komme afsted", "Mennään", "Andiamo", "Chodźmy" };
             Random r = new Random();
             int rInt = r.Next(0, answers.Length);
             var dialogSettings = new MetroDialogSettings();

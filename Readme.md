@@ -200,5 +200,4 @@ Version 2, December 2004
  
  - Icons from https://material.io/ ([Apache License](https://github.com/google/material-design-icons/blob/master/LICENSE))
  - WPF theme from https://mahapps.com/ ([MIT License](https://github.com/MahApps/MahApps.Metro/blob/develop/LICENSE))
- - [Command Line Parser Library for CLR and NetStandard](https://github.com/commandlineparser/commandline) (MIT License)
  

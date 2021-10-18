@@ -2,14 +2,12 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Collections;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using Serilog;
-// using CommandLine;
-using System.Linq;
-using System.Windows.Documents;
 using System.Diagnostics;
 using System.Windows.Media.Imaging;
 using SnowRunner_Tool.Properties;
@@ -53,28 +51,14 @@ namespace SnowRunner_Tool
             ((App)Application.Current).WindowPlace.Register(this);
 
             // Initialize Logging
-            var myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
+            Serilog.Core.Logger myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
             myLog.Information("App started");
 
             bool manualPaths = false;
 
             // Read directories from settings or find them automatically
-            if (string.IsNullOrEmpty(Settings.Default.SRbasedir))
-            {
-                SRBaseDir = DiscoverPaths.FindBaseDirectory();
-            }
-            else
-            {
-                SRBaseDir = Settings.Default.SRbasedir;
-            }
-            if (string.IsNullOrEmpty(Settings.Default.SRprofile))
-            {
-                SRProfile = DiscoverPaths.FindProfileName(SRBaseDir);
-            }
-            else
-            {
-                SRProfile = Settings.Default.SRprofile;
-            }
+            SRBaseDir = string.IsNullOrEmpty(Settings.Default.SRbasedir) ? DiscoverPaths.FindBaseDirectory() : Settings.Default.SRbasedir;
+            SRProfile = string.IsNullOrEmpty(Settings.Default.SRprofile) ? DiscoverPaths.FindProfileName(SRBaseDir) : Settings.Default.SRprofile;
             SRPaksDir = Settings.Default.SRPaksDir;
 
             // Check base directory for existance
@@ -103,7 +87,7 @@ namespace SnowRunner_Tool
                 manualPaths = true;
             }
 
-            if (manualPaths == true)
+            if (manualPaths)
             {
                 Log.Information("Manual path input required");
                 ShowSettingsDialog();
@@ -169,7 +153,7 @@ namespace SnowRunner_Tool
             {
                 if (allBackups.Count > 0)
                 {
-                    this.Dispatcher.Invoke(() => {
+                    Dispatcher.Invoke(() => {
                         dgBackups.ItemsSource = allBackups;
                         dgBackups.Items.SortDescriptions.Clear();
                         dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
@@ -199,29 +183,22 @@ namespace SnowRunner_Tool
             }
             else
             {
-                var menuItem = (MenuItem)sender;
-                var contextMenu = (ContextMenu)menuItem.Parent;
-                var item = (DataGrid)contextMenu.PlacementTarget;
+                MenuItem menuItem = (MenuItem)sender;
+                ContextMenu contextMenu = (ContextMenu)menuItem.Parent;
+                DataGrid item = (DataGrid)contextMenu.PlacementTarget;
                 if (dgBackups.SelectedItems.Count > 1)
                 {
                     _ = MetroMessage("Restore item", "You can only restore one item, please select a single row.");
                 }
                 else
                 {
-                    var restoreItem = (Backup)item.SelectedCells[0].Item;
+                    Backup restoreItem = (Backup)item.SelectedCells[0].Item;
 
                     // Create a backup before restore
                     _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "safety-bak");
-                    string backupSource;
-                    if (string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase))
-                    {
-                        backupSource = SRBackupDir + @"\" + restoreItem.BackupName;
-                    }
-                    else
-                    {
-                        backupSource = MyBackupDir + @"\" + restoreItem.BackupName;
-                    }
-
+                    string backupSource = string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase)
+                        ? SRBackupDir + @"\" + restoreItem.BackupName
+                        : MyBackupDir + @"\" + restoreItem.BackupName;
                     if (string.Equals(restoreItem.Type, "PAK-Backup"))
                     {
                         // Restore initial.pak
@@ -233,7 +210,7 @@ namespace SnowRunner_Tool
                         catch
                         {
                             _ = MetroMessage("Something went wrong", "Your backup could not be restored, please restore it manually.");
-                            Process.Start("explorer.exe " + backupSource);
+                            _ = Process.Start("explorer.exe " + backupSource);
                         }
                     }
                     else
@@ -246,6 +223,7 @@ namespace SnowRunner_Tool
             }
         }
 
+
         private void MnRevealExplorer_Click(object sender, RoutedEventArgs e)
         {
             if (dgBackups.SelectedItems.Count > 1)
@@ -253,20 +231,14 @@ namespace SnowRunner_Tool
                 _ = MetroMessage("Multiple rows selected", "Select a singe row to be revealed.");
                 return;
             }
-            var menuItem = (MenuItem)sender;
-            var contextMenu = (ContextMenu)menuItem.Parent;
-            var item = (DataGrid)contextMenu.PlacementTarget;
-            var restoreItem = (Backup)item.SelectedCells[0].Item;
-            string backupSource = string.Empty;
-            if (string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase))
-            {
-                backupSource = SRBackupDir + @"\" + restoreItem.BackupName;
-            }
-            else
-            {
-                backupSource = MyBackupDir + @"\" + restoreItem.BackupName;
-            }
-            Process.Start("explorer.exe", backupSource);
+            MenuItem menuItem = (MenuItem)sender;
+            ContextMenu contextMenu = (ContextMenu)menuItem.Parent;
+            DataGrid item = (DataGrid)contextMenu.PlacementTarget;
+            Backup restoreItem = (Backup)item.SelectedCells[0].Item;
+            string backupSource = string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase)
+                ? SRBackupDir + @"\" + restoreItem.BackupName
+                : MyBackupDir + @"\" + restoreItem.BackupName;
+            _ = Process.Start("explorer.exe", backupSource);
         }
 
 
@@ -282,29 +254,24 @@ namespace SnowRunner_Tool
                 "Très bien", "Na gut", "Von mir aus", "Let´s go", "Lad os komme afsted", "Mennään", "Andiamo", "Chodźmy" };
             Random r = new Random();
             int rInt = r.Next(0, answers.Length);
-            var dialogSettings = new MetroDialogSettings();
+            MetroDialogSettings dialogSettings = new MetroDialogSettings();
             dialogSettings.AffirmativeButtonText = answers[rInt] + " [OK]";
 
-            var dialogResult = await this.ShowMessageAsync(title,
+            MessageDialogResult dialogResult = await this.ShowMessageAsync(title,
                 message,
                 MessageDialogStyle.Affirmative, dialogSettings);
 
-            if (dialogResult == MessageDialogResult.Affirmative)
-            {
-                return true;
-            }
-
-            return false;
+            return dialogResult == MessageDialogResult.Affirmative;
         }
 
         private async Task<string> MetroInputMessage(string title, string message, string defaultValue)
         {
-            var dialogSettings = new MetroDialogSettings();
+            MetroDialogSettings dialogSettings = new MetroDialogSettings();
             dialogSettings.AffirmativeButtonText = "Save";
             dialogSettings.DefaultText = defaultValue;
             dialogSettings.NegativeButtonText = "Cancel";
 
-            var result = await this.ShowInputAsync(title, message, dialogSettings);
+            string result = await this.ShowInputAsync(title, message, dialogSettings);
             return result;
         }
 
@@ -314,21 +281,17 @@ namespace SnowRunner_Tool
             _ = MetroMessage("About", "SnowRunner-Tool\n\nVersion " + aVersion + "\n(c) 2020 elpatron68\nhttps://github.com/elpatron68/SnowRunner-Tool/");
         }
 
+
         private void MnuExit_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Application.Current.Shutdown();
+            Application.Current.Shutdown();
         }
+
 
         private void MnuIssues_Click(object sender, RoutedEventArgs e)
         {
             WebLinkMessage("https://github.com/elpatron68/SnowRunner-Tool/issues");
         }
-
-        //private void MnuSupportID_Click(object sender, RoutedEventArgs e)
-        //{
-        //    // Clipboard.SetText(guid);
-        //    // _ = MetroMessage("Support ID copied", "Your support ID has been copied to the clipboard. Make sure, \"Remote logging\" is activated when the problem occured before filing an issue.\n\nSupport ID: " + guid);
-        //}
 
 
         private void MnuSRTLicense_Click(object sender, RoutedEventArgs e)
@@ -336,11 +299,13 @@ namespace SnowRunner_Tool
             _ = MetroMessage("License", "DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\n\nDO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\nTERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION\n\n0. You just DO WHAT THE FUCK YOU WANT TO.");
         }
 
+
         private void MnuReload_Click(object sender, RoutedEventArgs e)
         {
             ReadBackups();
-            var m = CheatGame.GetMoney(SRsaveGameFile);
+            _ = CheatGame.GetMoney(SRsaveGameFile);
         }
+
 
         private void MnPaths_Click(object sender, RoutedEventArgs e)
         {
@@ -348,15 +313,18 @@ namespace SnowRunner_Tool
             ReadBackups();
         }
 
+
         private void MnProjectGithub_Click(object sender, RoutedEventArgs e)
         {
             WebLinkMessage("https://github.com/elpatron68/SnowRunner-Tool");
         }
 
+
         private void MnProjectModio_Click(object sender, RoutedEventArgs e)
         {
             WebLinkMessage("https://snowrunner.mod.io/snowrunner-tool");
         }
+
 
         private async void MnChkUpd_Click(object sender, RoutedEventArgs e)
         {
@@ -369,35 +337,35 @@ namespace SnowRunner_Tool
             else
             {
                 {
-                    var r = await UpdateCheck.CheckGithubReleses(aVersion);
+                    (int, string) r = await UpdateCheck.CheckGithubReleses(aVersion);
                     int result = r.Item1;
                     string url = r.Item2;
                     if (result > 0)
                     {
                         _ = MetroMessage("Update check", "An update is available.\n\nThe download will start in your web browser immediately after you clicked ok.");
-                        Process.Start(url);
-                    }
-                    else if (result < 0)
-                    {
-                        _ = MetroMessage("Update check", "You are in front of the rest of the world!");
+                        _ = Process.Start(url);
                     }
                     else
                     {
-                        _ = MetroMessage("Update check", "You are using the latest version.");
+                        _ = result < 0
+                            ? MetroMessage("Update check", "You are in front of the rest of the world!")
+                            : MetroMessage("Update check", "You are using the latest version.");
                     }
                 }
             }
         }
 
+
         private async void CheckUpdate()
         {
-            var r = await UpdateCheck.CheckGithubReleses(aVersion);
+            (int, string) r = await UpdateCheck.CheckGithubReleses(aVersion);
             int result = r.Item1;
             if (result > 0)
             {
                 ToastNote.Notify("Update available", "A new version of SnowRunner-Tool is available. See menu Help - Check for update to download the new version.");
             }
         }
+
 
         private void ShowSettingsDialog()
         {
@@ -442,6 +410,7 @@ namespace SnowRunner_Tool
             }
         }
 
+
         private async void MnMoneyCheat_Click(object sender, RoutedEventArgs e)
         {
             int oldMoney = int.Parse(CheatGame.GetMoney(SRsaveGameFile));
@@ -459,6 +428,7 @@ namespace SnowRunner_Tool
             }
         }
 
+
         private async void MnXpCheat_Click(object sender, RoutedEventArgs e)
         {
             string xp = CheatGame.GetXp(SRsaveGameFile);
@@ -475,10 +445,11 @@ namespace SnowRunner_Tool
             }
         }
 
+
         private void UpdateTitle()
         {
-            this.Dispatcher.Invoke(() => {
-                this.Title = "SnowRunner-Tool v" + aVersion;
+            Dispatcher.Invoke(() => {
+                Title = "SnowRunner-Tool v" + aVersion;
                 if (File.Exists(SRsaveGameFile))
                 {
                     string money = CheatGame.GetMoney(SRsaveGameFile);
@@ -492,11 +463,13 @@ namespace SnowRunner_Tool
             });
         }
 
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "manual-bak");
             ReadBackups();
         }
+
 
         private async void MnPaths2_Click(object sender, RoutedEventArgs e)
         {
@@ -509,7 +482,7 @@ namespace SnowRunner_Tool
             {
                 defaultPath = @"C:\Program Files\Epic Games\SnowRunner\en_us\preload\paks\client";
             }
-            var result = await MetroInputMessage("INITIAL.PAK", "Enter path to the file \"initial.pak\" (find the file and copy-paste the directory name):", defaultPath);
+            string result = await MetroInputMessage("INITIAL.PAK", "Enter path to the file \"initial.pak\" (find the file and copy-paste the directory name):", defaultPath);
             // Make sure we have a directory, not a file
             FileAttributes attr = File.GetAttributes(result);
             if (!attr.HasFlag(FileAttributes.Directory))
@@ -530,6 +503,7 @@ namespace SnowRunner_Tool
             }
         }
 
+
         private void MnBackupPak_Click(object sender, RoutedEventArgs e)
         {
             string f = SRPaksDir + @"\initial.pak";
@@ -544,9 +518,10 @@ namespace SnowRunner_Tool
             }
         }
 
+
         private void MnDeleteBackup_Click(object sender, RoutedEventArgs e)
         {
-            var rows = dgBackups.SelectedItems;
+            IList rows = dgBackups.SelectedItems;
             bool wontDelete = false;
             bool changedList = false;
             foreach(var row in rows)
@@ -568,13 +543,14 @@ namespace SnowRunner_Tool
                         Log.Error(ex, "Failed to delete backup {BackupFile}", f);
                     }
                 }
-                if (wontDelete == true)
+                if (wontDelete)
                 {
                     _ = MetroMessage("Skipped deletion", "You have selected a backup the game made by itself. These backups will not be deleted.");
                 }
             }
-            if (changedList == true) { ReadBackups(); }       
+            if (changedList) { ReadBackups(); }
         }
+
 
         private async void MnRename_Click(object sender, RoutedEventArgs e)
         {
@@ -583,10 +559,10 @@ namespace SnowRunner_Tool
                 _ = MetroMessage("Multiple rows selected", "You have selected more than one row. To rename a backup, select one single row.");
                 return;
             }
-            var menuItem = (MenuItem)sender;
-            var contextMenu = (ContextMenu)menuItem.Parent;
-            var item = (DataGrid)contextMenu.PlacementTarget;
-            var renameItem = (Backup)item.SelectedCells[0].Item;
+            MenuItem menuItem = (MenuItem)sender;
+            ContextMenu contextMenu = (ContextMenu)menuItem.Parent;
+            DataGrid item = (DataGrid)contextMenu.PlacementTarget;
+            Backup renameItem = (Backup)item.SelectedCells[0].Item;
             if (renameItem.Type == "Game-Backup")
             {
                 _ = MetroMessage("Sorry, I won´t do that", "You selected a backup the game made by itself. These backups cannot be deleted.");
@@ -634,7 +610,7 @@ namespace SnowRunner_Tool
         private void WebLinkMessage(string url)
         {
             _ = MetroMessage("Just to let you know", "This will open a new page in your web browser.");
-            Process.Start(url);
+            _ = Process.Start(url);
         }
 
         private void SetAutobackup(int interval)
@@ -651,38 +627,33 @@ namespace SnowRunner_Tool
             switch (interval)
             {
                 case 0:
-                    MnAutoOff.Icon = new System.Windows.Controls.Image
+                    MnAutoOff.Icon = new Image
                     {
                         Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
                     };
                     break;
                 case 2:
-                    MnAuto2.Icon = new System.Windows.Controls.Image
+                    MnAuto2.Icon = new Image
                     {
                         Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
                     };
                     break;
                 case 5:
-                    MnAuto5.Icon = new System.Windows.Controls.Image
+                    MnAuto5.Icon = new Image
                     {
                         Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
                     };
                     break;
                 case 10:
-                    MnAuto10.Icon = new System.Windows.Controls.Image
+                    MnAuto10.Icon = new Image
                     {
                         Source = new BitmapImage(new Uri("images/baseline_done_black_18dp_1x.png", UriKind.Relative))
                     };
                     break;
+                default:
+                    break;
             }
-            if (interval > 0)
-            {
-                fswGameBackup.EnableRaisingEvents = true;
-            }
-            else
-            {
-                fswGameBackup.EnableRaisingEvents = false;
-            }
+            fswGameBackup.EnableRaisingEvents = interval > 0;
         }
 
         private void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)

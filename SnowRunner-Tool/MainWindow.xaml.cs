@@ -56,7 +56,7 @@ namespace SnowRunner_Tool
             //               enableDebugLogging = true;
             //           }
             //       });
-            guid = GenGuid();
+            // guid = GenGuid();
             
             InitializeComponent();
             ((App)Application.Current).WindowPlace.Register(this);
@@ -167,21 +167,21 @@ namespace SnowRunner_Tool
         /// Generates unique support-id for logging
         /// </summary>
         /// <returns></returns>
-        private string GenGuid()
-        {
-            if (Settings.Default.guid == "")
-            {
-                string g = Guid.NewGuid().ToString();
-                Settings.Default.guid = g;
-                Settings.Default.Save();
-                return g;
-            }
-            else
-            {
-                string g = Settings.Default.guid;
-                return g;
-            }
-        }
+        //private string GenGuid()
+        //{
+        //    if (Settings.Default.guid == "")
+        //    {
+        //        string g = Guid.NewGuid().ToString();
+        //        Settings.Default.guid = g;
+        //        Settings.Default.Save();
+        //        return g;
+        //    }
+        //    else
+        //    {
+        //        string g = Settings.Default.guid;
+        //        return g;
+        //    }
+        //}
 
         /// <summary>
         /// Clear items in datagrid and (re)loads all backups
@@ -351,11 +351,11 @@ namespace SnowRunner_Tool
             WebLinkMessage("https://github.com/elpatron68/SnowRunner-Tool/issues");
         }
 
-        private void MnuSupportID_Click(object sender, RoutedEventArgs e)
-        {
-            Clipboard.SetText(guid);
-            _ = MetroMessage("Support ID copied", "Your support ID has been copied to the clipboard. Make sure, \"Remote logging\" is activated when the problem occured before filing an issue.\n\nSupport ID: " + guid);
-        }
+        //private void MnuSupportID_Click(object sender, RoutedEventArgs e)
+        //{
+        //    // Clipboard.SetText(guid);
+        //    // _ = MetroMessage("Support ID copied", "Your support ID has been copied to the clipboard. Make sure, \"Remote logging\" is activated when the problem occured before filing an issue.\n\nSupport ID: " + guid);
+        //}
 
 
         private void MnuSRTLicense_Click(object sender, RoutedEventArgs e)

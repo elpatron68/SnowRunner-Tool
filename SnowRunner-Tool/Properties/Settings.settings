@@ -14,12 +14,6 @@
     <Setting Name="SRbasedir" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="LogHostName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">markus.medisoftware.org</Value>
-    </Setting>
-    <Setting Name="LogPort" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">12201</Value>
-    </Setting>
     <Setting Name="SRprofile" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

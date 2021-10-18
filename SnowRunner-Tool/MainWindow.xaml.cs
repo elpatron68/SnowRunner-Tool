@@ -27,8 +27,7 @@ namespace SnowRunner_Tool
         private string MyBackupDir;
         private string SRSaveGameDir;
         private string SRsaveGameFile;
-        private static readonly string v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        private readonly string aVersion = v;
+        private static readonly string AssemblyVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private KeyboardHook _hook;
         private FileSystemWatcher fswGameBackup;
         private static int autoSaveCounter = 0;
@@ -278,7 +277,7 @@ namespace SnowRunner_Tool
 
         private void MnuAbout_Click(object sender, RoutedEventArgs e)
         {
-            _ = MetroMessage("About", "SnowRunner-Tool\n\nVersion " + aVersion + "\n(c) 2020 elpatron68\nhttps://github.com/elpatron68/SnowRunner-Tool/");
+            _ = MetroMessage("About", "SnowRunner-Tool\n\nVersion " + AssemblyVersion + "\n(c) 2020 elpatron68\nhttps://github.com/elpatron68/SnowRunner-Tool/");
         }
 
 
@@ -337,7 +336,7 @@ namespace SnowRunner_Tool
             else
             {
                 {
-                    (int, string) r = await UpdateCheck.CheckGithubReleses(aVersion);
+                    (int, string) r = await UpdateCheck.CheckGithubReleses(AssemblyVersion);
                     int result = r.Item1;
                     string url = r.Item2;
                     if (result > 0)
@@ -358,7 +357,7 @@ namespace SnowRunner_Tool
 
         private async void CheckUpdate()
         {
-            (int, string) r = await UpdateCheck.CheckGithubReleses(aVersion);
+            (int, string) r = await UpdateCheck.CheckGithubReleses(AssemblyVersion);
             int result = r.Item1;
             if (result > 0)
             {
@@ -449,7 +448,7 @@ namespace SnowRunner_Tool
         private void UpdateTitle()
         {
             Dispatcher.Invoke(() => {
-                Title = "SnowRunner-Tool v" + aVersion;
+                Title = "SnowRunner-Tool v" + AssemblyVersion;
                 if (File.Exists(SRsaveGameFile))
                 {
                     string money = CheatGame.GetMoney(SRsaveGameFile);
@@ -458,7 +457,7 @@ namespace SnowRunner_Tool
                 }
                 else
                 {
-                    Title = "SnowRunner-Tool v" + aVersion;
+                    Title = "SnowRunner-Tool v" + AssemblyVersion;
                 }
             });
         }

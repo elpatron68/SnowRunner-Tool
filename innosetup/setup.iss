@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 #include <idp.iss>
 #define MyAppName "SnowRunner-Tool"
-#define MyAppVersion "1.0.3.4"
+#define MyAppVersion "1.0.3.5"
 #define MyAppPublisher "elpatron68"
 #define MyAppURL "https://github.com/elpatron68/SnowRunner-Tool"
 #define MyAppExeName "SnowRunner-Tool.exe"
@@ -11,7 +11,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={#MyAppName}
+AppId={{fbc516d8-771f-414e-b57b-14211d6e0c62}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -34,9 +34,16 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\mbusc\source\repos\SnowRunner-Tool\SnowRunner-Tool\bin\Release\SnowRunner-Tool.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\mbusc\source\repos\SnowRunner-Tool\SnowRunner-Tool\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+Source: "..\SnowRunner-Tool\bin\Release\SnowRunner-Tool.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\SnowRunner-Tool\bin\Release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\SnowRunner-Tool\bin\Release\app.manifest"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\SnowRunner-Tool\bin\Release\de\System.Runtime.WindowsRuntime.resources.dll"; DestDir: "{app}\de"; Flags: ignoreversion
+Source: "..\SnowRunner-Tool\placement.config"; DestDir: "{app}"; Flags: ignoreversion onlyifdoesntexist
+Source: "..\SnowRunner-Tool\bin\Release\copying"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\SnowRunner-Tool\bin\Release\Readme.md"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\SnowRunner-Tool\bin\Release\SnowRunner-Tool.exe.config"; DestDir: "{app}"; Flags: ignoreversion onlyifdoesntexist
+Source: "..\SnowRunner-Tool\bin\Release\Windows.winmd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\SnowRunner-Tool\bin\Release\Changelog.md"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

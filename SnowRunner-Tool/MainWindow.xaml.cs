@@ -10,7 +10,7 @@ using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using Serilog;
-using CommandLine;
+// using CommandLine;
 using System.Linq;
 using System.Windows.Documents;
 using System.Diagnostics;
@@ -48,15 +48,15 @@ namespace SnowRunner_Tool
         {
             // Command line options
             string[] args = Environment.GetCommandLineArgs();
-            Parser.Default.ParseArguments<Options>(args)
-                   .WithParsed<Options>(o =>
-                   {
-                       if (o.EnableLogging == true)
-                       {
-                           enableDebugLogging = true;
-                       }
-                   });
-            guid = GenGuid();
+            //Parser.Default.ParseArguments<Options>(args)
+            //       .WithParsed<Options>(o =>
+            //       {
+            //           if (o.EnableLogging == true)
+            //           {
+            //               enableDebugLogging = true;
+            //           }
+            //       });
+            // guid = GenGuid();
             
             InitializeComponent();
             ((App)Application.Current).WindowPlace.Register(this);
@@ -167,21 +167,21 @@ namespace SnowRunner_Tool
         /// Generates unique support-id for logging
         /// </summary>
         /// <returns></returns>
-        private string GenGuid()
-        {
-            if (Settings.Default.guid == "")
-            {
-                string g = Guid.NewGuid().ToString();
-                Settings.Default.guid = g;
-                Settings.Default.Save();
-                return g;
-            }
-            else
-            {
-                string g = Settings.Default.guid;
-                return g;
-            }
-        }
+        //private string GenGuid()
+        //{
+        //    if (Settings.Default.guid == "")
+        //    {
+        //        string g = Guid.NewGuid().ToString();
+        //        Settings.Default.guid = g;
+        //        Settings.Default.Save();
+        //        return g;
+        //    }
+        //    else
+        //    {
+        //        string g = Settings.Default.guid;
+        //        return g;
+        //    }
+        //}
 
         /// <summary>
         /// Clear items in datagrid and (re)loads all backups
@@ -189,26 +189,33 @@ namespace SnowRunner_Tool
         private void ReadBackups()
         {
             // Add SnowRunner backup directories
-            var allBackups = Backup.GetBackups(SRBackupDir);
+            var allBackups = Backup.GetGameBackups(SRBackupDir);
             // Add own zipped backups
-            allBackups.AddRange(Backup.GetOtherBackups(MyBackupDir));
-                        
-            if (allBackups.Count > 0)
+            allBackups.AddRange(Backup.GetSrtBackups(MyBackupDir));
+
+            try
             {
-                this.Dispatcher.Invoke(() => {
+                if (allBackups.Count > 0)
+                {
+                    this.Dispatcher.Invoke(() => {
+                        dgBackups.ItemsSource = allBackups;
+                        dgBackups.Items.SortDescriptions.Clear();
+                        dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
+                        dgBackups.Items.Refresh();
+                    });
+                }
+                else
+                {
                     dgBackups.ItemsSource = allBackups;
                     dgBackups.Items.SortDescriptions.Clear();
-                    dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
                     dgBackups.Items.Refresh();
-                });
+                }
+                UpdateTitle();
             }
-            else
+            catch
             {
-                dgBackups.ItemsSource = allBackups;
-                dgBackups.Items.SortDescriptions.Clear();
-                dgBackups.Items.Refresh();
+                _ = MetroMessage("No Backups", "Sorry, no backups found. Did you play the game, yet? Otherwise: Check path settings.");
             }
-            UpdateTitle();
         }
 
         
@@ -299,7 +306,8 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         private async Task<bool> MetroMessage(string title, string message)
         {
-            string[] answers = { "Fine", "OK", "Make it so", "Hmmm", "Okay", "Hoot", "Ладно", "Хорошо", "d'accord", "Très bien", "Na gut", "Von mir aus" };
+            string[] answers = { "Fine", "OK", "Make it so", "Hmmm", "Okay", "Hoot", "Ладно", "Хорошо", "d'accord",
+                "Très bien", "Na gut", "Von mir aus", "Let´s go", "Lad os komme afsted", "Mennään", "Andiamo", "Chodźmy" };
             Random r = new Random();
             int rInt = r.Next(0, answers.Length);
             var dialogSettings = new MetroDialogSettings();
@@ -344,11 +352,11 @@ namespace SnowRunner_Tool
             WebLinkMessage("https://github.com/elpatron68/SnowRunner-Tool/issues");
         }
 
-        private void MnuSupportID_Click(object sender, RoutedEventArgs e)
-        {
-            Clipboard.SetText(guid);
-            _ = MetroMessage("Support ID copied", "Your support ID has been copied to the clipboard. Make sure, \"Remote logging\" is activated when the problem occured before filing an issue.\n\nSupport ID: " + guid);
-        }
+        //private void MnuSupportID_Click(object sender, RoutedEventArgs e)
+        //{
+        //    // Clipboard.SetText(guid);
+        //    // _ = MetroMessage("Support ID copied", "Your support ID has been copied to the clipboard. Make sure, \"Remote logging\" is activated when the problem occured before filing an issue.\n\nSupport ID: " + guid);
+        //}
 
 
         private void MnuSRTLicense_Click(object sender, RoutedEventArgs e)

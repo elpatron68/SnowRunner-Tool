@@ -142,14 +142,6 @@
                         <iconPacks:PackIconMaterial Kind="DownloadOutline" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="MnSupportID" 
-                                    Header="_Copy support-ID"
-                                    Click="MnuSupportID_Click"
-                          >
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="Lifebuoy" />
-                    </MenuItem.Icon>
-                </MenuItem>
                 <MenuItem Header="_Web">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="Web" />

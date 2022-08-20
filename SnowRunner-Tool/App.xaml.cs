@@ -32,11 +32,11 @@ namespace SnowRunner_Tool
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-
+            string logfile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\SRT\log.txt";
             ILogger log = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Console()
-                .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.File(logfile, rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
             MainWindow window = new MainWindow(log);

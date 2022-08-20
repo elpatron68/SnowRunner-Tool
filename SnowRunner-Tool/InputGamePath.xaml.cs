@@ -22,6 +22,7 @@ namespace SnowRunner_Tool
     /// </summary>
     public partial class InputGamePath : MetroWindow
     {
+        public string fileToCheck;
         public InputGamePath()
         {
             InitializeComponent();
@@ -61,6 +62,18 @@ namespace SnowRunner_Tool
                 {
                     TxSRBackupDir.Foreground = Brushes.Red;
                 }
+            }
+        }
+
+        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists(fileToCheck))
+            {
+                this.Title = "Settings (OK)";
+            }
+            else
+            {
+                this.Title = "Settings (File not found!)";
             }
         }
     }

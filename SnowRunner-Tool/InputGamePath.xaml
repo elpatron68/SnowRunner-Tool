@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SnowRunner_Tool"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="File not found!" Height="345" Width="586.616" >
+        Title="Settings" Height="345" Width="586.616" Loaded="MetroWindow_Loaded" >
     <Grid>
         <Label Content="Select your save game file (CompleteSave.dat)" 
                      HorizontalAlignment="Left" 

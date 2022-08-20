@@ -416,6 +416,7 @@ namespace SnowRunner_Tool
             {
                 gamePath.TxSRProfileName.Text = SRProfile;
             }
+            gamePath.fileToCheck = SRSaveGameDir + @"\CompleteSave.dat";
             gamePath.ShowDialog();
             if (!string.IsNullOrEmpty(gamePath.TxSRBaseDir.Text))
             {

@@ -176,6 +176,7 @@ namespace SnowRunner_Tool
         
         private void RestoreBackup_Click(object sender, RoutedEventArgs e)
         {
+            bool copyResult = false;
             if (BackupScheduler.IsActive())
             {
                 _ = MetroMessage("Attention!", "The game has to be closed before a backup can be restored.");
@@ -218,13 +219,14 @@ namespace SnowRunner_Tool
                     string backupSource = string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase)
                         ? SRBackupDir + @"\" + restoreItem.BackupName
                         : MyBackupDir + @"\" + restoreItem.BackupName;
+                    
                     if (string.Equals(restoreItem.Type, "PAK-Backup"))
                     {
                         // Restore initial.pak
                         try
                         {
                             _ = MetroMessage("This function experimental!", "Please report any problems to Github issues, see Help - Web - Report a problem.");
-                            Backup.RestoreBackup(backupSource, SRPaksDir, -1);
+                            copyResult = Backup.RestoreBackup(backupSource, SRPaksDir, -1);
                         }
                         catch
                         {
@@ -234,9 +236,17 @@ namespace SnowRunner_Tool
                     }
                     else
                     {
-                        Backup.RestoreBackup(backupSource, SRSaveGameDir, SavegameSlot);
+                        copyResult = Backup.RestoreBackup(backupSource, SRSaveGameDir, SavegameSlot);
                     }
-                    _ = MetroMessage("Next time better luck", "The selected saved game has been restored. A backup of your former save game has been saved.");
+                    if (copyResult)
+                    {
+                        _ = MetroMessage("Next time better luck", "The selected saved game has successfully been restored. A backup of your former save game has been made.");
+                    }
+                    else
+                    {
+                        _ = MetroMessage("File not found", "The selected backup slot contains no corresponding save game file. Select a valid slot or restore all slots.");
+                    }
+
                     ReadBackups();
                 }
             }

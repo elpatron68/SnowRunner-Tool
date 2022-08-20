@@ -27,17 +27,75 @@ namespace SnowRunner_Tool
         /// <param name="destDirName"></param>
         /// <param name="copySubDirs"></param>
         /// <param name="overwriteExisting"></param>
-        public static void DirCopy(string sourceDirName, string destDirName, bool overwriteExisting)
+        public static bool DirCopy(string sourceDirName, string destDirName, bool overwriteExisting, int SavegameSlot)
         {
-            foreach (string newPath in Directory.GetFiles(sourceDirName, "*.*", SearchOption.AllDirectories))
+            bool result = false;
+            string saveGameSlotFile = string.Empty;
+            List<string> filesToSkip = new List<string>();
+
+            switch (SavegameSlot)
+            {
+                // Recover all backup slots
+                case 0:
+                    result = true;
+                    break;
+                // Recover backup slot 1
+                case 1:
+                    saveGameSlotFile = "CompleteSave.dat";
+                    filesToSkip.Add("CompleteSave1.dat");
+                    filesToSkip.Add("CompleteSave2.dat");
+                    filesToSkip.Add("CompleteSave3.dat");
+                    break;
+                // Recover backup slot 2
+                case 2:
+                    saveGameSlotFile = "CompleteSave1.dat";
+                    filesToSkip.Add("CompleteSave.dat");
+                    filesToSkip.Add("CompleteSave2.dat");
+                    filesToSkip.Add("CompleteSave3.dat");
+                    break;
+                // Recover backup slot 3
+                case 3:
+                    saveGameSlotFile = "CompleteSave2.dat";
+                    filesToSkip.Add("CompleteSave.dat");
+                    filesToSkip.Add("CompleteSave1.dat");
+                    filesToSkip.Add("CompleteSave3.dat");
+                    break;
+                // Recover backup slot 4
+                case 4:
+                    saveGameSlotFile = "CompleteSave3.dat";
+                    filesToSkip.Add("CompleteSave.dat");
+                    filesToSkip.Add("CompleteSave1.dat");
+                    filesToSkip.Add("CompleteSave2.dat");
+                    break;
+            }
+            if(File.Exists(sourceDirName + @"\" + saveGameSlotFile))
+            {
+                result = true;
+            }
+            else
+            {
+                result = false;
+                return result;
+            }
+
+            foreach (string sourceFile in Directory.GetFiles(sourceDirName, "*.*", SearchOption.AllDirectories))
                 try
                 {
-                    File.Copy(newPath, newPath.Replace(sourceDirName, destDirName), overwriteExisting);
+                    foreach (string file in filesToSkip)
+                    {
+                        if (!(Path.GetFileName(sourceFile) == file))
+                        {
+                            File.Copy(sourceFile, sourceFile.Replace(sourceDirName, destDirName), overwriteExisting);
+                        }
+                    }
+
                 }
                 catch (IOException ex)
                 {
-                    Log.Error(ex, "File copy failed: {NewPath} {DestDirName}", newPath, destDirName);
+                    Log.Error(ex, "File copy failed: {sourceFile} {DestDirName}", sourceFile, destDirName);
+                    result = false;
                 }
+            return result;
         }
 
         /// <summary>
@@ -193,7 +251,7 @@ namespace SnowRunner_Tool
         /// Restores a game backup (overwrites current save game)
         /// </summary>
         /// <param name="sourceFileOrDirectory"></param>
-        public static void RestoreBackup(string sourceFileOrDirectory, string targetDirectory, int SavegameSlot)
+        public static bool RestoreBackup(string sourceFileOrDirectory, string targetDirectory, int SavegameSlot)
         {
             string TmpExtractionDirectory = Path.GetTempPath() + "SRT";
             // Delete temporary folder
@@ -204,57 +262,23 @@ namespace SnowRunner_Tool
             Directory.CreateDirectory(TmpExtractionDirectory);
 
             Log.Information("Restore backup {BackupItem}", sourceFileOrDirectory);
+            bool result;
             // SnowRunner Backup: Copy directory
             if (!String.Equals(Path.GetExtension(sourceFileOrDirectory), ".zip", StringComparison.OrdinalIgnoreCase))
             {
                 Log.Debug("Copy directory from {Source} to {Destination}", sourceFileOrDirectory, targetDirectory);
-                Backup.DirCopy(sourceFileOrDirectory, targetDirectory, true);
+                result = DirCopy(sourceFileOrDirectory, targetDirectory, true, SavegameSlot);
             }
             // Zipped backup: Extract zip file, see ZipExtractHelperClass
             else
             {
-                Log.Debug("Unzipping all saves from save game {Source} to {Destination}", sourceFileOrDirectory, TmpExtractionDirectory);
+                Log.Debug("Unzipping all saves from save game {Source} to temporary directory {Destination}", sourceFileOrDirectory, TmpExtractionDirectory);
                 ZipExtractHelperClass.ZipFileExtractToDirectory(sourceFileOrDirectory, TmpExtractionDirectory);
 
-                string[] AllFiles = Directory.GetFiles(TmpExtractionDirectory);
-                List<string> AllFilesList = new List<string>(AllFiles);
-                switch (SavegameSlot)
-                {
-                    case 0:
-                        break;
-                    case 1:
-                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave1.dat");
-                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave2.dat");
-                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave3.dat");
-                        break;
-                    case 2:
-                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave.dat");
-                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave2.dat");
-                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave3.dat");
-                        break;
-                    case 3:
-                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave.dat");
-                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave1.dat");
-                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave3.dat");
-                        break;
-                    case 4:
-                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave.dat");
-                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave1.dat");
-                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave2.dat");
-                        break;
-                }
-
-                AllFilesList.ForEach(delegate (string filename)
-                {
-                    string tagetFilename = targetDirectory + @"\" + Path.GetFileName(filename);
-                    if (File.Exists(tagetFilename))
-                    {
-                        File.Delete(tagetFilename);
-                    }
-                    Log.Debug("Moving {source} to {target}", filename, tagetFilename);
-                    File.Move(filename, tagetFilename);
-                });
+                result = DirCopy(TmpExtractionDirectory, targetDirectory, true, SavegameSlot);
+                Directory.Delete(TmpExtractionDirectory, true);
             }
+            return result;
         }
     }
 }

@@ -50,7 +50,11 @@ namespace SnowRunner_Tool
             ((App)Application.Current).WindowPlace.Register(this);
 
             // Initialize Logging
-            Serilog.Core.Logger myLog = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
+            Serilog.Core.Logger myLog = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
             myLog.Information("App started");
 
             bool manualPaths = false;

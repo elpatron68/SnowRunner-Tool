@@ -241,7 +241,7 @@ namespace SnowRunner_Tool
                     if (copyResult)
                     {
                         _ = MetroDonateMessage("Next time better luck", "The selected saved game has successfully been restored. A backup of your former save game has been made.\n\n" +
-                            "As I saved your a** this time (again?), consider to buy me a beer or a coffee!");
+                            "As I may have saved your a** this time (again?), consider to buy me a beer or a coffee!");
                     }
                     else
                     {

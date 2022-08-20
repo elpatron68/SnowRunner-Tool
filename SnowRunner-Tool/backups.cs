@@ -68,7 +68,7 @@ namespace SnowRunner_Tool
                     filesToSkip.Add("CompleteSave2.dat");
                     break;
             }
-            if(File.Exists(sourceDirName + @"\" + saveGameSlotFile))
+            if(File.Exists(sourceDirName + @"\" + saveGameSlotFile) | SavegameSlot == 0)
             {
                 result = true;
             }

@@ -57,9 +57,11 @@ namespace SnowRunner_Tool
                 if (Directory.Exists(backupDir))
                 {
                     TxSRBackupDir.Foreground = Brushes.Green;
+                    this.Title = "Settings (OK)";
                 }
                 else
                 {
+                    this.Title = "Settings (File not found!)";
                     TxSRBackupDir.Foreground = Brushes.Red;
                 }
             }

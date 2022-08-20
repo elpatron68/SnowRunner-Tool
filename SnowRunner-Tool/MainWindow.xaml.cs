@@ -240,7 +240,8 @@ namespace SnowRunner_Tool
                     }
                     if (copyResult)
                     {
-                        _ = MetroMessage("Next time better luck", "The selected saved game has successfully been restored. A backup of your former save game has been made.");
+                        _ = MetroDonateMessage("Next time better luck", "The selected saved game has successfully been restored. A backup of your former save game has been made.\n\n" +
+                            "As I saved your a** this time (again?), consider to buy me a beer or a coffee!");
                     }
                     else
                     {
@@ -292,6 +293,30 @@ namespace SnowRunner_Tool
 
             return dialogResult == MessageDialogResult.Affirmative;
         }
+
+        private async Task<bool> MetroDonateMessage(string title, string message)
+        {
+            string[] answers = { "Fine", "OK", "Make it so", "Hmmm", "Okay", "Hoot", "Ладно", "Хорошо", "d'accord",
+                "Très bien", "Na gut", "Von mir aus", "Let´s go", "Lad os komme afsted", "Mennään", "Andiamo", "Chodźmy", "良い" };
+            Random r = new Random();
+            int rInt = r.Next(0, answers.Length);
+            MetroDialogSettings dialogSettings = new MetroDialogSettings();
+            dialogSettings.NegativeButtonText = answers[rInt] + " [OK]";
+            dialogSettings.AffirmativeButtonText = "Donate (PayPal)";
+            dialogSettings.DefaultButtonFocus = MahApps.Metro.Controls.Dialogs.MessageDialogResult.Affirmative;
+            
+            MessageDialogResult dialogResult = await this.ShowMessageAsync(title,
+                message,
+                MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
+            if (dialogResult == MessageDialogResult.Negative) { return true; }
+            if (dialogResult == MessageDialogResult.Affirmative)
+            {
+                Process.Start("https://www.paypal.com/paypalme/MBusche");
+                return true;
+            }
+            return false;
+        }
+
 
         private async Task<string> MetroInputMessage(string title, string message, string defaultValue)
         {

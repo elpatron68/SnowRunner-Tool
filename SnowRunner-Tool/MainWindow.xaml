@@ -59,20 +59,84 @@
                 </MenuItem.Icon>
                 <MenuItem x:Name="MnMoneyCheat"
                           Header="_Money"
-                          Click="MnMoneyCheat_Click"                             
                           >
                     <MenuItem.Icon>
                         <iconPacks:PackIconBoxIcons Kind="RegularMoney" />
                     </MenuItem.Icon>
+                    <MenuItem x:Name="MnMoneyCheat1"
+                          Header="Money #_1"
+                          Click="MnMoneyCheat_Click"                             
+                          >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconBoxIcons Kind="RegularMoney" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="MnMoneyCheat2"
+                          Header="Money #_2"
+                          Click="MnMoneyCheat_Click"                             
+                          >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconBoxIcons Kind="RegularMoney" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="MnMoneyCheat3"
+                          Header="Money #_3"
+                          Click="MnMoneyCheat_Click"                             
+                          >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconBoxIcons Kind="RegularMoney" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="MnMoneyCheat4"
+                          Header="Money #_4"
+                          Click="MnMoneyCheat_Click"                             
+                          >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconBoxIcons Kind="RegularMoney" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
                 </MenuItem>
                 <MenuItem x:Name="MnXp"
                           Header="_XP"
-                          Click="MnXpCheat_Click"
                           >
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="CircleExpand" />
                     </MenuItem.Icon>
+                    <MenuItem x:Name="MnXp1"
+                          Header="XP #_1"
+                          Click="MnXpCheat_Click"
+                          >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial Kind="CircleExpand" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="MnXp2"
+                          Header="XP #_2"
+                          Click="MnXpCheat_Click"
+                          >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial Kind="CircleExpand" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="MnXp3"
+                          Header="XP #_3"
+                          Click="MnXpCheat_Click"
+                          >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial Kind="CircleExpand" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="MnXp4"
+                          Header="XP #_4"
+                          Click="MnXpCheat_Click"
+                          >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial Kind="CircleExpand" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
+                
             </MenuItem>
             <MenuItem Header="_Settings">
                 <MenuItem.Icon>

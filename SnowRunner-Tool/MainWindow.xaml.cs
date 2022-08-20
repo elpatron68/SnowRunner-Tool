@@ -332,7 +332,7 @@ namespace SnowRunner_Tool
         private void MnuReload_Click(object sender, RoutedEventArgs e)
         {
             ReadBackups();
-            _ = CheatGame.GetMoney(SRsaveGameFile);
+            _ = CheatGame.GetMoney(SRsaveGameFile, 1);
         }
 
 
@@ -442,13 +442,41 @@ namespace SnowRunner_Tool
 
         private async void MnMoneyCheat_Click(object sender, RoutedEventArgs e)
         {
-            int oldMoney = int.Parse(CheatGame.GetMoney(SRsaveGameFile));
-            string result = await MetroInputMessage("Money Cheat", "Enter the amount of money you´d like to have", oldMoney.ToString());
+            int SavegameSlot = 0;
+
+            String source = e.Source.ToString();
+            if (source.Contains("#_1"))
+            {
+                SavegameSlot = 1;
+            }
+            if (source.Contains("#_2"))
+            {
+                SavegameSlot = 2;
+            }
+            if (source.Contains("#_3"))
+            {
+                SavegameSlot = 3;
+            }
+            if (source.Contains("#_4"))
+            {
+                SavegameSlot = 4;
+            }
+
+            string oldMoneyString = CheatGame.GetMoney(SRsaveGameFile, SavegameSlot);
+            
+            if (oldMoneyString == "n/a")
+            {
+                _ = MetroMessage("File not found", "The selected backup slot contains no corresponding save game file. Select a valid slot.");
+                return;
+            }
+            
+            int oldMoney = int.Parse(oldMoneyString);
+            string result = await MetroInputMessage("Money Cheat", "Enter the amount of money you´d like to have", oldMoneyString);
             if (!string.IsNullOrEmpty(result))
             {
                 // Create a backup before changing the file
                 _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "cheat-bak");
-                _ = CheatGame.SaveMoney(SRsaveGameFile, result);
+                _ = CheatGame.SaveMoney(SRsaveGameFile, result, SavegameSlot);
                 int moneyUpgrade = int.Parse(result) - oldMoney;
                 Log.Information("MoneyUpgrade {MoneyUpgrade}", moneyUpgrade);
                 _ = MetroMessage("Congratulations", "You won " + moneyUpgrade.ToString() + " coins.");
@@ -460,15 +488,49 @@ namespace SnowRunner_Tool
 
         private async void MnXpCheat_Click(object sender, RoutedEventArgs e)
         {
-            string xp = CheatGame.GetXp(SRsaveGameFile);
-            string result = await MetroInputMessage("XP Cheat", "Enter the amount of XP you´d like to have",
+            int SavegameSlot = 0;
+
+            String source = e.Source.ToString();
+            if (source.Contains("#_1"))
+            {
+                SavegameSlot = 1;
+            }
+            if (source.Contains("#_2"))
+            {
+                SavegameSlot = 2;
+            }
+            if (source.Contains("#_3"))
+            {
+                SavegameSlot = 3;
+            }
+            if (source.Contains("#_4"))
+            {
+                SavegameSlot = 4;
+            }
+
+            string xp = CheatGame.GetXp(SRsaveGameFile, SavegameSlot);
+            if (xp == "n/a")
+            {
+                _ = MetroMessage("File not found", "The selected backup slot contains no corresponding save game file. Select a valid slot.");
+                return;
+            }
+
+            string result = await MetroInputMessage("XP Cheat", "Enter the amount of XP you´d like to have.",
                                                     xp);
             if (!string.IsNullOrEmpty(result))
             {
                 // Create a backup before changing the file
                 _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "cheat-bak");
-                _ = CheatGame.SaveXp(SRSaveGameDir, result);
-                _ = MetroMessage("Congratulations", "Nothing is better than experience!");
+                bool success = CheatGame.SaveXp(SRSaveGameDir, result, SavegameSlot);
+                if (success)
+                {
+                    _ = MetroMessage("Congratulations", "Nothing is better than experience!");
+                }
+                else
+                {
+                    _ = MetroMessage("File not found", "The selected backup slot contains no corresponding save game file. Select a valid slot.");
+                }
+                
                 ReadBackups();
                 UpdateTitle();
             }
@@ -481,9 +543,9 @@ namespace SnowRunner_Tool
                 Title = "SnowRunner-Tool v" + AssemblyVersion;
                 if (File.Exists(SRsaveGameFile))
                 {
-                    string money = CheatGame.GetMoney(SRsaveGameFile);
-                    string xp = CheatGame.GetXp(SRsaveGameFile);
-                    Title += " | Money: " + money + " | XP: " + xp;
+                    string money = CheatGame.GetMoney(SRsaveGameFile, 1);
+                    string xp = CheatGame.GetXp(SRsaveGameFile, 1);
+                    Title += " | Money: " + money + " | XP: " + xp + " (Slot #1)";
                 }
                 else
                 {

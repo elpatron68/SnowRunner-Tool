@@ -17,8 +17,24 @@ namespace SnowRunner_Tool
         /// </summary>
         private readonly ILogger _log = Log.ForContext<CheatGame>();
 
-        public static string GetMoney(string saveGameFile)
+        public static string GetMoney(string saveGameFile, int saveGameSlot)
         {
+            switch (saveGameSlot)
+            {
+                case 2:
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave1.dat";
+                    break;
+                case 3:
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave2.dat";
+                    break;
+                case 4:
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave3.dat";
+                    break;
+            }
+            if (!File.Exists(saveGameFile))
+            {
+                return "n/a";
+            }
             string s = File.ReadAllText(saveGameFile);
             string sPattern = @"\""money\""\:\d+";
             string moneyAmount;
@@ -36,13 +52,30 @@ namespace SnowRunner_Tool
             }
         }
 
-        public static bool SaveMoney(string saveGameFile, string newMoney)
+        public static bool SaveMoney(string saveGameFile, string newAmount, int saveGameSlot)
         {
+            switch (saveGameSlot)
+            {
+                case 2:
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave1.dat";
+                    break;
+                case 3:
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave2.dat";
+                    break;
+                case 4:
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave3.dat";
+                    break;
+            }
+            if (!File.Exists(saveGameFile))
+            {
+                return false;
+            }
+
             // Check if money value is numeric
             Log.Information("SaveMoney");
-            if (Regex.IsMatch(newMoney, @"^\d+$"))
+            if (Regex.IsMatch(newAmount, @"^\d+$"))
             {
-                File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + newMoney));
+                File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + newAmount));
                 return true;
             }
             else
@@ -51,8 +84,25 @@ namespace SnowRunner_Tool
             }
         }
 
-        public static string GetXp(string saveGameFile)
+        public static string GetXp(string saveGameFile, int saveGameSlot)
         {
+            switch (saveGameSlot)
+            {
+                case 2:
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave1.dat";
+                    break;
+                case 3:
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave2.dat";
+                    break;
+                case 4:
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave3.dat";
+                    break;
+            }
+            if (!File.Exists(saveGameFile))
+            {
+                return "n/a";
+            }
+
             string s = File.ReadAllText(saveGameFile);
             string sPattern = @"\""experience\""\:\d+";
             string xpAmount;
@@ -71,9 +121,23 @@ namespace SnowRunner_Tool
 
         }
 
-        public static bool SaveXp(string SRSaveGameDir, string newXP, string saveGameSlot="")
+        public static bool SaveXp(string SRSaveGameDir, string newXP, int SaveGameSlot)
         {
-            string saveGameFile = SRSaveGameDir + @"\CompleteSave" + saveGameSlot + ".dat";
+            string saveGameFile;
+            if (SaveGameSlot == 1)
+            {
+                saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+            }
+            else
+            {
+                saveGameFile = SRSaveGameDir + @"\CompleteSave" + (SaveGameSlot - 1).ToString() + ".dat";
+            }
+
+            if (!File.Exists(saveGameFile))
+            {
+                return false;
+            }
+            
             Log.Information("SaveXp");
             try
             {

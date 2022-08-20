@@ -31,9 +31,11 @@ namespace SnowRunner_Tool
         private KeyboardHook _hook;
         private FileSystemWatcher fswGameBackup;
         private static int autoSaveCounter = 0;
+        private readonly ILogger _logger;
 
-        public MainWindow()
+        public MainWindow(ILogger logger)
         {
+            _logger = logger;
             // Command line options
             //string[] args = Environment.GetCommandLineArgs();
             //Parser.Default.ParseArguments<Options>(args)
@@ -45,17 +47,11 @@ namespace SnowRunner_Tool
             //           }
             //       });
             //guid = GenGuid();
-            
+
             InitializeComponent();
             ((App)Application.Current).WindowPlace.Register(this);
 
-            // Initialize Logging
-            Serilog.Core.Logger myLog = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.Console()
-                .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
-                .CreateLogger();
-            myLog.Information("App started");
+            _logger.Information("App started");
 
             bool manualPaths = false;
 
@@ -92,7 +88,7 @@ namespace SnowRunner_Tool
 
             if (manualPaths)
             {
-                Log.Information("Manual path input required");
+                _logger.Information("Manual path input required");
                 ShowSettingsDialog();
             }
 
@@ -100,15 +96,15 @@ namespace SnowRunner_Tool
             if (!Directory.Exists(MyBackupDir))
             {
                 Directory.CreateDirectory(MyBackupDir);
-                Log.Debug("{MyBackupDir} created ", MyBackupDir);
+                _logger.Debug("{MyBackupDir} created ", MyBackupDir);
             }
 
             // Send directories to log
-            Log.Debug("Set {SRBaseDir}", SRBaseDir);
-            Log.Information("Set {SRProfile}", SRProfile);
-            Log.Debug("Set {MyBackupDir}", MyBackupDir);
-            Log.Debug("Set {SRBackupDir}", SRBackupDir);
-            Log.Debug("Set {SRSaveGameDir}", SRSaveGameDir);
+            _logger.Debug("Set base directory: {SRBaseDir}", SRBaseDir);
+            _logger.Information("Set profile directory: {SRProfile}", SRProfile);
+            _logger.Debug("Set backup directory: {MyBackupDir}", MyBackupDir);
+            _logger.Debug("Set Snowrunner backup directory: {SRBackupDir}", SRBackupDir);
+            _logger.Debug("Set Snowrunner save game directory: {SRSaveGameDir}", SRSaveGameDir);
 
             // Set value of some UI elements, load backup data
             lblSnowRunnerPath.Content = SRBaseDir;
@@ -134,7 +130,7 @@ namespace SnowRunner_Tool
 
             // Check for update (Win8+)
             string os = OsInfo.GetOSInfo();
-            Log.Information("{Os}", os);
+            _logger.Information("Operating system: {Os}", os);
             if (!os.ToLower().Contains("windows 7"))
             {
                 CheckUpdate();
@@ -395,7 +391,7 @@ namespace SnowRunner_Tool
             int result = r.Item1;
             if (result > 0)
             {
-                ToastNote.Notify("Update available", "A new version of SnowRunner-Tool is available. See menu Help - Check for update to download the new version.");
+                ToastNote.Notify("Update available", "A new version of SnowRunner-Tool is available. See menu 'Help - Check for update' to download the latest version.");
             }
         }
 
@@ -482,7 +478,6 @@ namespace SnowRunner_Tool
                 _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "cheat-bak");
                 _ = CheatGame.SaveMoney(SRsaveGameFile, result, SavegameSlot);
                 int moneyUpgrade = int.Parse(result) - oldMoney;
-                Log.Information("MoneyUpgrade {MoneyUpgrade}", moneyUpgrade);
                 _ = MetroMessage("Congratulations", "You won " + moneyUpgrade.ToString() + " coins.");
                 ReadBackups();
                 UpdateTitle();
@@ -635,7 +630,7 @@ namespace SnowRunner_Tool
                     }
                     catch (IOException ex)
                     {
-                        Log.Error(ex, "Failed to delete backup {BackupFile}", f);
+                        _logger.Error(ex, "Failed to delete backup {BackupFile}", f);
                     }
                 }
                 if (wontDelete)
@@ -673,7 +668,7 @@ namespace SnowRunner_Tool
                 }
                 catch (IOException ex)
                 {
-                    Log.Error(ex, "Failed to rename backup {BackupFile}", oldFileName);
+                    _logger.Error(ex, "Failed to rename backup {BackupFile}", oldFileName);
                 }
                 ReadBackups();
             }
@@ -695,7 +690,7 @@ namespace SnowRunner_Tool
             {
                 if (BackupScheduler.IsActive())
                 {
-                    Log.Debug("Start backup from hotkey");
+                    _logger.Debug("Start backup from hotkey");
                     _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "hotkey-bak");
                     ReadBackups();
                 }
@@ -761,7 +756,7 @@ namespace SnowRunner_Tool
             {
                 autoSaveCounter = 0;
                 _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "auto-bak");
-                Log.Debug("FSW-backup created");
+                _logger.Debug("FSW-backup created");
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using RestoreWindowPlace;
+using Serilog;
 using SnowRunner_Tool.Properties;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,21 @@ namespace SnowRunner_Tool
         {
             base.OnExit(e);
             this.WindowPlace.Save();
+        }
+
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+
+            ILogger log = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            MainWindow window = new MainWindow(log);
+            Current.MainWindow = window;
+            window.InitializeComponent();
+            window.Show();
         }
     }
 }

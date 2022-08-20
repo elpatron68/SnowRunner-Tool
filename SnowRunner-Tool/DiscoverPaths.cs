@@ -11,8 +11,6 @@ namespace SnowRunner_Tool
 {
     class DiscoverPaths
     {
-        private readonly ILogger _log = Log.ForContext<DiscoverPaths>();
-
         /// <summary>
         /// SnowRunner base directory, usually %userprofofile%\documents\my games\Snowrunner\base
         /// </summary>
@@ -59,6 +57,5 @@ namespace SnowRunner_Tool
             }
             return null;
         }
-
     }
 }

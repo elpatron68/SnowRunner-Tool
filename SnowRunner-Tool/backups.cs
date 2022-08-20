@@ -18,7 +18,7 @@ namespace SnowRunner_Tool
         public string Type { get; set; }
         public string MoneySlot1 { get; set; }
         public string Xp { get; set; }
-        private readonly ILogger _log = Log.ForContext<Backup>();
+
 
         /// <summary>
         /// Copies a directory to another directory

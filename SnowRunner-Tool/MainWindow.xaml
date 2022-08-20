@@ -324,7 +324,7 @@
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
-                    <MenuItem Header="_Delete this backup"
+                    <MenuItem Header="_Delete this/these backup(s)"
                               Click="MnDeleteBackup_Click"
                             >
                         <MenuItem.Icon>
@@ -340,7 +340,7 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem x:Name="MnRename"
-                              Header="_Rename the backup"
+                              Header="_Rename backup"
                               Click="MnRename_Click"
                               >
                         <MenuItem.Icon>

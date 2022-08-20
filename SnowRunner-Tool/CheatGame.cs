@@ -15,8 +15,6 @@ namespace SnowRunner_Tool
         /// <summary>
         /// Cheat: Set amount of money in current save game
         /// </summary>
-        private readonly ILogger _log = Log.ForContext<CheatGame>();
-
         public static string GetMoney(string saveGameFile, int saveGameSlot)
         {
             switch (saveGameSlot)
@@ -137,7 +135,7 @@ namespace SnowRunner_Tool
             {
                 return false;
             }
-            
+
             Log.Information("SaveXp");
             try
             {

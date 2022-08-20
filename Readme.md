@@ -13,7 +13,7 @@ looking nice.
 In addition, this tool lets you change (cheat) the money and experience points of the current game state. So, 
 if you feel, you are broke, don´t hesitate to rob the bank!
 
-**Use this software with caution! I have tested a lot, but only on my own machine. I recommend to make manual 
+**Use this software with caution! I have tested a lot, but only on my own machines. I recommend to make manual 
 backups until you are sure that everything works as expected.**
 
 ## Features

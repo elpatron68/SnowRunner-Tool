@@ -50,7 +50,8 @@ Source: "..\SnowRunner-Tool\bin\Release\Changelog.md"; DestDir: "{app}"; Flags: 
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\Project on GitHub"; Filename: "{#MyAppURL}"
 Name: "{group}\Donate a coffee"; Filename: "https://www.paypal.com/paypalme/MBusche"
-Name: "{group}\Open Changelog"; Filename: "notepad.exe"; Parameters: "{app}\changelog.md"
+Name: "{group}\Show Changelog"; Filename: "notepad.exe"; Parameters: "{app}\changelog.md"
+Name: "{group}\Show README"; Filename: "notepad.exe"; Parameters: "{app}\readme.md"
 Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]

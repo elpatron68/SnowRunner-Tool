@@ -193,8 +193,16 @@ namespace SnowRunner_Tool
         /// Restores a game backup (overwrites current save game)
         /// </summary>
         /// <param name="sourceFileOrDirectory"></param>
-        public static void RestoreBackup(string sourceFileOrDirectory, string targetDirectory)
+        public static void RestoreBackup(string sourceFileOrDirectory, string targetDirectory, int SavegameSlot)
         {
+            string TmpExtractionDirectory = Path.GetTempPath() + "SRT";
+            // Delete temporary folder
+            if (Directory.Exists(TmpExtractionDirectory)) 
+            {
+                Directory.Delete(TmpExtractionDirectory, true);
+            }
+            Directory.CreateDirectory(TmpExtractionDirectory);
+
             Log.Information("Restore backup {BackupItem}", sourceFileOrDirectory);
             // SnowRunner Backup: Copy directory
             if (!String.Equals(Path.GetExtension(sourceFileOrDirectory), ".zip", StringComparison.OrdinalIgnoreCase))
@@ -205,8 +213,47 @@ namespace SnowRunner_Tool
             // Zipped backup: Extract zip file, see ZipExtractHelperClass
             else
             {
-                Log.Debug("Unzipping save game {Source} to {Destination}", sourceFileOrDirectory, targetDirectory);
-                ZipExtractHelperClass.ZipFileExtractToDirectory(sourceFileOrDirectory, targetDirectory);
+                Log.Debug("Unzipping all saves from save game {Source} to {Destination}", sourceFileOrDirectory, TmpExtractionDirectory);
+                ZipExtractHelperClass.ZipFileExtractToDirectory(sourceFileOrDirectory, TmpExtractionDirectory);
+
+                string[] AllFiles = Directory.GetFiles(TmpExtractionDirectory);
+                List<string> AllFilesList = new List<string>(AllFiles);
+                switch (SavegameSlot)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave1.dat");
+                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave2.dat");
+                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave3.dat");
+                        break;
+                    case 2:
+                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave.dat");
+                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave2.dat");
+                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave3.dat");
+                        break;
+                    case 3:
+                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave.dat");
+                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave1.dat");
+                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave3.dat");
+                        break;
+                    case 4:
+                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave.dat");
+                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave1.dat");
+                        AllFilesList.Remove(TmpExtractionDirectory + @"\CompleteSave2.dat");
+                        break;
+                }
+
+                AllFilesList.ForEach(delegate (string filename)
+                {
+                    string tagetFilename = targetDirectory + @"\" + Path.GetFileName(filename);
+                    if (File.Exists(tagetFilename))
+                    {
+                        File.Delete(tagetFilename);
+                    }
+                    Log.Debug("Moving {source} to {target}", filename, tagetFilename);
+                    File.Move(filename, tagetFilename);
+                });
             }
         }
     }

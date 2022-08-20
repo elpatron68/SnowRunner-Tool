@@ -182,9 +182,29 @@ namespace SnowRunner_Tool
             }
             else
             {
-                MenuItem menuItem = (MenuItem)sender;
-                ContextMenu contextMenu = (ContextMenu)menuItem.Parent;
+                int SavegameSlot=0;
+
+                String source = e.Source.ToString();
+                if (source.Contains("#_1"))
+                {
+                    SavegameSlot = 1;
+                }
+                if (source.Contains("#_2"))
+                {
+                    SavegameSlot = 2;
+                }
+                if (source.Contains("#_3"))
+                {
+                    SavegameSlot = 3;
+                }
+                if (source.Contains("#_4"))
+                {
+                    SavegameSlot = 4;
+                }
+                
+                ContextMenu contextMenu = this.FindName("Restore") as ContextMenu;
                 DataGrid item = (DataGrid)contextMenu.PlacementTarget;
+
                 if (dgBackups.SelectedItems.Count > 1)
                 {
                     _ = MetroMessage("Restore item", "You can only restore one item, please select a single row.");
@@ -204,7 +224,7 @@ namespace SnowRunner_Tool
                         try
                         {
                             _ = MetroMessage("This function experimental!", "Please report any problems to Github issues, see Help - Web - Report a problem.");
-                            Backup.RestoreBackup(backupSource, SRPaksDir);
+                            Backup.RestoreBackup(backupSource, SRPaksDir, -1);
                         }
                         catch
                         {
@@ -214,7 +234,7 @@ namespace SnowRunner_Tool
                     }
                     else
                     {
-                        Backup.RestoreBackup(backupSource, SRSaveGameDir);
+                        Backup.RestoreBackup(backupSource, SRSaveGameDir, SavegameSlot);
                     }
                     _ = MetroMessage("Next time better luck", "The selected saved game has been restored. A backup of your former save game has been saved.");
                     ReadBackups();

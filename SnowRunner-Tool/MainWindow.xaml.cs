@@ -303,7 +303,7 @@ namespace SnowRunner_Tool
             MetroDialogSettings dialogSettings = new MetroDialogSettings();
             dialogSettings.NegativeButtonText = answers[rInt] + " [OK]";
             dialogSettings.AffirmativeButtonText = "Donate (PayPal)";
-            dialogSettings.DefaultButtonFocus = MahApps.Metro.Controls.Dialogs.MessageDialogResult.Affirmative;
+            dialogSettings.DefaultButtonFocus = MessageDialogResult.Affirmative;
             
             MessageDialogResult dialogResult = await this.ShowMessageAsync(title,
                 message,

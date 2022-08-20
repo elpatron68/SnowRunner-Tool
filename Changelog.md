@@ -1,5 +1,14 @@
 ﻿# SnowRunner-Tool Changes
 
+## v1.0.4.0 (21.08.2022)
+
+- Option to restore a single save game slot (#1 - #4) or all slots from a backup
+- Cheat money in all slots #1 - #4
+- Cheat XP in all slots #1 - #4
+- Option to donate with PayPal after restoring a backup
+- Fixed some logging issues
+- Dependencies updated
+
 ## v1.0.3.4 (04.06.2020)
 
 - Select multiple rows in backup list for deletion

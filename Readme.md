@@ -23,7 +23,7 @@ backups until you are sure that everything works as expected.**
 - Create backups of the current game state and list them in a fancy style
 - Hotkey `F2` for instant in-game-backups without leaving the game
 - Automatically create backups afer the game itself saves it´s status
-- Restore a saved game from the game´s backup repository or a backup made with this tool
+- Restore a saved game from the game´s backup repository or a backup made with this tool (single save game slot or all slots)
 - Delete backups from the list and your storage
 - Rename backup files from the UI
 - Cheat the amount of money you have in your pocket
@@ -38,7 +38,7 @@ backups until you are sure that everything works as expected.**
 ### Installation With Setup.exe
 
 1. Download the latest `SRT_setup.zip` from [Github Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) or [mod.io](https://snowrunner.mod.io/snowrunner-tool/#15370).
-2. Unzip the file and install *SnowRunner-Tool*  by starting `SRT_setup.exe`. The setup will install the required Microsoft .NET Framework 4.7.2 if it is not found on your system.
+2. Unzip the file and install *SnowRunner-Tool* by starting `SRT_setup.exe`. The setup will install the required Microsoft .NET Framework 4.7.2 if it is not found on your system.
 
 ### Manual Installation From Zip File
 
@@ -121,17 +121,9 @@ which usually results in one backup per less than 5 minutes. You have to reload 
 
 ### Logging
 
-Remote logging sends debug information to a private log server. Enable it if you have a problem with *SnowRunner-Tool*. If you need help from the developer, open an issue at [Github](https://github.com/elpatron68/SnowRunner-Tool/issues), describe the problem and post your Support ID (shown under *Help* - *Support ID*).
+The App creates log files in the directory `%LOCALAPPDATA%\SRT`.
 
-Usage reporting sends small datagrams whenever one of these events occur:
-
-- User starts *SnowRunner-Tool* 
-- User changes money or XP
-- Critical errors
-
-Both reporting options require an active internet connection. No personal data will be sent. Usage reporting helps the developer to decide, if this tool will be expanded in the future.
-
-Debug logging is **disabled** by default. Usage reporting is **enabled** by default.
+If you need help from the developer, open an issue at [Github](https://github.com/elpatron68/SnowRunner-Tool/issues), describe the problem and attach the log file.
 
 ## Menu Help
 
@@ -162,12 +154,6 @@ If *SnowRunner-Tool* cannot find your game profile directory, you are asked to e
 
 
 Select the file *CompleteSave.dat* in that folder, click *Open* and close the *FILE NOT FOUND!* dialog.
-
-### Command line arguments
-
-`-l`
-
-Enables remote logging.
 
 ## Useful links
 

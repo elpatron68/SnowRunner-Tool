@@ -115,11 +115,11 @@ namespace SnowRunner_Tool
             dgBackups.AutoGenerateColumns = true;
             ReadBackups();
 
-            // Initialize Autobackup FileSystemWatcher
+            // Register Autobackup FileSystemWatcher
             fswGameBackup = new FileSystemWatcher
             {
                 Path = SRSaveGameDir,
-                Filter = "CompleteSave.dat"
+                Filter = "CompleteSave*.dat"
             };
             fswGameBackup.Changed += FileSystemWatcher_Changed;
             SetAutobackup(Settings.Default.autobackupinterval);

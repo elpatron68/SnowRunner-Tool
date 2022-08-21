@@ -337,7 +337,7 @@ namespace SnowRunner_Tool
             if (dialogResult == MessageDialogResult.Negative) { return true; }
             if (dialogResult == MessageDialogResult.Affirmative)
             {
-                Process.Start("https://www.paypal.com/paypalme/MBusche");
+                Process.Start("https://www.paypal.com/donate/?hosted_button_id=4HC7YCMXQK3N8");
                 return true;
             }
             return false;

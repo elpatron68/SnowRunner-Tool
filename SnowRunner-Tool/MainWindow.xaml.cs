@@ -166,6 +166,7 @@ namespace SnowRunner_Tool
                     dgBackups.Items.Refresh();
                 }
                 UpdateTitle();
+                UpdateSaveGameSlotMenus();
             }
             catch
             {
@@ -173,7 +174,32 @@ namespace SnowRunner_Tool
             }
         }
 
-        
+        private void UpdateSaveGameSlotMenus()
+        {
+            bool saveGameExists;
+            string saveFile;
+
+            saveFile = SRBaseDir + @"\storage\" + SRProfile + @"\CompleteSave.dat";
+            saveGameExists = File.Exists(saveFile);
+            MnMoneyCheat1.IsEnabled = saveGameExists; 
+            MnXp1.IsEnabled = saveGameExists;
+
+            saveFile = SRBaseDir + @"\storage\" + SRProfile + @"\CompleteSave1.dat";
+            saveGameExists = File.Exists(saveFile);
+            MnMoneyCheat2.IsEnabled = saveGameExists;
+            MnXp2.IsEnabled = saveGameExists;
+
+            saveFile = SRBaseDir + @"\storage\" + SRProfile + @"\CompleteSave2.dat";
+            saveGameExists = File.Exists(saveFile);
+            MnMoneyCheat3.IsEnabled = saveGameExists;
+            MnXp3.IsEnabled = saveGameExists;
+
+            saveFile = SRBaseDir + @"\storage\" + SRProfile + @"\CompleteSave3.dat";
+            saveGameExists = File.Exists(saveFile);
+            MnMoneyCheat4.IsEnabled = saveGameExists;
+            MnXp4.IsEnabled = saveGameExists;
+        }
+
         private void RestoreBackup_Click(object sender, RoutedEventArgs e)
         {
             bool copyResult = false;

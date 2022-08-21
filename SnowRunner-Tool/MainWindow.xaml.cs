@@ -110,8 +110,6 @@ namespace SnowRunner_Tool
 
             // Set value of some UI elements, load backup data
             lblSnowRunnerPath.Content = SRBaseDir;
-            UpdateTitle();
-            
 
             // Fill Datagrid
             dgBackups.AutoGenerateColumns = true;

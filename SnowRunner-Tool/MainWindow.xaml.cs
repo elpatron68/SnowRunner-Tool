@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Windows.Media.Imaging;
 using SnowRunner_Tool.Properties;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace SnowRunner_Tool
 {
@@ -116,6 +117,7 @@ namespace SnowRunner_Tool
             ReadBackups();
 
             // Register Autobackup FileSystemWatcher
+            _logger.Information("Registering FileSystemWatcher");
             fswGameBackup = new FileSystemWatcher
             {
                 Path = SRSaveGameDir,
@@ -125,6 +127,7 @@ namespace SnowRunner_Tool
             SetAutobackup(Settings.Default.autobackupinterval);
 
             // Register global hotkey
+            _logger.Information("Registering hotkey");
             _hook = new KeyboardHook();
             _hook.KeyDown += new KeyboardHook.HookEventHandler(OnHookKeyDown);
 
@@ -133,6 +136,7 @@ namespace SnowRunner_Tool
             _logger.Information("Operating system: {Os}", os);
             if (!os.ToLower().Contains("windows 7"))
             {
+                _logger.Information("Searching update");
                 CheckUpdate();
             }
         }
@@ -144,15 +148,16 @@ namespace SnowRunner_Tool
         private void ReadBackups()
         {
             // Add SnowRunner backup directories
-            var allBackups = Backup.GetGameBackups(SRBackupDir);
+            List<Backup> allBackups = Backup.GetGameBackups(SRBackupDir);
             // Add own zipped backups
             allBackups.AddRange(Backup.GetSrtBackups(MyBackupDir));
-
+            
             try
             {
                 if (allBackups.Count > 0)
                 {
-                    Dispatcher.Invoke(() => {
+                    Dispatcher.Invoke(() =>
+                    {
                         dgBackups.ItemsSource = allBackups;
                         dgBackups.Items.SortDescriptions.Clear();
                         dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
@@ -165,6 +170,7 @@ namespace SnowRunner_Tool
                     dgBackups.Items.SortDescriptions.Clear();
                     dgBackups.Items.Refresh();
                 }
+
                 UpdateTitle();
                 UpdateSaveGameSlotMenus();
             }

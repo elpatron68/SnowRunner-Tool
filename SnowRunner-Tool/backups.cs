@@ -17,7 +17,7 @@ namespace SnowRunner_Tool
         // public string Timestamp { get; set; }
         public string Type { get; set; }
         public string MoneySlot1 { get; set; }
-        public string Xp { get; set; }
+        public string XpSlot1 { get; set; }
 
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace SnowRunner_Tool
                     }
                     DateTime timestamp = File.GetCreationTime(f);
                     // string ts = timestamp.ToString();
-                    backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = backupType, MoneySlot1 = sgMoney, Xp = sgXp });
+                    backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = backupType, MoneySlot1 = sgMoney, XpSlot1 = sgXp });
                 }
                 return backups;
             }
@@ -167,7 +167,7 @@ namespace SnowRunner_Tool
                     {
                         string sgMoney = CheatGame.GetMoney(backupSaveGameFile, 1);
                         string sgXp = CheatGame.GetXp(backupSaveGameFile, 1);
-                        backups.Add(new Backup() { BackupName = dir, Timestamp = timestamp, Type = "Game-Backup", MoneySlot1 = sgMoney, Xp = sgXp });
+                        backups.Add(new Backup() { BackupName = dir, Timestamp = timestamp, Type = "Game-Backup", MoneySlot1 = sgMoney, XpSlot1 = sgXp });
                     }
                 }
                 return backups;

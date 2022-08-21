@@ -279,7 +279,17 @@
                           IsReadOnly="True" 
                           SelectedItem="{Binding SelectedRow, Mode=TwoWay}"   
                           ColumnWidth="220" Grid.ColumnSpan="2"
+                          AutoGenerateColumns="False"
+                          ItemsSource="{Binding Backup}"
             >
+            <!--<DataGrid.Columns >
+                <DataGridTextColumn Header="Backup Name" Binding="{Binding BackupName}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Timestamp" Binding="{Binding Timestamp}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Backup Type" Binding="{Binding Type}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Money (#1)" Binding="{Binding MoneySlot1}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Xp (#1)" Binding="{Binding XpSlot1}"></DataGridTextColumn>
+            </DataGrid.Columns>-->
+            
             <DataGrid.ContextMenu>
                 <ContextMenu x:Name="Restore" DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                     <MenuItem  Header="Re_store this backup" 

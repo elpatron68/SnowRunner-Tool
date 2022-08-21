@@ -57,6 +57,9 @@ Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
+[InstallDelete]
+Type: filesandordirs; Name: "{app}\*"
+
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\*"
 Type: filesandordirs; Name: "{localappdata}\SRT\*"

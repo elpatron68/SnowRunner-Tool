@@ -34,7 +34,7 @@ namespace SnowRunner_Tool
         private static int autoSaveCounter = 0;
         private readonly ILogger _logger;
         private readonly string[] answers = { "Fine", "OK", "Make it so", "Hmmm", "Okay", "Hoot", "Ладно", "Хорошо", "d'accord",
-                "Très bien", "Na gut", "Von mir aus", "Let´s go", "Lad os komme afsted", "Mennään", "Andiamo", "Chodźmy", "良い" };
+                "Très bien", "Na gut", "Von mir aus", "Let´s go", "Lad os komme afsted", "Mennään", "Andiamo", "Chodźmy", "良い", "Hau rein" };
 
         public MainWindow(ILogger logger)
         {

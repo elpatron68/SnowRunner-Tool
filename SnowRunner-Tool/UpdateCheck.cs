@@ -12,7 +12,7 @@ namespace SnowRunner_Tool
     {
         private readonly ILogger _log = Log.ForContext<UpdateCheck>();
 
-        public async static Task<(int, string)> CheckGithubReleses(string assemblyVersion)
+        public static async Task<(int, string)> CheckGithubReleses(string assemblyVersion)
         {
             try
             {

@@ -358,7 +358,7 @@ namespace SnowRunner_Tool
 
         private void MnuAbout_Click(object sender, RoutedEventArgs e)
         {
-            _ = MetroMessage("About", "SnowRunner-Tool\n\nVersion " + AssemblyVersion + "\n(c) 2020 elpatron68\nhttps://github.com/elpatron68/SnowRunner-Tool/");
+            _ = MetroDonateMessage("About", "SnowRunner-Tool\n\nVersion " + AssemblyVersion + "\n(c) 2020-2022 elpatron68\nhttps://github.com/elpatron68/SnowRunner-Tool/");
         }
 
 

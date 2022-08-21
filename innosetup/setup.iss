@@ -59,6 +59,7 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\*"
+Type: filesandordirs; Name: "{localappdata}\SRT\*"
 
 [CustomMessages]
 IDP_DownloadFailed=Download of .NET Framework 4.7.2 failed. .NET Framework 4.7 is required to run SnowRunner-Tool.

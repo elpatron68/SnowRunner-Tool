@@ -17,9 +17,15 @@ namespace SnowRunner_Tool
         // public string Timestamp { get; set; }
         public string Type { get; set; }
         public string MoneySlot1 { get; set; }
+        public string MoneySlot2 { get; set; }
+        public string MoneySlot3 { get; set; }
+        public string MoneySlot4 { get; set; }
+
         public string XpSlot1 { get; set; }
-
-
+        public string XpSlot2 { get; set; }
+        public string XpSlot3 { get; set; }
+        public string XpSlot4 { get; set; }
+        
         /// <summary>
         /// Copies a directory to another directory
         /// </summary>
@@ -106,9 +112,9 @@ namespace SnowRunner_Tool
         {
             Log.Debug("getOtherBackups: {OtherBackupDirectory}", directory);
             List<Backup> backups = new List<Backup>();
-            string sgMoney = string.Empty;
+            string[] sgMoney = { "n/a", "n/a", "n/a", "n/a" };
             string backupType = string.Empty;
-            string sgXp = string.Empty;
+            string[] sgXp = { "n/a", "n/a", "n/a", "n/a" };
             if (Directory.Exists(directory))
             {
                 string[] fileEntries = Directory.GetFiles(directory);
@@ -119,8 +125,6 @@ namespace SnowRunner_Tool
                     if (fName.EndsWith(".pak.zip", StringComparison.OrdinalIgnoreCase))
                     {
                         backupType = "PAK-Backup";
-                        sgMoney = "n/a";
-                        sgXp = "n/a";
                     }
                     else
                     {
@@ -128,13 +132,27 @@ namespace SnowRunner_Tool
                         string tmpSaveGameFile = CheatGame.UnzipToTemp(f);
                         if (File.Exists(tmpSaveGameFile))
                         {
-                            sgMoney = CheatGame.GetMoney(tmpSaveGameFile, 1);
-                            sgXp = CheatGame.GetXp(tmpSaveGameFile, 1);
+                            for (int i = 0; i < 4; i++)
+                            {
+                                sgMoney[i] = CheatGame.GetMoney(tmpSaveGameFile, i + 1);
+                                sgXp[i] = CheatGame.GetXp(tmpSaveGameFile, i + 1);
+                            }
                         }
                     }
                     DateTime timestamp = File.GetCreationTime(f);
                     // string ts = timestamp.ToString();
-                    backups.Add(new Backup() { BackupName = fName, Timestamp = timestamp, Type = backupType, MoneySlot1 = sgMoney, XpSlot1 = sgXp });
+                    backups.Add(new Backup() { BackupName = fName, 
+                        Timestamp = timestamp, 
+                        Type = backupType, 
+                        MoneySlot1 = sgMoney[0], 
+                        XpSlot1 = sgXp[0],
+                        MoneySlot2 = sgMoney[1],
+                        XpSlot2 = sgXp[1],
+                        MoneySlot3 = sgMoney[2],
+                        XpSlot3 = sgXp[2],
+                        MoneySlot4 = sgMoney[3],
+                        XpSlot4 = sgXp[3]
+                    });
                 }
                 return backups;
             }
@@ -152,6 +170,8 @@ namespace SnowRunner_Tool
         {
             if (Directory.Exists(directory))
             {
+                string[] sgMoney = { "n/a", "n/a", "n/a", "n/a" };
+                string[] sgXp = { "n/a", "n/a", "n/a", "n/a" };
                 Log.Debug("Reading game backups");
                 List<Backup> backups = new List<Backup>();
                 string[] subdirectoryEntries = Directory.GetDirectories(directory);
@@ -165,9 +185,23 @@ namespace SnowRunner_Tool
                     string backupSaveGameFile = subdirectory + @"\CompleteSave.dat";
                     if (File.Exists(backupSaveGameFile))
                     {
-                        string sgMoney = CheatGame.GetMoney(backupSaveGameFile, 1);
-                        string sgXp = CheatGame.GetXp(backupSaveGameFile, 1);
-                        backups.Add(new Backup() { BackupName = dir, Timestamp = timestamp, Type = "Game-Backup", MoneySlot1 = sgMoney, XpSlot1 = sgXp });
+                        for (int i = 0; i < 4; i++)
+                        {
+                            sgMoney[i] = CheatGame.GetMoney(backupSaveGameFile, i + 1);
+                            sgXp[i] = CheatGame.GetXp(backupSaveGameFile, i + 1);
+                        }
+                        backups.Add(new Backup() { BackupName = dir, 
+                            Timestamp = timestamp, 
+                            Type = "Game-Backup", 
+                            MoneySlot1 = sgMoney[0], 
+                            XpSlot1 = sgXp[0],
+                            MoneySlot2 = sgMoney[1],
+                            XpSlot2 = sgXp[2],
+                            MoneySlot3 = sgMoney[2],
+                            XpSlot3 = sgXp[2],
+                            MoneySlot4 = sgMoney[3],
+                            XpSlot4 = sgXp[3]
+                        });
                     }
                 }
                 return backups;

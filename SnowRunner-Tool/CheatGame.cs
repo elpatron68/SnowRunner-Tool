@@ -151,23 +151,25 @@ namespace SnowRunner_Tool
 
         public static string UnzipToTemp(string zipFile)
         {
-            string tempDir = Path.GetTempPath();
+            string tempDir = Path.GetTempPath() + @"\SRT-TMP";
+            if (!Directory.Exists(tempDir)) { Directory.CreateDirectory(tempDir); }
+            string returnPath = "";
             using (ZipArchive archive = ZipFile.OpenRead(zipFile))
             {
                 foreach (ZipArchiveEntry entry in archive.Entries)
                 {
-                    if (entry.FullName.Equals("CompleteSave.dat"))
+                    // 
+                    if (entry.FullName.Contains("CompleteSave"))
                     {
-                        string destinationPath = Path.GetFullPath(Path.Combine(tempDir, entry.FullName));
-                        entry.ExtractToFile(destinationPath, true);
-                        return destinationPath;
+                        if (entry.FullName.Equals("CompleteSave.dat")) 
+                        {
+                            returnPath = Path.GetFullPath(Path.Combine(tempDir, entry.FullName));
+                        }
+                        entry.ExtractToFile(Path.GetFullPath(Path.Combine(tempDir, entry.FullName)), true);
                     }
-                }
+                }    
             }
-            return null;
+            return returnPath;
         }
-
-
-
     }
 }

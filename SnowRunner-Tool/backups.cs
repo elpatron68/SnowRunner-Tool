@@ -141,7 +141,9 @@ namespace SnowRunner_Tool
                     }
                     DateTime timestamp = File.GetCreationTime(f);
                     // string ts = timestamp.ToString();
-                    backups.Add(new Backup() { BackupName = fName, 
+                    backups.Add(new Backup()
+                    {
+                        BackupName = fName,
                         Timestamp = timestamp, 
                         Type = backupType, 
                         MoneySlot1 = sgMoney[0], 

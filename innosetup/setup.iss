@@ -3,7 +3,7 @@
 #pragma include __INCLUDE__ + ";" + ReadReg(HKLM, "Software\Mitrich Software\Inno Download Plugin", "InstallDir")
 #include <idp.iss>
 #define MyAppName "SnowRunner-Tool"
-#define MyAppVersion "1.0.4.2"
+#define MyAppVersion "1.0.4.3"
 #define MyAppPublisher "elpatron68"
 #define MyAppURL "https://github.com/elpatron68/SnowRunner-Tool"
 #define MyAppExeName "SnowRunner-Tool.exe"

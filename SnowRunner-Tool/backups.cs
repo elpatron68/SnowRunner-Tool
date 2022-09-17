@@ -17,13 +17,12 @@ namespace SnowRunner_Tool
         // public string Timestamp { get; set; }
         public string Type { get; set; }
         public string MoneySlot1 { get; set; }
-        public string MoneySlot2 { get; set; }
-        public string MoneySlot3 { get; set; }
-        public string MoneySlot4 { get; set; }
-
         public string XpSlot1 { get; set; }
+        public string MoneySlot2 { get; set; }
         public string XpSlot2 { get; set; }
+        public string MoneySlot3 { get; set; }
         public string XpSlot3 { get; set; }
+        public string MoneySlot4 { get; set; }
         public string XpSlot4 { get; set; }
         
         /// <summary>

@@ -170,7 +170,7 @@ namespace SnowRunner_Tool
                     dgBackups.Items.SortDescriptions.Clear();
                     dgBackups.Items.Refresh();
                 }
-
+                
                 UpdateTitle();
                 UpdateSaveGameSlotMenus();
             }
@@ -832,6 +832,38 @@ namespace SnowRunner_Tool
         private void MnAuto10_Click(object sender, RoutedEventArgs e)
         {
             SetAutobackup(10);
+        }
+
+
+        /// <summary>
+        /// Rename Columns Headers and set width
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgBackups_AutoGeneratingColumn(object sender, EventArgs e)
+        {
+            try
+            {
+                dgBackups.Columns[3].Header = "Money #1";
+                dgBackups.Columns[4].Header = "XP #1";
+                dgBackups.Columns[5].Header = "Money #2";
+                dgBackups.Columns[6].Header = "XP #2";
+                dgBackups.Columns[7].Header = "Money #3";
+                dgBackups.Columns[8].Header = "XP #3";
+                dgBackups.Columns[9].Header = "Money #4";
+                dgBackups.Columns[10].Header = "XP #4";
+
+                for (int i = 3; i < 11; i++)
+                {
+                    dgBackups.Columns[i].Width = 80;
+                }
+                dgBackups.Columns[1].Width = 160;
+                dgBackups.Columns[2].Width = 120;
+            }
+            catch
+            {
+            }
+
         }
     }
 }

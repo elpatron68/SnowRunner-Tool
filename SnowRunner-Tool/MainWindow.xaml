@@ -185,7 +185,7 @@
                     </MenuItem>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="_Help" Click="MenuItem_Click">
+            <MenuItem Header="_Help">
                 <MenuItem.Icon>
                     <iconPacks:PackIconMaterial Kind="HelpCircleOutline" />
                 </MenuItem.Icon>

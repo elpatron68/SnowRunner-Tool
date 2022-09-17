@@ -863,7 +863,6 @@ namespace SnowRunner_Tool
             catch
             {
             }
-
         }
     }
 }

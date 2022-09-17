@@ -185,14 +185,14 @@
                     </MenuItem>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="_Help">
+            <MenuItem Header="_Help" Click="MenuItem_Click">
                 <MenuItem.Icon>
                     <iconPacks:PackIconMaterial Kind="HelpCircleOutline" />
                 </MenuItem.Icon>
 
                 <MenuItem x:Name="MnReadme"
-                          Header="_Readme!"
-                          Click="MnReadme_Click"
+                            Header="_Readme!"
+                            Click="MnReadme_Click"
                           >
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="InformationOutline" />

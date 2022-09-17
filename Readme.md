@@ -119,7 +119,7 @@ Usually, the file is located under your documents folder -> my games -> snowrunn
 
 Example:
 ```
-C:\Users\johndoe\Documents\My Games\SnowRunner\base\storage\f2555667235d4dbd899a5670674d88b0
+"C:\Users\john doe\Documents\My Games\SnowRunner\base\storage\f2555667235d4dbd899a5670674d88b0"
 ```
 
 All other path fields in the dialog are read only and will be filled by the app.
@@ -150,7 +150,6 @@ Pretty self-explanatory:
 
 * Link to this Readme (online)
 * Check for new version
-* Copy support-ID
 * Project web links
 * License
 * About
@@ -173,7 +172,7 @@ Pretty self-explanatory:
 If *SnowRunner-Tool* cannot find your game profile directory, you are asked to enter the path to your save 
 game file *CompleteSave.dat*.
 
-![](images/File_not_found.png)
+![File not found](images/File_not_found.png)
 
 
 Select the file *CompleteSave.dat* in that folder, click *Open* and close the *FILE NOT FOUND!* dialog.

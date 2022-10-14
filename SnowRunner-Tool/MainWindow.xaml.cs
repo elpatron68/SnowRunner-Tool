@@ -131,6 +131,7 @@ namespace SnowRunner_Tool
         /// </summary>
         private void ReadBackups()
         {
+            _logger.Information("Reading list of existin backups");
             List<Backup> allBackups = new List<Backup>();
             // Add SnowRunner backup directories
             try
@@ -141,10 +142,12 @@ namespace SnowRunner_Tool
             {
                 // No existing SnowRunner backups
             }
-            
-            
+            _logger.Information("Added backups made by SnowRunner: " + allBackups.Count);
+
             // Add own zipped backups
-            allBackups.AddRange(Backup.GetSrtBackups(MyBackupDir, Platform));
+            var MyBackups = Backup.GetSrtBackups(MyBackupDir, Platform);
+            _logger.Information("Added backups made by SnowRunner: " + MyBackups.Count);
+            allBackups.AddRange(MyBackups);
             
             try
             {
@@ -155,6 +158,7 @@ namespace SnowRunner_Tool
                         dgBackups.ItemsSource = allBackups;
                         dgBackups.Items.SortDescriptions.Clear();
                         dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
+                        _logger.Debug("Refreshing table");
                         dgBackups.Items.Refresh();
                     });
                 }
@@ -176,6 +180,7 @@ namespace SnowRunner_Tool
 
         private void UpdateSaveGameSlotMenus()
         {
+            _logger.Debug("Updating save game slot menu items");
             bool saveGameExists;
             string saveFile;
 
@@ -202,6 +207,7 @@ namespace SnowRunner_Tool
 
         private void RestoreBackup_Click(object sender, RoutedEventArgs e)
         {
+            _logger.Information("Start restoring a backup");
             bool copyResult = false;
             if (BackupScheduler.IsActive())
             {
@@ -209,7 +215,7 @@ namespace SnowRunner_Tool
             }
             else
             {
-                int SavegameSlot=0;
+                int SavegameSlot = 0;
 
                 String source = e.Source.ToString();
                 if (source.Contains("#_1"))
@@ -228,7 +234,8 @@ namespace SnowRunner_Tool
                 {
                     SavegameSlot = 4;
                 }
-                
+                _logger.Debug("Slot: " + SavegameSlot);
+
                 ContextMenu contextMenu = this.FindName("Restore") as ContextMenu;
                 DataGrid item = (DataGrid)contextMenu.PlacementTarget;
 
@@ -241,19 +248,24 @@ namespace SnowRunner_Tool
                     Backup restoreItem = (Backup)item.SelectedCells[0].Item;
 
                     // Create a backup before restore
+                    _logger.Debug("Backing up current save game before restoring");
                     _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "safety-bak");
+
                     string backupSource = string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase)
                         ? SRBackupDir + @"\" + restoreItem.BackupName
                         : MyBackupDir + @"\" + restoreItem.BackupName;
 
+                    _logger.Information(String.Format("Restoring {0}, slot {1} to {2}", backupSource, SavegameSlot, SRProfile));
                     copyResult = Backup.RestoreBackup(backupSource, SRProfile, SavegameSlot, SavegameExtension);
                     if (copyResult)
                     {
+                        _logger.Debug("Restore was successful");
                         _ = MetroDonateMessage("Next time better luck", "The selected saved game has successfully been restored. A backup of your former save game has been made.\n\n" +
                             "As I may have saved your a** this time (again?), consider to buy me a \U0001F37A or a \U00002615!");
                     }
                     else
                     {
+                        _logger.Warning("Restore failed");
                         _ = MetroMessage("File not found", "The selected backup slot contains no corresponding save game file. Select a valid slot or restore all slots.");
                     }
 

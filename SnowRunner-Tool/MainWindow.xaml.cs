@@ -522,7 +522,7 @@ namespace SnowRunner_Tool
         private void UpdateTitle()
         {
             Dispatcher.Invoke(() => {
-                Title = "SnowRunner-Tool v" + AssemblyVersion;
+                Title = "SnowRunner-Tool v" + AssemblyVersion + " (" + Platform + ")";
                 if (File.Exists(SRsaveGameFile))
                 {
                     string money = CheatGame.GetMoney(SRsaveGameFile, 1, SavegameExtension);

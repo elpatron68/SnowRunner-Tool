@@ -15,6 +15,7 @@ using System.Threading;
 using System.Collections.Generic;
 using CommandLine;
 using System.Linq;
+using Serilog.Core;
 
 namespace SnowRunner_Tool
 {
@@ -34,8 +35,9 @@ namespace SnowRunner_Tool
         private FileSystemWatcher fswGameBackup;
         private static int autoSaveCounter = 0;
         private readonly ILogger _logger;
-        private readonly string[] answers = { "Fine", "OK", "Make it so", "Hmmm", "Okay", "Hoot", "Ладно", "Хорошо", "d'accord",
-                "Très bien", "Na gut", "Von mir aus", "Let´s go", "Lad os komme afsted", "Mennään", "Andiamo", "Chodźmy", "良い", "Hau rein" };
+        private readonly string[] answers = { "Fine", "OK", "Make it so", "Hmmm", "Okay", "Hoot", "Ладно", "Хорошо", "D'accord",
+                "Très bien", "Na gut", "Von mir aus", "Let´s go", "Lad os komme afsted", "Mennään", "Andiamo", "Chodźmy", "良い", 
+                "Hau rein", "Go on" };
 
         public MainWindow(ILogger logger, string[] args)
         {
@@ -51,6 +53,7 @@ namespace SnowRunner_Tool
             ((App)Application.Current).WindowPlace.Register(this);
 
             _logger.Information("App started");
+            _logger.Information("Platform: " + Platform);
 
             // Read directories from settings or find them automatically
             SRProfile = DiscoverPaths.FindBaseDirectory(Platform);
@@ -741,6 +744,16 @@ namespace SnowRunner_Tool
             catch
             {
             }
+        }
+
+        private void lblSnowRunnerPath_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Process.Start("explorer.exe", lblSnowRunnerPath.Content.ToString());
+        }
+
+        private void lblBackupDirectory_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Process.Start("explorer.exe", lblBackupDirectory.Content.ToString());
         }
     }
 }

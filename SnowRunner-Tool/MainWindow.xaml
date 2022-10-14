@@ -32,14 +32,6 @@
                         <iconPacks:PackIconMaterial Kind="ContentSaveOutline" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <!--<MenuItem x:Name="MnBackupPak"
-                          Header="Backup INITIAL._PAK file"
-                          Click="MnBackupPak_Click"
-                          >
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentSaveAllOutline" />
-                    </MenuItem.Icon>
-                </MenuItem>-->
                 <MenuItem x:Name="MnReload" 
                           Header="_Reload backup table"
                           Click="MnuReload_Click"
@@ -248,7 +240,7 @@
                     Content="Path" 
                     Margin="200,28,0,0" 
                     VerticalAlignment="Top"
-                    HorizontalAlignment="Left" Width="653" Grid.ColumnSpan="2"
+                    HorizontalAlignment="Left" Width="653" Grid.ColumnSpan="2" MouseDown="lblSnowRunnerPath_MouseDown"
                />
         <Label Content="Backup directory" 
                     Margin="20,59,0,0" 
@@ -260,7 +252,7 @@
                     Content="Path" 
                     Margin="200,59,0,0" 
                     VerticalAlignment="Top"
-                    HorizontalAlignment="Left" Width="653" Grid.ColumnSpan="2"
+                    HorizontalAlignment="Left" Width="653" Grid.ColumnSpan="2" MouseDown="lblBackupDirectory_MouseDown"
                />
 
         <Label Content="Right click on a backup item to restore, rename or delete it" 

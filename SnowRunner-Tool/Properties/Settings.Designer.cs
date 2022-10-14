@@ -25,7 +25,7 @@ namespace SnowRunner_Tool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
         public int autobackupinterval {
             get {
                 return ((int)(this["autobackupinterval"]));

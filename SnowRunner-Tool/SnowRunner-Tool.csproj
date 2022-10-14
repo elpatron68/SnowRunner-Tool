@@ -230,6 +230,7 @@
       <DependentUpon>InputGamePath.xaml</DependentUpon>
     </Compile>
     <Compile Include="KeyboardHook.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="OsInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

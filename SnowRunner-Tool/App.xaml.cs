@@ -39,7 +39,7 @@ namespace SnowRunner_Tool
                 .WriteTo.File(logfile, rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
-            MainWindow window = new MainWindow(log);
+            MainWindow window = new MainWindow(log, e.Args);
             Current.MainWindow = window;
             window.InitializeComponent();
             window.Show();

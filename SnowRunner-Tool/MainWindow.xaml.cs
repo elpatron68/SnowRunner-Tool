@@ -36,20 +36,11 @@ namespace SnowRunner_Tool
         private readonly string[] answers = { "Fine", "OK", "Make it so", "Hmmm", "Okay", "Hoot", "Ладно", "Хорошо", "d'accord",
                 "Très bien", "Na gut", "Von mir aus", "Let´s go", "Lad os komme afsted", "Mennään", "Andiamo", "Chodźmy", "良い", "Hau rein" };
 
-        public MainWindow(ILogger logger)
+        public MainWindow(ILogger logger, string[] args)
         {
             _logger = logger;
             // Command line options
-            //string[] args = Environment.GetCommandLineArgs();
-            //Parser.Default.ParseArguments<Options>(args)
-            //       .WithParsed<Options>(o =>
-            //       {
-            //           if (o.EnableLogging == true)
-            //           {
-            //               enableDebugLogging = true;
-            //           }
-            //       });
-            //guid = GenGuid();
+
 
             InitializeComponent();
             ((App)Application.Current).WindowPlace.Register(this);

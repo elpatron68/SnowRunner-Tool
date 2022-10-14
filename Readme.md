@@ -29,9 +29,7 @@ or all slots)
 - Rename backup files from the UI
 - Cheat the amount of money you have in your pocket
 - Cheat your experience points (XP)
-- Create backups of the file `initial.pak` (which has to be changed for some mods)
-- Restore former saved `initial.pak` file
-
+- Works with the Epic Games and Steam version of the game
 ![SnowRunner-Tool](images/SnowRunner-Tool_Screenshot.png)
 
 ## Installation
@@ -84,14 +82,6 @@ selected backup. Before restoring anything, another backup of the current game s
 - The `F2` backup function only works while the game is running!
 - Activate *regular backups* in the settings menu to automatically let the tool create backups in the background.
 
-### PAK backup
-
-Create a backup of your `initial.pak` file before making changes to it! Open the *File* menu and select 
-*Backup INITIAL.PAK*. The backup will be listed as *PAK-Backup* and can be restored as any other backup by right clicking 
-on it.
-
-**This feature is experimental, handle with care!**
-
 ### Menu Cheats
 
 Set the amount of money or experience points you´d like to have by opening the *Cheats* menu. Before changing the money 
@@ -103,26 +93,6 @@ or XP points in your save game file, another fresh backup will be made.
 
 In the *Settings* menu, you can enter a couple paths this tool needs to operate. Also,  usage reporting and remote logging 
 can en- and disabled. A check mark will be displayed if an option is enabled.
-
-### Save Game Path
-
-*SnowRunner-Tool* tries to find your save game path automagically at the first start (which is not always a trivial task). 
-If this fails, the *Set save game path* dialog will open. If you like to change this setting at a later time, open the menu 
-*Settings* -  *Set save game path*.
-
-![Save game path setup](images/Path_settings_save_game.png)
-
-Click *Browse*, navigate to the file `CompleteSave.dat` and open it.
-
-Usually, the file is located under your documents folder -> my games -> snowrunner -> base -> storage -> 
-(profile directory, long name of random characters).
-
-Example:
-```
-"C:\Users\john doe\Documents\My Games\SnowRunner\base\storage\f2555667235d4dbd899a5670674d88b0"
-```
-
-All other path fields in the dialog are read only and will be filled by the app.
 
 ### Autobackup
 
@@ -161,21 +131,12 @@ Pretty self-explanatory:
   (see *Installation* above).
 * After you have restored a saved game from a backup or after altering money or XP, the *Epic Launcher* detects 
   locally changed files at the next game start. You are asked if you want to upload local files into the cloud or 
-  download cloud files to your local disk. Choose *Upload local files*.
+  download cloud files to your local disk. Choose *Upload local files*. Steam asks a similar question, see screenshot.
 ![Epic Launcher](images/epic-cloud.png)
+![Steam Conflict](images/steam-cloud.png)
 * It is not possible to change money or XP while the game is running.
 
 ## Advanced, Troubleshooting
-
-### Save Game Path Not Found
-
-If *SnowRunner-Tool* cannot find your game profile directory, you are asked to enter the path to your save 
-game file *CompleteSave.dat*.
-
-![File not found](images/File_not_found.png)
-
-
-Select the file *CompleteSave.dat* in that folder, click *Open* and close the *FILE NOT FOUND!* dialog.
 
 ## Useful links
 

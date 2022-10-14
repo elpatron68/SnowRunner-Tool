@@ -1,0 +1,6 @@
+{
+  "platform": "epic",
+  "baz": {
+    "bar": "qux"
+  }
+}

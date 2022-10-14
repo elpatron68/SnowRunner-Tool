@@ -47,7 +47,8 @@ Source: "..\SnowRunner-Tool\bin\Release\Windows.winmd"; DestDir: "{app}"; Flags:
 Source: "..\SnowRunner-Tool\bin\Release\Changelog.md"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Parameters: "/Steam"; Components: Steam
+Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Parameters: "/Epic"; Components: Epic
 Name: "{group}\Project on GitHub"; Filename: "{#MyAppURL}"
 Name: "{group}\Donate a coffee"; Filename: "https://www.paypal.com/donate/?hosted_button_id=4HC7YCMXQK3N8"
 Name: "{group}\Show Changelog"; Filename: "notepad.exe"; Parameters: "{app}\changelog.md"
@@ -74,8 +75,15 @@ DotNetFrameworkFailed1603=A fatal error occurred while installing the .NET Frame
 DotNetFrameworkFailed5100=Your computer does not meet the requirements of the .NET Framework. Please consult the documentation.
 DotNetFrameworkFailedOther=The .NET Framework installer exited with an unexpected status code "%1". Please review any other messages shown by the installer to determine whether the installation completed successfully, and abort this installation and fix the problem if it did not.
 
-[Code]
+[Types]
+Name: "Steam"; Description: "Steam"
+Name: "Epic"; Description: "Epic Games"
 
+[Components]
+Name: Epic; Description: Epic games; Types: Epic
+Name: Steam; Description: Steam install; Types: Steam
+
+[Code]
 var
   requiresRestart: boolean;
 

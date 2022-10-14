@@ -14,8 +14,12 @@
         WindowStyle="ToolWindow" 
         Icon="baseline_restore_black_18dp.ico">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="53*"/>
+            <ColumnDefinition Width="147*"/>
+        </Grid.ColumnDefinitions>
 
-        <Menu DockPanel.Dock="Top">
+        <Menu Grid.ColumnSpan="2">
             <MenuItem Header="_File">
                 <MenuItem.Icon>
                     <iconPacks:PackIconMaterial Kind="Menu" />
@@ -136,10 +140,10 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                
+
             </MenuItem>
             <MenuItem Header="_Settings">
-                <MenuItem.Icon>
+                <!--<MenuItem.Icon>
                     <iconPacks:PackIconMaterial Kind="Cog" />
                 </MenuItem.Icon>
 
@@ -158,7 +162,7 @@
                     <MenuItem.Icon>
                         <iconPacks:PackIconPicolIcons Kind="Path" />
                     </MenuItem.Icon>
-                </MenuItem>
+                </MenuItem>-->
                 <MenuItem Header="_Autobackup">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="AvTimer" />
@@ -254,7 +258,7 @@
             </MenuItem>
         </Menu>
 
-        <Label Content="SnowRunner path" 
+        <Label Content="SnowRunner profile" 
                      Margin="20,28,0,0" 
                      VerticalAlignment="Top" 
                      HorizontalAlignment="Left"
@@ -264,17 +268,30 @@
                     Content="Path" 
                     Margin="200,28,0,0" 
                     VerticalAlignment="Top"
-                    HorizontalAlignment="Left" Width="653"
+                    HorizontalAlignment="Left" Width="653" Grid.ColumnSpan="2"
                />
+        <Label Content="Backup directory" 
+                    Margin="20,59,0,0" 
+                    VerticalAlignment="Top" 
+                    HorizontalAlignment="Left"
+                    FontStyle="Italic" Width="154"
+               />
+        <Label x:Name="lblBackupDirectory" 
+                    Content="Path" 
+                    Margin="200,59,0,0" 
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left" Width="653" Grid.ColumnSpan="2"
+               />
+
         <Label Content="Right click on a backup item to restore, rename or delete it" 
-                     Margin="20,60,0,0" 
+                     Margin="20,90,0,0" 
                      VerticalAlignment="Top" 
                      HorizontalAlignment="Left" 
-                     Width="953" Foreground="Red"
+                     Width="953" Foreground="Red" Grid.ColumnSpan="2"
                />
 
         <DataGrid x:Name="dgBackups" 
-                          Margin="20,100,20,60" 
+                          Margin="20,121,20,60" 
                           RenderTransformOrigin="-0.429,0.15" 
                           IsReadOnly="True" 
                           SelectedItem="{Binding SelectedRow, Mode=TwoWay}"   
@@ -289,7 +306,7 @@
                 <DataGridTextColumn Header="Money (#1)" Binding="{Binding MoneySlot1}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Xp (#1)" Binding="{Binding XpSlot1}"></DataGridTextColumn>
             </DataGrid.Columns>-->
-            
+
             <DataGrid.ContextMenu>
                 <ContextMenu x:Name="Restore" DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                     <MenuItem  Header="Re_store this backup" 

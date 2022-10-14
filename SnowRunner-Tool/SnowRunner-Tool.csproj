@@ -226,9 +226,7 @@
     <Compile Include="BackupScheduler.cs" />
     <Compile Include="CheatGame.cs" />
     <Compile Include="DiscoverPaths.cs" />
-    <Compile Include="InputGamePath.xaml.cs">
-      <DependentUpon>InputGamePath.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="EpicParser.cs" />
     <Compile Include="KeyboardHook.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="OsInfo.cs" />
@@ -237,13 +235,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SteamParser.cs" />
     <Compile Include="ToastNote.cs" />
     <Compile Include="UpdateCheck.cs" />
     <Compile Include="ZipExtractHelperClass.cs" />
-    <Page Include="InputGamePath.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

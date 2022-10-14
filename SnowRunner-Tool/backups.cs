@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.Foundation.Metadata;
 
 namespace SnowRunner_Tool
 {
@@ -32,7 +33,7 @@ namespace SnowRunner_Tool
         /// <param name="destDirName"></param>
         /// <param name="copySubDirs"></param>
         /// <param name="overwriteExisting"></param>
-        public static bool DirCopy(string sourceDirName, string destDirName, bool overwriteExisting, int SavegameSlot)
+        public static bool DirCopy(string sourceDirName, string destDirName, bool overwriteExisting, int SavegameSlot, string SavegameExtension)
         {
             bool result = false;
             string saveGameSlotFile = string.Empty;
@@ -46,31 +47,31 @@ namespace SnowRunner_Tool
                     break;
                 // Recover backup slot 1
                 case 1:
-                    saveGameSlotFile = "CompleteSave.dat";
-                    filesToSkip.Add("CompleteSave1.dat");
-                    filesToSkip.Add("CompleteSave2.dat");
-                    filesToSkip.Add("CompleteSave3.dat");
+                    saveGameSlotFile = "CompleteSave." + SavegameExtension;
+                    filesToSkip.Add("CompleteSave1." + SavegameExtension);
+                    filesToSkip.Add("CompleteSave2." + SavegameExtension);
+                    filesToSkip.Add("CompleteSave3." + SavegameExtension);
                     break;
                 // Recover backup slot 2
                 case 2:
-                    saveGameSlotFile = "CompleteSave1.dat";
-                    filesToSkip.Add("CompleteSave.dat");
-                    filesToSkip.Add("CompleteSave2.dat");
-                    filesToSkip.Add("CompleteSave3.dat");
+                    saveGameSlotFile = "CompleteSave1." + SavegameExtension;
+                    filesToSkip.Add("CompleteSave." + SavegameExtension);
+                    filesToSkip.Add("CompleteSave2." + SavegameExtension);
+                    filesToSkip.Add("CompleteSave3." + SavegameExtension);
                     break;
                 // Recover backup slot 3
                 case 3:
-                    saveGameSlotFile = "CompleteSave2.dat";
-                    filesToSkip.Add("CompleteSave.dat");
-                    filesToSkip.Add("CompleteSave1.dat");
-                    filesToSkip.Add("CompleteSave3.dat");
+                    saveGameSlotFile = "CompleteSave2." + SavegameExtension;
+                    filesToSkip.Add("CompleteSave." + SavegameExtension);
+                    filesToSkip.Add("CompleteSave1." + SavegameExtension);
+                    filesToSkip.Add("CompleteSave3." + SavegameExtension);
                     break;
                 // Recover backup slot 4
                 case 4:
-                    saveGameSlotFile = "CompleteSave3.dat";
-                    filesToSkip.Add("CompleteSave.dat");
-                    filesToSkip.Add("CompleteSave1.dat");
-                    filesToSkip.Add("CompleteSave2.dat");
+                    saveGameSlotFile = "CompleteSave3." + SavegameExtension;
+                    filesToSkip.Add("CompleteSave." + SavegameExtension);
+                    filesToSkip.Add("CompleteSave1." + SavegameExtension);
+                    filesToSkip.Add("CompleteSave2." + SavegameExtension);
                     break;
             }
             if(File.Exists(sourceDirName + @"\" + saveGameSlotFile) | SavegameSlot == 0)
@@ -107,9 +108,19 @@ namespace SnowRunner_Tool
         /// Load backups made by SnorRunner-Tool and 3rd party zipped backups
         /// </summary>
         /// <returns></returns>
-        public static List<Backup> GetSrtBackups(string directory)
+        public static List<Backup> GetSrtBackups(string directory, string platform)
         {
             Log.Debug("getOtherBackups: {OtherBackupDirectory}", directory);
+            string SavegameExtension = "dat";
+            if (platform == "epic")
+            {
+                SavegameExtension = "dat";
+            }
+            else if (platform == "steam")
+            {
+                SavegameExtension = "cfg";
+            }
+
             List<Backup> backups = new List<Backup>();
             string[] sgMoney = { "n/a", "n/a", "n/a", "n/a" };
             string backupType = string.Empty;
@@ -128,13 +139,13 @@ namespace SnowRunner_Tool
                     else
                     {
                         backupType = "SRT-Backup";
-                        string tmpSaveGameFile = CheatGame.UnzipToTemp(f);
+                        string tmpSaveGameFile = CheatGame.UnzipToTemp(f, platform);
                         if (File.Exists(tmpSaveGameFile))
                         {
                             for (int i = 0; i < 4; i++)
                             {
-                                sgMoney[i] = CheatGame.GetMoney(tmpSaveGameFile, i + 1);
-                                sgXp[i] = CheatGame.GetXp(tmpSaveGameFile, i + 1);
+                                sgMoney[i] = CheatGame.GetMoney(tmpSaveGameFile, i + 1, SavegameExtension);
+                                sgXp[i] = CheatGame.GetXp(tmpSaveGameFile, i + 1, SavegameExtension);
                             }
                         }
                     }
@@ -167,7 +178,7 @@ namespace SnowRunner_Tool
         /// Collect SnowRunner save game backup directory names  in list
         /// </summary>
         /// <returns></returns>
-        public static List<Backup> GetGameBackups(string directory)
+        public static List<Backup> GetGameBackups(string directory, string SavegameExtension)
         {
             if (Directory.Exists(directory))
             {
@@ -183,13 +194,13 @@ namespace SnowRunner_Tool
                     string dir = new DirectoryInfo(subdirectory).Name;
                     DateTime timestamp = Directory.GetCreationTime(subdirectory);
                     // string ts = timestamp.ToString();
-                    string backupSaveGameFile = subdirectory + @"\CompleteSave.dat";
+                    string backupSaveGameFile = subdirectory + @"\CompleteSave." + SavegameExtension;
                     if (File.Exists(backupSaveGameFile))
                     {
                         for (int i = 0; i < 4; i++)
                         {
-                            sgMoney[i] = CheatGame.GetMoney(backupSaveGameFile, i + 1);
-                            sgXp[i] = CheatGame.GetXp(backupSaveGameFile, i + 1);
+                            sgMoney[i] = CheatGame.GetMoney(backupSaveGameFile, i + 1, SavegameExtension);
+                            sgXp[i] = CheatGame.GetXp(backupSaveGameFile, i + 1, SavegameExtension);
                         }
                         backups.Add(new Backup() { BackupName = dir, 
                             Timestamp = timestamp, 
@@ -286,7 +297,7 @@ namespace SnowRunner_Tool
         /// Restores a game backup (overwrites current save game)
         /// </summary>
         /// <param name="sourceFileOrDirectory"></param>
-        public static bool RestoreBackup(string sourceFileOrDirectory, string targetDirectory, int SavegameSlot)
+        public static bool RestoreBackup(string sourceFileOrDirectory, string targetDirectory, int SavegameSlot, string SavegameExtension)
         {
             string TmpExtractionDirectory = Path.GetTempPath() + "SRT";
             // Delete temporary folder
@@ -302,7 +313,7 @@ namespace SnowRunner_Tool
             if (!String.Equals(Path.GetExtension(sourceFileOrDirectory), ".zip", StringComparison.OrdinalIgnoreCase))
             {
                 Log.Debug("Copy directory from {Source} to {Destination}", sourceFileOrDirectory, targetDirectory);
-                result = DirCopy(sourceFileOrDirectory, targetDirectory, true, SavegameSlot);
+                result = DirCopy(sourceFileOrDirectory, targetDirectory, true, SavegameSlot, SavegameExtension);
             }
             // Zipped backup: Extract zip file, see ZipExtractHelperClass
             else
@@ -310,7 +321,7 @@ namespace SnowRunner_Tool
                 Log.Debug("Unzipping all saves from save game {Source} to temporary directory {Destination}", sourceFileOrDirectory, TmpExtractionDirectory);
                 ZipExtractHelperClass.ZipFileExtractToDirectory(sourceFileOrDirectory, TmpExtractionDirectory);
 
-                result = DirCopy(TmpExtractionDirectory, targetDirectory, true, SavegameSlot);
+                result = DirCopy(TmpExtractionDirectory, targetDirectory, true, SavegameSlot, SavegameExtension);
                 Directory.Delete(TmpExtractionDirectory, true);
             }
             return result;

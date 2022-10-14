@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using SnowRunner_Tool.Properties;
 using System.Threading;
 using System.Collections.Generic;
+using CommandLine;
+using System.Linq;
 
 namespace SnowRunner_Tool
 {
@@ -21,13 +23,15 @@ namespace SnowRunner_Tool
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        private string SRBaseDir;
+        // private string SRBaseDir;
         private string SRPaksDir;
         private string SRProfile;
         private string SRBackupDir;
         private string MyBackupDir;
-        private string SRSaveGameDir;
+        // private string SRSaveGameDir;
         private string SRsaveGameFile;
+        private string Platform;
+        private string SavegameExtension;
         private static readonly string AssemblyVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private KeyboardHook _hook;
         private FileSystemWatcher fswGameBackup;
@@ -40,51 +44,39 @@ namespace SnowRunner_Tool
         {
             _logger = logger;
             // Command line options
-
+            Parser.Default.ParseArguments<Options>(args)
+                   .WithParsed<Options>(o =>
+                   {
+                       Platform = o.Platform.ToLower();
+                   });
 
             InitializeComponent();
             ((App)Application.Current).WindowPlace.Register(this);
 
             _logger.Information("App started");
 
-            bool manualPaths = false;
-
             // Read directories from settings or find them automatically
-            SRBaseDir = string.IsNullOrEmpty(Settings.Default.SRbasedir) ? DiscoverPaths.FindBaseDirectory() : Settings.Default.SRbasedir;
-            SRProfile = string.IsNullOrEmpty(Settings.Default.SRprofile) ? DiscoverPaths.FindProfileName(SRBaseDir) : Settings.Default.SRprofile;
-            SRPaksDir = Settings.Default.SRPaksDir;
+            SRProfile = DiscoverPaths.FindBaseDirectory(Platform);
+            MyBackupDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\SRToolBackup";
 
-            // Check base directory for existance
-            if (!Directory.Exists(SRBaseDir))
+            if (Platform == "epic")
             {
-                manualPaths = true;
+                SRBackupDir = Directory.GetParent(SRProfile) + @"\BackupSlots\" + SRProfile.Split('\\').Last();
+                // Move old backups from former versions to new location
+                EpicParser.MoveOldBackupsToNewLocation(SRProfile, MyBackupDir);
             }
-
-            // Set derived directory
-            SRBackupDir = SRBaseDir + @"\storage\BackupSlots\" + SRProfile;
-
-            // Check for existance
-            if (!Directory.Exists(SRBackupDir))
-            {
-                manualPaths = true;
-            }
-
+            
             // Set derived directories
-            MyBackupDir = Directory.GetParent(SRBaseDir) + @"\SRToolBackup";
-            SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
-            SRsaveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
-
-            // Check for existance
-            if (!Directory.Exists(SRSaveGameDir))
+            if (Platform == "epic")
             {
-                manualPaths = true;
+                SavegameExtension = "dat";
             }
-
-            if (manualPaths)
+            else if (Platform == "steam")
             {
-                _logger.Information("Manual path input required");
-                ShowSettingsDialog();
+                SavegameExtension = "cfg";
             }
+            
+            SRsaveGameFile = SRProfile + @"\CompleteSave." + SavegameExtension;
 
             // Create directory for our backups
             if (!Directory.Exists(MyBackupDir))
@@ -94,14 +86,15 @@ namespace SnowRunner_Tool
             }
 
             // Send directories to log
-            _logger.Debug("Set base directory: {SRBaseDir}", SRBaseDir);
+            // _logger.Debug("Set base directory: {SRBaseDir}", SRBaseDir);
             _logger.Information("Set profile directory: {SRProfile}", SRProfile);
             _logger.Debug("Set backup directory: {MyBackupDir}", MyBackupDir);
             _logger.Debug("Set Snowrunner backup directory: {SRBackupDir}", SRBackupDir);
-            _logger.Debug("Set Snowrunner save game directory: {SRSaveGameDir}", SRSaveGameDir);
+            _logger.Debug("Set Snowrunner save game directory: {SRSaveGameDir}", SRProfile);
 
             // Set value of some UI elements, load backup data
-            lblSnowRunnerPath.Content = SRBaseDir;
+            lblSnowRunnerPath.Content = SRProfile;
+            lblBackupDirectory.Content = MyBackupDir;
 
             // Fill Datagrid
             dgBackups.AutoGenerateColumns = true;
@@ -111,8 +104,8 @@ namespace SnowRunner_Tool
             _logger.Information("Registering FileSystemWatcher");
             fswGameBackup = new FileSystemWatcher
             {
-                Path = SRSaveGameDir,
-                Filter = "CompleteSave*.dat"
+                Path = SRProfile,
+                Filter = "CompleteSave*.*"
             };
             fswGameBackup.Changed += FileSystemWatcher_Changed;
             SetAutobackup(Settings.Default.autobackupinterval);
@@ -138,10 +131,20 @@ namespace SnowRunner_Tool
         /// </summary>
         private void ReadBackups()
         {
+            List<Backup> allBackups = new List<Backup>();
             // Add SnowRunner backup directories
-            List<Backup> allBackups = Backup.GetGameBackups(SRBackupDir);
+            try
+            {
+                allBackups.AddRange(Backup.GetGameBackups(SRBackupDir, SavegameExtension));
+            }
+            catch
+            {
+                // No existing SnowRunner backups
+            }
+            
+            
             // Add own zipped backups
-            allBackups.AddRange(Backup.GetSrtBackups(MyBackupDir));
+            allBackups.AddRange(Backup.GetSrtBackups(MyBackupDir, Platform));
             
             try
             {
@@ -176,22 +179,22 @@ namespace SnowRunner_Tool
             bool saveGameExists;
             string saveFile;
 
-            saveFile = SRBaseDir + @"\storage\" + SRProfile + @"\CompleteSave.dat";
+            saveFile = SRProfile + @"\CompleteSave." + SavegameExtension;
             saveGameExists = File.Exists(saveFile);
             MnMoneyCheat1.IsEnabled = saveGameExists; 
             MnXp1.IsEnabled = saveGameExists;
 
-            saveFile = SRBaseDir + @"\storage\" + SRProfile + @"\CompleteSave1.dat";
+            saveFile = SRProfile + @"\CompleteSave1." + SavegameExtension; ;
             saveGameExists = File.Exists(saveFile);
             MnMoneyCheat2.IsEnabled = saveGameExists;
             MnXp2.IsEnabled = saveGameExists;
 
-            saveFile = SRBaseDir + @"\storage\" + SRProfile + @"\CompleteSave2.dat";
+            saveFile = SRProfile + @"\CompleteSave2." + SavegameExtension; ;
             saveGameExists = File.Exists(saveFile);
             MnMoneyCheat3.IsEnabled = saveGameExists;
             MnXp3.IsEnabled = saveGameExists;
 
-            saveFile = SRBaseDir + @"\storage\" + SRProfile + @"\CompleteSave3.dat";
+            saveFile = SRProfile + @"\CompleteSave3." + SavegameExtension; ;
             saveGameExists = File.Exists(saveFile);
             MnMoneyCheat4.IsEnabled = saveGameExists;
             MnXp4.IsEnabled = saveGameExists;
@@ -238,7 +241,7 @@ namespace SnowRunner_Tool
                     Backup restoreItem = (Backup)item.SelectedCells[0].Item;
 
                     // Create a backup before restore
-                    _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "safety-bak");
+                    _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "safety-bak");
                     string backupSource = string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase)
                         ? SRBackupDir + @"\" + restoreItem.BackupName
                         : MyBackupDir + @"\" + restoreItem.BackupName;
@@ -249,7 +252,7 @@ namespace SnowRunner_Tool
                         try
                         {
                             _ = MetroMessage("This function experimental!", "Please report any problems to Github issues, see Help - Web - Report a problem.");
-                            copyResult = Backup.RestoreBackup(backupSource, SRPaksDir, -1);
+                            copyResult = Backup.RestoreBackup(backupSource, SRPaksDir, -1, SavegameExtension);
                         }
                         catch
                         {
@@ -259,7 +262,7 @@ namespace SnowRunner_Tool
                     }
                     else
                     {
-                        copyResult = Backup.RestoreBackup(backupSource, SRSaveGameDir, SavegameSlot);
+                        copyResult = Backup.RestoreBackup(backupSource, SRProfile, SavegameSlot, SavegameExtension);
                     }
                     if (copyResult)
                     {
@@ -376,15 +379,15 @@ namespace SnowRunner_Tool
         private void MnuReload_Click(object sender, RoutedEventArgs e)
         {
             ReadBackups();
-            _ = CheatGame.GetMoney(SRsaveGameFile, 1);
+            _ = CheatGame.GetMoney(SRsaveGameFile, 1, SavegameExtension);
         }
 
 
-        private void MnPaths_Click(object sender, RoutedEventArgs e)
-        {
-            ShowSettingsDialog();
-            ReadBackups();
-        }
+        //private void MnPaths_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ShowSettingsDialog();
+        //    ReadBackups();
+        //}
 
 
         private void MnProjectGithub_Click(object sender, RoutedEventArgs e)
@@ -439,52 +442,6 @@ namespace SnowRunner_Tool
             }
         }
 
-
-        private void ShowSettingsDialog()
-        {
-            InputGamePath gamePath = new InputGamePath();
-            // Fill paths in settings window
-            if (!string.IsNullOrEmpty(SRBaseDir))
-            {
-                gamePath.TxSRBaseDir.Text = SRBaseDir;
-            }
-            if (!string.IsNullOrEmpty(SRBackupDir))
-            {
-                gamePath.TxSRBackupDir.Text = SRBackupDir;
-            }
-            if (!string.IsNullOrEmpty(SRSaveGameDir))
-            {
-                gamePath.TxSaveGamePath.Text = SRSaveGameDir;
-            }
-            if (!string.IsNullOrEmpty(SRProfile))
-            {
-                gamePath.TxSRProfileName.Text = SRProfile;
-            }
-            gamePath.fileToCheck = SRSaveGameDir + @"\CompleteSave.dat";
-            gamePath.ShowDialog();
-            if (!string.IsNullOrEmpty(gamePath.TxSRBaseDir.Text))
-            {
-                SRBaseDir = gamePath.TxSRBaseDir.Text;
-                SRProfile = gamePath.TxSRProfileName.Text;
-                SRBackupDir = gamePath.TxSRBackupDir.Text;
-                MyBackupDir = Directory.GetParent(SRBaseDir) + @"\SRToolBackup";
-                SRSaveGameDir = SRBaseDir + @"\storage\" + SRProfile;
-                SRsaveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
-                Settings.Default.SRbasedir = SRBaseDir;
-                Settings.Default.SRprofile = SRProfile;
-                Settings.Default.Save();
-            }
-            else
-            {
-                if (!Directory.Exists(SRBaseDir))
-                {
-                    _ = MetroMessage("Sorry!", "You can`t leave the settings without entering a valid path!");
-                    ShowSettingsDialog();
-                }
-            }
-        }
-
-
         private async void MnMoneyCheat_Click(object sender, RoutedEventArgs e)
         {
             int SavegameSlot = 0;
@@ -507,7 +464,7 @@ namespace SnowRunner_Tool
                 SavegameSlot = 4;
             }
 
-            string oldMoneyString = CheatGame.GetMoney(SRsaveGameFile, SavegameSlot);
+            string oldMoneyString = CheatGame.GetMoney(SRsaveGameFile, SavegameSlot, SavegameExtension);
             
             if (oldMoneyString == "n/a")
             {
@@ -520,8 +477,8 @@ namespace SnowRunner_Tool
             if (!string.IsNullOrEmpty(result))
             {
                 // Create a backup before changing the file
-                _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "cheat-bak");
-                _ = CheatGame.SaveMoney(SRsaveGameFile, result, SavegameSlot);
+                _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "cheat-bak");
+                _ = CheatGame.SaveMoney(SRsaveGameFile, result, SavegameSlot, SavegameExtension);
                 int moneyUpgrade = int.Parse(result) - oldMoney;
                 _ = MetroMessage("Congratulations", "You won " + moneyUpgrade.ToString() + " coins.");
                 ReadBackups();
@@ -552,7 +509,7 @@ namespace SnowRunner_Tool
                 SavegameSlot = 4;
             }
 
-            string xp = CheatGame.GetXp(SRsaveGameFile, SavegameSlot);
+            string xp = CheatGame.GetXp(SRsaveGameFile, SavegameSlot, SavegameExtension);
             if (xp == "n/a")
             {
                 _ = MetroMessage("File not found", "The selected backup slot contains no corresponding save game file. Select a valid slot.");
@@ -564,8 +521,8 @@ namespace SnowRunner_Tool
             if (!string.IsNullOrEmpty(result))
             {
                 // Create a backup before changing the file
-                _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "cheat-bak");
-                bool success = CheatGame.SaveXp(SRSaveGameDir, result, SavegameSlot);
+                _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "cheat-bak");
+                bool success = CheatGame.SaveXp(SRProfile, result, SavegameSlot, SavegameExtension);
                 if (success)
                 {
                     _ = MetroMessage("Congratulations", "Nothing is better than experience!");
@@ -580,15 +537,14 @@ namespace SnowRunner_Tool
             }
         }
 
-
         private void UpdateTitle()
         {
             Dispatcher.Invoke(() => {
                 Title = "SnowRunner-Tool v" + AssemblyVersion;
                 if (File.Exists(SRsaveGameFile))
                 {
-                    string money = CheatGame.GetMoney(SRsaveGameFile, 1);
-                    string xp = CheatGame.GetXp(SRsaveGameFile, 1);
+                    string money = CheatGame.GetMoney(SRsaveGameFile, 1, SavegameExtension);
+                    string xp = CheatGame.GetXp(SRsaveGameFile, 1, SavegameExtension);
                     Title += " | Money: " + money + " | XP: " + xp + " (Slot #1)";
                 }
                 else
@@ -601,7 +557,7 @@ namespace SnowRunner_Tool
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "manual-bak");
+            _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "manual-bak");
             ReadBackups();
         }
 
@@ -736,7 +692,7 @@ namespace SnowRunner_Tool
                 if (BackupScheduler.IsActive())
                 {
                     _logger.Debug("Start backup from hotkey");
-                    _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "hotkey-bak");
+                    _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "hotkey-bak");
                     ReadBackups();
                 }
             }
@@ -800,7 +756,7 @@ namespace SnowRunner_Tool
             if (autoSaveCounter == Settings.Default.autobackupinterval)
             {
                 autoSaveCounter = 0;
-                _ = Backup.BackupCurrentSavegame(SRSaveGameDir, MyBackupDir, "auto-bak");
+                _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "auto-bak");
                 _logger.Debug("FSW-backup created");
             }
         }

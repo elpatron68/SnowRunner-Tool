@@ -15,18 +15,18 @@ namespace SnowRunner_Tool
         /// <summary>
         /// Cheat: Set amount of money in current save game
         /// </summary>
-        public static string GetMoney(string saveGameFile, int saveGameSlot)
+        public static string GetMoney(string saveGameFile, int saveGameSlot, string SavegameExtension)
         {
             switch (saveGameSlot)
             {
                 case 2:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave1.dat";
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave1." + SavegameExtension;
                     break;
                 case 3:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave2.dat";
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave2." + SavegameExtension;
                     break;
                 case 4:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave3.dat";
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave3." + SavegameExtension;
                     break;
             }
             if (!File.Exists(saveGameFile))
@@ -50,18 +50,18 @@ namespace SnowRunner_Tool
             }
         }
 
-        public static bool SaveMoney(string saveGameFile, string newAmount, int saveGameSlot)
+        public static bool SaveMoney(string saveGameFile, string newAmount, int saveGameSlot, string SavegameExtension)
         {
             switch (saveGameSlot)
             {
                 case 2:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave1.dat";
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave1." + SavegameExtension;
                     break;
                 case 3:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave2.dat";
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave2." + SavegameExtension;
                     break;
                 case 4:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave3.dat";
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave3." + SavegameExtension;
                     break;
             }
             if (!File.Exists(saveGameFile))
@@ -82,18 +82,18 @@ namespace SnowRunner_Tool
             }
         }
 
-        public static string GetXp(string saveGameFile, int saveGameSlot)
+        public static string GetXp(string saveGameFile, int saveGameSlot, string SavegameExtension)
         {
             switch (saveGameSlot)
             {
                 case 2:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave1.dat";
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave1." + SavegameExtension;
                     break;
                 case 3:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave2.dat";
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave2." + SavegameExtension;
                     break;
                 case 4:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave3.dat";
+                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave3." + SavegameExtension;
                     break;
             }
             if (!File.Exists(saveGameFile))
@@ -119,16 +119,16 @@ namespace SnowRunner_Tool
 
         }
 
-        public static bool SaveXp(string SRSaveGameDir, string newXP, int SaveGameSlot)
+        public static bool SaveXp(string SRSaveGameDir, string newXP, int SaveGameSlot, string SavegameExtension)
         {
             string saveGameFile;
             if (SaveGameSlot == 1)
             {
-                saveGameFile = SRSaveGameDir + @"\CompleteSave.dat";
+                saveGameFile = SRSaveGameDir + @"\CompleteSave." + SavegameExtension;
             }
             else
             {
-                saveGameFile = SRSaveGameDir + @"\CompleteSave" + (SaveGameSlot - 1).ToString() + ".dat";
+                saveGameFile = SRSaveGameDir + @"\CompleteSave" + (SaveGameSlot - 1).ToString() + "." + SavegameExtension;
             }
 
             if (!File.Exists(saveGameFile))
@@ -149,9 +149,19 @@ namespace SnowRunner_Tool
             }
         }
 
-        public static string UnzipToTemp(string zipFile)
+        public static string UnzipToTemp(string zipFile, string platform)
         {
             string tempDir = Path.GetTempPath() + @"\SRT-TMP";
+            string extension = null;
+            if (platform == "epic")
+            {
+                extension = "dat";
+            }
+            if (platform == "steam")
+            {
+                extension = "cfg";
+            }
+
             if (!Directory.Exists(tempDir)) { Directory.CreateDirectory(tempDir); }
             string returnPath = "";
             using (ZipArchive archive = ZipFile.OpenRead(zipFile))
@@ -161,7 +171,7 @@ namespace SnowRunner_Tool
                     // 
                     if (entry.FullName.Contains("CompleteSave"))
                     {
-                        if (entry.FullName.Equals("CompleteSave.dat")) 
+                        if (entry.FullName.Equals("CompleteSave." + extension)) 
                         {
                             returnPath = Path.GetFullPath(Path.Combine(tempDir, entry.FullName));
                         }

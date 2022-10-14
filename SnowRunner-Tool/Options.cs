@@ -5,7 +5,7 @@ namespace SnowRunner_Tool
 {
     public class Options
     {
-        [Option('s', "steam", Required = false, HelpText = "Snowrunner from Steam")]
-        public bool Steam { get; set; }
+        [Option("platform", Required = true, HelpText = "Set your platform (Epic/Steam/Microsoft)")]
+        public string Platform { get; set; }
     }
 }

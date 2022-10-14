@@ -53,6 +53,7 @@ namespace SnowRunner_Tool
             ((App)Application.Current).WindowPlace.Register(this);
 
             _logger.Information("App started");
+            _logger.Information("Version: " + AssemblyVersion);
             _logger.Information("Platform: " + Platform);
 
             // Read directories from settings or find them automatically

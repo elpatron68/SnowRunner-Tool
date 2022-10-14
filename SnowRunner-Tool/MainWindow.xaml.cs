@@ -23,12 +23,9 @@ namespace SnowRunner_Tool
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        // private string SRBaseDir;
-        private string SRPaksDir;
         private string SRProfile;
         private string SRBackupDir;
         private string MyBackupDir;
-        // private string SRSaveGameDir;
         private string SRsaveGameFile;
         private string Platform;
         private string SavegameExtension;
@@ -86,7 +83,6 @@ namespace SnowRunner_Tool
             }
 
             // Send directories to log
-            // _logger.Debug("Set base directory: {SRBaseDir}", SRBaseDir);
             _logger.Information("Set profile directory: {SRProfile}", SRProfile);
             _logger.Debug("Set backup directory: {MyBackupDir}", MyBackupDir);
             _logger.Debug("Set Snowrunner backup directory: {SRBackupDir}", SRBackupDir);
@@ -245,25 +241,8 @@ namespace SnowRunner_Tool
                     string backupSource = string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase)
                         ? SRBackupDir + @"\" + restoreItem.BackupName
                         : MyBackupDir + @"\" + restoreItem.BackupName;
-                    
-                    if (string.Equals(restoreItem.Type, "PAK-Backup"))
-                    {
-                        // Restore initial.pak
-                        try
-                        {
-                            _ = MetroMessage("This function experimental!", "Please report any problems to Github issues, see Help - Web - Report a problem.");
-                            copyResult = Backup.RestoreBackup(backupSource, SRPaksDir, -1, SavegameExtension);
-                        }
-                        catch
-                        {
-                            _ = MetroMessage("Something went wrong", "Your backup could not be restored, please restore it manually.");
-                            _ = Process.Start("explorer.exe " + backupSource);
-                        }
-                    }
-                    else
-                    {
-                        copyResult = Backup.RestoreBackup(backupSource, SRProfile, SavegameSlot, SavegameExtension);
-                    }
+
+                    copyResult = Backup.RestoreBackup(backupSource, SRProfile, SavegameSlot, SavegameExtension);
                     if (copyResult)
                     {
                         _ = MetroDonateMessage("Next time better luck", "The selected saved game has successfully been restored. A backup of your former save game has been made.\n\n" +
@@ -559,54 +538,6 @@ namespace SnowRunner_Tool
         {
             _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "manual-bak");
             ReadBackups();
-        }
-
-
-        private async void MnPaths2_Click(object sender, RoutedEventArgs e)
-        {
-            string defaultPath;
-            if (!string.IsNullOrEmpty(SRPaksDir))
-            {
-                defaultPath = SRPaksDir;
-            }
-            else
-            {
-                defaultPath = @"C:\Program Files\Epic Games\SnowRunner\en_us\preload\paks\client";
-            }
-            string result = await MetroInputMessage("INITIAL.PAK", "Enter path to the file \"initial.pak\" (find the file and copy-paste the directory name):", defaultPath);
-            // Make sure we have a directory, not a file
-            FileAttributes attr = File.GetAttributes(result);
-            if (!attr.HasFlag(FileAttributes.Directory))
-            {
-                result = Directory.GetParent(result).ToString();
-            }
-
-            // Make sure we have the correct directory
-            if (File.Exists(result + @"\initial.pak"))
-            {
-                SRPaksDir = result;
-                Settings.Default.SRPaksDir = SRPaksDir;
-                Settings.Default.Save();
-            }
-            else
-            {
-                _ = MetroMessage("File not found!", "The file \"initial.pak\" was not found in " + @result + "!");
-            }
-        }
-
-
-        private void MnBackupPak_Click(object sender, RoutedEventArgs e)
-        {
-            string f = SRPaksDir + @"\initial.pak";
-            if (File.Exists(f))
-            {
-                _ = Backup.BackupSingleFile(f, MyBackupDir, "pakbackup");
-                ReadBackups();
-            }
-            else
-            {
-                _ = MetroMessage("Settings missing!", "To create a backup of \"initial.pak\" you have to set the path in the menu Settings - Set pak file path.");
-            }
         }
 
 

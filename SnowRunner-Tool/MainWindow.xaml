@@ -32,14 +32,14 @@
                         <iconPacks:PackIconMaterial Kind="ContentSaveOutline" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="MnBackupPak"
+                <!--<MenuItem x:Name="MnBackupPak"
                           Header="Backup INITIAL._PAK file"
                           Click="MnBackupPak_Click"
                           >
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="ContentSaveAllOutline" />
                     </MenuItem.Icon>
-                </MenuItem>
+                </MenuItem>-->
                 <MenuItem x:Name="MnReload" 
                           Header="_Reload backup table"
                           Click="MnuReload_Click"
@@ -143,26 +143,6 @@
 
             </MenuItem>
             <MenuItem Header="_Settings">
-                <!--<MenuItem.Icon>
-                    <iconPacks:PackIconMaterial Kind="Cog" />
-                </MenuItem.Icon>
-
-                <MenuItem x:Name="MnPaths1"
-                                     Header="Set _save game path"
-                                     Click="MnPaths_Click"
-                          >
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="FileTreeOutline" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem x:Name="MnPaths2"
-                                     Header="Set _pak file path"
-                                     Click="MnPaths2_Click"
-                          >
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconPicolIcons Kind="Path" />
-                    </MenuItem.Icon>
-                </MenuItem>-->
                 <MenuItem Header="_Autobackup">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="AvTimer" />

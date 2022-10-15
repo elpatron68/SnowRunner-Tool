@@ -1,26 +1,21 @@
 ﻿# SnowRunner-Tool
 
-The game *SnowRunner* is a pain! Don´t play it. But if you do, you will sooner or later get stuck with your truck 
-in the deepest mud, lose all your payload and your best trailer. That is the very moment, when this small tool 
-comes into the game.
+The game *SnowRunner* is a pain! Don´t play it. But if you do, you will sooner or later get stuck with your truck in the deepest mud, lose all your payload and your best trailer. That is the very moment, when this small tool comes into the game.
 
-So, if you feel that restoring a saved game would sometimes be nice to have, here is the good news: The game 
-creates backups from time to time, and it´s easy to restore them.
+So, if you feel that restoring a saved game would sometimes be nice to have, here is the good news: The game creates backups from time to time, and it´s easy to restore them.
 
-The *SnowRunner-Tool* does nothing that you could not do in a manual way, but it makes it safe and easy and it´s 
-looking nice.
+The *SnowRunner-Tool* does nothing that you could not do in a manual way, but it makes it safe and easy and it´s looking nice.
 
-In addition, this tool lets you change (cheat) the money and experience points of the current game state. So, 
-if you feel, you are broke, don´t hesitate to rob the bank!
+In addition, this tool lets you change (cheat) the money and experience points of the current game state. So, if you feel, you are broke, don´t hesitate to rob the bank!
 
-**Use this software with caution! I have tested a lot, but only on my own machines. I recommend to make manual 
-backups until you are sure that everything works as expected.**
+**Use this software with caution! I have tested a lot, but only on my own machines. I recommend to make manual backups until you are sure that everything works as expected.**
 
 ## Features
 
 *SnowRunner-Tool* Features in details
 
 - Create backups of the current game state and list them in a fancy style
+- Supports *Epic Games* **and** *Steam* version of the game
 - Hotkey `F2` for instant in-game-backups without leaving the game
 - Automatically create backups afer the game itself saves it´s status
 - Restore a saved game from the game´s backup repository or a backup made with this tool (single save game slot 
@@ -36,20 +31,14 @@ or all slots)
 
 ### Installation With Setup.exe
 
-1. Download the latest `SRT_setup.zip` from [Github Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) 
-   or [mod.io](https://snowrunner.mod.io/snowrunner-tool/#15370).
-2. Unzip the file and install *SnowRunner-Tool* by starting `SRT_setup.exe`. The setup will install the required 
-   Microsoft .NET Framework 4.7.2 if it is not found on your system.
+1. Download the latest `SRT_setup.zip` from [Github Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) or [mod.io](https://snowrunner.mod.io/snowrunner-tool/#15370).
+2. Unzip the file and install *SnowRunner-Tool* by starting `SRT_setup.exe`. The setup will install the required Microsoft .NET Framework 4.7.2 if it is not found on your system.
 
 ### Manual Installation From Zip File
 
-1. Microsoft .NET Framework 4.7.2. **must be installed** for *SnowRunner-Tool* to start! It should deliver with Windows 
-   Updates, but it is not a mandatory update. You can manually download .NET Framework 4.7.2 
-   [here](http://go.microsoft.com/fwlink/?linkid=863262) or update your Windows - see optional updates.
-2. Download the latest `SRT-portable.zip` from [Github Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) 
-   and unzip the files to a location of your choice. **Never download the file from any other website**!
-3. Start `SnowRunner-Tool.exe` or create a desktop shortcut. Windows will warn you about using suspicious software as 
-   this program is not signed with a valid certificate. You have to accept this at the first start.
+1. Microsoft .NET Framework 4.7.2. **must be installed** for *SnowRunner-Tool* to start! It should deliver with Windows Updates, but it is not a mandatory update. You can manually download .NET Framework 4.7.2 [here](http://go.microsoft.com/fwlink/?linkid=863262) or update your Windows - see optional updates.
+2. Download the latest `SRT-portable.zip` from [Github Releases](https://github.com/elpatron68/SnowRunner-Tool/releases) and unzip the files to a location of your choice. **Never download the file from any other website**!
+3. Start `SnowRunner-Tool.exe` or create a desktop shortcut. Windows will warn you about using suspicious software as this program is not signed with a valid certificate. You have to accept this at the first start.
 
 ## Uninstall
 
@@ -63,9 +52,7 @@ Uninstall *SnowRunner-Tool* with the Windows *Programs and Functions* control.
 
 ## Usage
 
-After the start, *SnowRunner-Tool* reads all backup files created by the game or by itself and lists them with their 
-time stamps and further information as the amount of money and XP. *Right click* on a row to restore or delete the 
-selected backup. Before restoring anything, another backup of the current game state will be made.
+After the start, *SnowRunner-Tool* discovers if you own the Steam- or Epic Games- version of the game. It then reads all backup files created by the game or by itself and lists them with their time stamps and further information as the amount of money and XP. *Right click* on a row to restore or delete the selected backup. Before restoring anything, another backup of the current game state will be made.
 
 ### Save game backup
 
@@ -76,23 +63,15 @@ selected backup. Before restoring anything, another backup of the current game s
 
 #### Notes
 
-- **Backups can usually be created while the game is running**. If you have to master a risky maneuver, just 
-  switch to your *SnowRunner-Tool* and make a backup before you fail. Or even easier: Let the tool run in the backgroud 
-  and use the instant-hotkey-backup (`F2`).
+- **Backups can usually be created while the game is running**. If you have to master a risky maneuver, just switch to your *SnowRunner-Tool* and make a backup before you fail. Or even easier: Let the tool run in the background and use the instant-hotkey-backup (`F2`).
 - The `F2` backup function only works while the game is running!
 - Activate *regular backups* in the settings menu to automatically let the tool create backups in the background.
 
 ### Menu Cheats
 
-Set the amount of money or experience points you´d like to have by opening the *Cheats* menu. Before changing the money 
-or XP points in your save game file, another fresh backup will be made.
+Set the amount of money or experience points you´d like to have by opening the *Cheats* menu. Before changing the money or XP points in your save game file, another fresh backup will be made.
 
 ![Money cheat](images/SnowRunner-Tool_MoneyCheat.png)
-
-## Menu Settings
-
-In the *Settings* menu, you can enter a couple paths this tool needs to operate. Also,  usage reporting and remote logging 
-can en- and disabled. A check mark will be displayed if an option is enabled.
 
 ### Autobackup
 
@@ -109,7 +88,7 @@ backups appear in the list.
 
 ### Logging
 
-The App creates log files in the directory `%LOCALAPPDATA%\SRT`.
+The App creates log files in the directory `%LOCALAPPDATA%\SRT`. You can easily access this folder from the *File* - *Show log files* menu.
 
 If you need help from the developer, open an issue at [Github](https://github.com/elpatron68/SnowRunner-Tool/issues), 
 describe the problem and attach the log file.
@@ -137,6 +116,14 @@ Pretty self-explanatory:
 * It is not possible to change money or XP while the game is running.
 
 ## Advanced, Troubleshooting
+
+*SnowRunner-Tool* tries to detect, on which platform (Steam or Epic Games) you play the game on. Both platforms differ in several ways (location of saved game files, file extension), so *SnowRunner-Tool* can only support **one** platform at a time.
+
+The platform detection should work quite reliable, but may fail under certain circumstances. In that case - *or if you have installed the game on both platforms* - *SnowRunner-Tool* can be launched using the `--platform` argument. Open the properties of the Desktop icon (or Windows start menu item) and add the platform argument with a leading blank *after* the path to `SnowRunner-Tool.exe`:
+
+![Properties](images/platform_argument.png)
+
+Use `--platform epic` if you play the Epic Games version or `--platform steam` if you use the steam version.
 
 ## Useful links
 

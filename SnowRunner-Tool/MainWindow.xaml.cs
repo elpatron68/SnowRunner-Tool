@@ -78,18 +78,18 @@ namespace SnowRunner_Tool
                         break;
                     case 3:
                         // Epic and Steam
-                        Winforms.MessageBoxManager.OK = "Epic";
-                        Winforms.MessageBoxManager.Cancel = "Steam";
+                        Winforms.MessageBoxManager.OK = "Steam";
+                        Winforms.MessageBoxManager.Cancel = "Epic Games";
                         Winforms.MessageBoxManager.Register();
-                        var answer = Winforms.MessageBox.Show("Saved games from the Epic Games- and Steam- version of SnowRunner were found. Select the platform you want to use.", "SnowRunner platform", Winforms.MessageBoxButtons.OKCancel);
+                        var answer = Winforms.MessageBox.Show("Saved games from the Epic Games- and Steam- version of SnowRunner were found. Select the platform you want to use.", "Select SnowRunner platform", Winforms.MessageBoxButtons.OKCancel);
                         Winforms.MessageBoxManager.Unregister();
                         switch (answer)
                         {
                             case Winforms.DialogResult.OK:
-                                Platform = "epic";
+                                Platform = "steam";
                                 break;
                             case Winforms.DialogResult.Cancel:
-                                Platform = "steam";
+                                Platform = "epic";
                                 break;
                         }
                         break;

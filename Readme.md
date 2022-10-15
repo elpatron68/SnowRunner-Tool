@@ -24,7 +24,6 @@ or all slots)
 - Rename backup files from the UI
 - Cheat the amount of money you have in your pocket
 - Cheat your experience points (XP)
-- Works with the Epic Games and Steam version of the game
 ![SnowRunner-Tool](images/SnowRunner-Tool_Screenshot.png)
 
 ## Installation

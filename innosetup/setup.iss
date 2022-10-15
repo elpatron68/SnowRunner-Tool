@@ -3,7 +3,7 @@
 #pragma include __INCLUDE__ + ";" + ReadReg(HKLM, "Software\Mitrich Software\Inno Download Plugin", "InstallDir")
 #include <idp.iss>
 #define MyAppName "SnowRunner-Tool"
-#define MyAppVersion "1.0.4.4"
+#define MyAppVersion "1.0.5.0"
 #define MyAppPublisher "elpatron68"
 #define MyAppURL "https://github.com/elpatron68/SnowRunner-Tool"
 #define MyAppExeName "SnowRunner-Tool.exe"
@@ -47,8 +47,7 @@ Source: "..\SnowRunner-Tool\bin\Release\Windows.winmd"; DestDir: "{app}"; Flags:
 Source: "..\SnowRunner-Tool\bin\Release\Changelog.md"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Parameters: "/Steam"; Components: Steam
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Parameters: "/Epic"; Components: Epic
+Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\Project on GitHub"; Filename: "{#MyAppURL}"
 Name: "{group}\Donate a coffee"; Filename: "https://www.paypal.com/donate/?hosted_button_id=4HC7YCMXQK3N8"
 Name: "{group}\Show Changelog"; Filename: "notepad.exe"; Parameters: "{app}\changelog.md"
@@ -64,6 +63,7 @@ Type: filesandordirs; Name: "{app}\*"
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\*"
 Type: filesandordirs; Name: "{localappdata}\SRT\*"
+Type: filesandordirs; Name: "{localappdata}\SnowRunner_Tool\*"
 
 [CustomMessages]
 IDP_DownloadFailed=Download of .NET Framework 4.7.2 failed. .NET Framework 4.7 is required to run SnowRunner-Tool.
@@ -74,14 +74,6 @@ DotNetFrameworkFailed1602=.NET Framework installation was cancelled. This instal
 DotNetFrameworkFailed1603=A fatal error occurred while installing the .NET Framework. Please fix the error, then run the installer again.
 DotNetFrameworkFailed5100=Your computer does not meet the requirements of the .NET Framework. Please consult the documentation.
 DotNetFrameworkFailedOther=The .NET Framework installer exited with an unexpected status code "%1". Please review any other messages shown by the installer to determine whether the installation completed successfully, and abort this installation and fix the problem if it did not.
-
-[Types]
-Name: "Steam"; Description: "Steam"
-Name: "Epic"; Description: "Epic Games"
-
-[Components]
-Name: Epic; Description: Epic games; Types: Epic
-Name: Steam; Description: Steam install; Types: Steam
 
 [Code]
 var

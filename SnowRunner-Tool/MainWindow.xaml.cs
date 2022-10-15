@@ -253,6 +253,8 @@ namespace SnowRunner_Tool
         private void RestoreBackup_Click(object sender, RoutedEventArgs e)
         {
             _logger.Information("Start restoring a backup");
+            fswGameBackup.EnableRaisingEvents=false;
+
             bool copyResult = false;
             if (BackupScheduler.IsActive())
             {
@@ -315,6 +317,7 @@ namespace SnowRunner_Tool
                     }
 
                     ReadBackups();
+                    fswGameBackup.EnableRaisingEvents = true;
                 }
             }
         }
@@ -814,11 +817,10 @@ namespace SnowRunner_Tool
             Process.Start("explorer.exe", lblBackupDirectory.Content.ToString());
         }
 
-        private async Task<string> PlatformSelection()
+        private void MnShowLogFiles_Click(object sender, RoutedEventArgs e)
         {
-            string answer = await MetroInputMessage("Select your platform", "I found SnowRunner from Epic Games and Steam. Which version do you want to use?", "Epic");
-            answer = "epic";
-            return answer;
+            string logfiledir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\SRT\";
+            Process.Start("explorer.exe", logfiledir);
         }
     }
 }

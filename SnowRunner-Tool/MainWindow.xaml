@@ -40,6 +40,14 @@
                         <iconPacks:PackIconMaterial Kind="Reload" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem x:Name="MnShowLogFiles"
+                          Header="Show _log files" 
+                          Click="MnShowLogFiles_Click"
+                          >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="StickerText" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem x:Name="MnExit" 
                           Header="_Exit"
                           Click="MnuExit_Click"

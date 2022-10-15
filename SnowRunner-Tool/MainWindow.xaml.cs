@@ -16,6 +16,10 @@ using System.Collections.Generic;
 using CommandLine;
 using System.Linq;
 using Serilog.Core;
+using System.Linq.Expressions;
+using Windows.Foundation.Metadata;
+using Microsoft.Xaml.Behaviors;
+using Winforms = System.Windows.Forms;
 
 namespace SnowRunner_Tool
 {
@@ -54,6 +58,46 @@ namespace SnowRunner_Tool
 
             _logger.Information("App started");
             _logger.Information("Version: " + AssemblyVersion);
+
+            if (Platform == null)
+            {
+                int result = DiscoverPaths.Autodiscover();
+                switch (result)
+                {
+                    case 0:
+                        // No platform found
+                        Winforms.MessageBox.Show("No saved games were found. You have to have at least one save game to use SnowRunner-Tool", "Platform detection");
+                        break;
+                    case 1:
+                        // Epic
+                        Platform = "epic";
+                        break;
+                    case 2:
+                        // Steam
+                        Platform = "steam";
+                        break;
+                    case 3:
+                        // Epic and Steam
+                        Winforms.MessageBoxManager.OK = "Epic";
+                        Winforms.MessageBoxManager.Cancel = "Steam";
+                        Winforms.MessageBoxManager.Register();
+                        var answer = Winforms.MessageBox.Show("Saved games from the Epic Games- and Steam- version of SnowRunner were found. Select the platform you want to use.", "SnowRunner platform", Winforms.MessageBoxButtons.OKCancel);
+                        Winforms.MessageBoxManager.Unregister();
+                        switch (answer)
+                        {
+                            case Winforms.DialogResult.OK:
+                                Platform = "epic";
+                                break;
+                            case Winforms.DialogResult.Cancel:
+                                Platform = "steam";
+                                break;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             _logger.Information("Platform: " + Platform);
 
             // Read directories from settings or find them automatically
@@ -767,6 +811,13 @@ namespace SnowRunner_Tool
         private void lblBackupDirectory_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Process.Start("explorer.exe", lblBackupDirectory.Content.ToString());
+        }
+
+        private async Task<string> PlatformSelection()
+        {
+            string answer = await MetroInputMessage("Select your platform", "I found SnowRunner from Epic Games and Steam. Which version do you want to use?", "Epic");
+            answer = "epic";
+            return answer;
         }
     }
 }

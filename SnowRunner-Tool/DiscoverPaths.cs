@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.Foundation.Metadata;
+using Windows.UI.Input.Inking.Preview;
 
 namespace SnowRunner_Tool
 {
@@ -18,7 +20,7 @@ namespace SnowRunner_Tool
         /// <returns></returns>
         public static string FindBaseDirectory(string platform)
         {
-            string p = string.Empty;
+            string p = null;
             if (platform == "steam")
             {
                 RegistryKey key;
@@ -81,6 +83,23 @@ namespace SnowRunner_Tool
                 return null;
             }
             return null;
+        }
+
+        public static int Autodiscover()
+        {
+            bool epic = false;
+            bool steam = false;
+            string p = null;
+            p = FindBaseDirectory("epic");
+            if (p != null) { epic=true; }
+            p = null;
+            p = FindBaseDirectory("steam");
+            if (p != null) { steam = true; }
+            if (epic==false && steam == false) { return 0; }
+            if (epic == true && steam == false) { return 1; }
+            if (epic == false && steam == true) { return 2; }
+            if (epic == true && steam == true) { return 3; }
+            return -1;
         }
     }
 }

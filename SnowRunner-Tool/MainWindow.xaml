@@ -351,13 +351,14 @@
             </DataGrid.ContextMenu>
         </DataGrid>
         <Button Content="Backup current save game" 
-                       HorizontalAlignment="Left" 
+                       HorizontalAlignment="Right" 
                        VerticalAlignment="Bottom" 
-                       Margin="20,0,0,20"
+                       Margin="0,0,30,20"
                        Width="215"
                        RenderTransformOrigin="-0.29,0.04"
                        Click="Button_Click"
                 />
+        <Label x:Name="lbTotalBackups" Grid.Column="1" Content="Label" Margin="0,90,20,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="148"/>
     </Grid>
 
 </Controls:MetroWindow>

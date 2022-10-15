@@ -9,6 +9,11 @@ namespace SnowRunner_Tool
 {
     internal class EpicParser
     {
+        /// <summary>
+        /// Discover save game directory (Epic Games)
+        /// </summary>
+        /// <param name="EpicBaseFolder"></param>
+        /// <returns></returns>
         public static string EpicSaveGameDirectory(string EpicBaseFolder)
         {
             foreach (string subdir in Directory.GetDirectories(EpicBaseFolder + @"\storage"))
@@ -21,15 +26,31 @@ namespace SnowRunner_Tool
             return null;
         }
 
+        /// <summary>
+        /// Migrate files from backup location of SRT < 1.0.5
+        /// </summary>
+        /// <param name="SRProfileDirectory"></param>
+        /// <param name="MyBackupDir"></param>
         public static void MoveOldBackupsToNewLocation(string SRProfileDirectory, string MyBackupDir)
         {
             string oldBackupLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\My Games\SnowRunner\SRToolBackup";
-            string[] backupFiles = Directory.GetFiles(oldBackupLocation);
-            foreach(string backupFile in backupFiles)
+            if (Directory.Exists(oldBackupLocation))
             {
+                string[] backupFiles = Directory.GetFiles(oldBackupLocation, "*.zip");
+                foreach (string backupFile in backupFiles)
+                {
+                    try
+                    {
+                        File.Move(backupFile, MyBackupDir + @"\" + Path.GetFileName(backupFile));
+                    }
+                    catch
+                    {
+                        // Something went wrong
+                    }
+                }
                 try
                 {
-                    File.Move(backupFile, MyBackupDir + Path.GetFileName(backupFile));
+                    Directory.Delete(oldBackupLocation, true);
                 }
                 catch
                 {

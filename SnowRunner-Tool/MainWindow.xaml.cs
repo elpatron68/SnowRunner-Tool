@@ -102,7 +102,7 @@ namespace SnowRunner_Tool
 
             // Read directories from settings or find them automatically
             SRProfile = DiscoverPaths.FindBaseDirectory(Platform);
-            MyBackupDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\SRToolBackup";
+            MyBackupDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\SRToolBackup\" + Platform;
 
             if (Platform == "epic")
             {
@@ -136,10 +136,6 @@ namespace SnowRunner_Tool
             _logger.Debug("Set Snowrunner backup directory: {SRBackupDir}", SRBackupDir);
             _logger.Debug("Set Snowrunner save game directory: {SRSaveGameDir}", SRProfile);
 
-            // Set value of some UI elements, load backup data
-            lblSnowRunnerPath.Content = SRProfile;
-            lblBackupDirectory.Content = MyBackupDir;
-
             // Fill Datagrid
             dgBackups.AutoGenerateColumns = true;
             ReadBackups();
@@ -158,6 +154,11 @@ namespace SnowRunner_Tool
             _logger.Information("Registering hotkey");
             _hook = new KeyboardHook();
             _hook.KeyDown += new KeyboardHook.HookEventHandler(OnHookKeyDown);
+
+            // Set value of some UI elements
+            lblSnowRunnerPath.Content = SRProfile;
+            lblBackupDirectory.Content = MyBackupDir;
+            lbTotalBackups.Content = "Total backups: " + dgBackups.Items.Count;
 
             // Check for update (Win8+)
             string os = OsInfo.GetOSInfo();

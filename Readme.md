@@ -13,7 +13,7 @@ The game *SnowRunner* is a pain! Don´t play it. But if you do, you will sooner 
 
 So, if you feel that restoring a saved game would sometimes be nice to have, here is the good news: The game creates backups from time to time, and it´s easy to restore them.
 
-The *SnowRunner-Tool* does nothing that you could not do in a manual way, but it makes it safe and easy and it´s looking nice.
+*SnowRunner-Tool* does nothing that you could not do in a manual way, but it makes it safe and easy and it´s looking beautiful.
 
 In addition, this tool lets you change (cheat) the money and experience points of the current game state. So, if you feel, you are broke, don´t hesitate to rob the bank!
 

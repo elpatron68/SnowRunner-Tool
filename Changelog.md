@@ -1,5 +1,15 @@
 ﻿# SnowRunner-Tool Changes
 
+## v1.0.5.1 (16.10.2022)
+- Fixed a bug which deleted backup files while moving old backups to new location at the first start of v1.0.5.0
+- Fixed a bug preventing the tool to start if Steam client is not installed
+- Made update check more resistant against failures
+
+## v1.0.5.0 (15.10.2022)
+- Add support for Steam platform
+- Remove PAK backup functionality
+- UI changes
+
 ## v1.0.4.0 (21.08.2022)
 
 - Option to restore a single save game slot (#1 - #4) or all slots from a backup

@@ -25,12 +25,19 @@ namespace SnowRunner_Tool
             {
                 RegistryKey key;
                 key = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
-                String value = (String)key.GetValue("SteamPath");
-                value = value.Replace("/", "\\");
-                value = value + @"\userdata";
-                if (Directory.Exists(value))
+                try
                 {
-                    p = SteamParser.SteamSaveGameDirectory(value);
+                    String value = (String)key.GetValue("SteamPath");
+                    value = value.Replace("/", "\\");
+                    value = value + @"\userdata";
+                    if (Directory.Exists(value))
+                    {
+                        p = SteamParser.SteamSaveGameDirectory(value);
+                    }
+                }
+                catch
+                {
+                    // Registry key not found
                 }
             }
             if (platform == "epic")

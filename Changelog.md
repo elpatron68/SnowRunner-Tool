@@ -1,5 +1,8 @@
 ﻿# SnowRunner-Tool Changes
 
+## v1.0.5.2 ()
+- Delete files to recycle bin
+
 ## v1.0.5.1 (16.10.2022)
 - Fixed a bug which deleted backup files while moving old backups to new location at the first start of v1.0.5.0
 - Fixed a bug preventing the tool to start if Steam client is not installed

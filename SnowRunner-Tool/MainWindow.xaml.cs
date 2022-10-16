@@ -633,7 +633,8 @@ namespace SnowRunner_Tool
                     string f = MyBackupDir + @"\" + ((Backup)row).BackupName;
                     try
                     {
-                        File.Delete(f);
+                        // File.Delete(f);
+                        NativeMethods.DeleteFileOrFolder(f);
                         changedList = true;
                     }
                     catch (IOException ex)

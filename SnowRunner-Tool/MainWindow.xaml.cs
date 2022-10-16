@@ -66,7 +66,10 @@ namespace SnowRunner_Tool
                 {
                     case 0:
                         // No platform found
-                        Winforms.MessageBox.Show("No saved games were found. You have to have at least one save game to use SnowRunner-Tool", "Platform detection");
+                        Winforms.MessageBox.Show("No saved games were found. You have to have at least one save game to use SnowRunner-Tool.\n\n" + 
+                            "Restart SnowRunner-Tool after you have saved the game at least once.", "Platform detection");
+                        // Close();
+                        Application.Current.Shutdown();
                         break;
                     case 1:
                         // Epic
@@ -81,7 +84,8 @@ namespace SnowRunner_Tool
                         Winforms.MessageBoxManager.OK = "Steam";
                         Winforms.MessageBoxManager.Cancel = "Epic Games";
                         Winforms.MessageBoxManager.Register();
-                        var answer = Winforms.MessageBox.Show("Saved games from the Epic Games- and Steam- version of SnowRunner were found. Select the platform you want to use.", "Select SnowRunner platform", Winforms.MessageBoxButtons.OKCancel);
+                        var answer = Winforms.MessageBox.Show("Saved games from the Epic Games- and Steam- version of SnowRunner were found.\n\n" + 
+                            "Select the platform you want to use.", "Select SnowRunner platform", Winforms.MessageBoxButtons.OKCancel);
                         Winforms.MessageBoxManager.Unregister();
                         switch (answer)
                         {
@@ -477,11 +481,19 @@ namespace SnowRunner_Tool
 
         private async void CheckUpdate()
         {
-            (int, string) r = await UpdateCheck.CheckGithubReleses(AssemblyVersion);
-            int result = r.Item1;
-            if (result > 0)
+            try
             {
-                ToastNote.Notify("Update available", "A new version of SnowRunner-Tool is available. See menu 'Help - Check for update' to download the latest version.");
+                (int, string) r = await UpdateCheck.CheckGithubReleses(AssemblyVersion);
+                int result = r.Item1;
+                if (result > 0)
+                {
+                    ToastNote.Notify("Update available", "A new version of SnowRunner-Tool is available. See menu 'Help - Check for update' to download the latest version.");
+                }
+            }
+            catch
+            {
+                _logger.Warning("Update check failed.");
+                // No internet connection
             }
         }
 
@@ -598,7 +610,7 @@ namespace SnowRunner_Tool
         }
 
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void BtnBackupCurrentSave_Click(object sender, RoutedEventArgs e)
         {
             _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "manual-bak");
             ReadBackups();
@@ -739,7 +751,10 @@ namespace SnowRunner_Tool
                 default:
                     break;
             }
-            fswGameBackup.EnableRaisingEvents = interval > 0;
+            if (Platform != null)
+            {
+                fswGameBackup.EnableRaisingEvents = interval > 0;
+            }
         }
 
         private void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)

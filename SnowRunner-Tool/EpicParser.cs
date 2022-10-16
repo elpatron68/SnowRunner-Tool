@@ -41,6 +41,10 @@ namespace SnowRunner_Tool
                 {
                     try
                     {
+                        if (!Directory.Exists(MyBackupDir))
+                        {
+                            Directory.CreateDirectory(MyBackupDir);
+                        }
                         File.Move(backupFile, MyBackupDir + @"\" + Path.GetFileName(backupFile));
                     }
                     catch

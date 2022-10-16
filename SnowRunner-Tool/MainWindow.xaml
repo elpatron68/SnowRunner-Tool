@@ -26,7 +26,7 @@
                 </MenuItem.Icon>
                 <MenuItem x:Name="MnBackupSaveGame"
                           Header="Backup _save game"
-                          Click="Button_Click"
+                          Click="BtnBackupCurrentSave_Click"
                           >
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="ContentSaveOutline" />
@@ -364,7 +364,7 @@
                        Margin="0,0,30,20"
                        Width="215"
                        RenderTransformOrigin="-0.29,0.04"
-                       Click="Button_Click"
+                       Click="BtnBackupCurrentSave_Click"
                 />
         <Label x:Name="lbTotalBackups" Grid.Column="1" Content="Label" Margin="0,90,20,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="148"/>
     </Grid>

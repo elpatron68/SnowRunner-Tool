@@ -10,7 +10,7 @@ namespace SnowRunner_Tool
 {
     class UpdateCheck
     {
-        private readonly ILogger _log = Log.ForContext<UpdateCheck>();
+        //private readonly ILogger _log = Log.ForContext<UpdateCheck>();
 
         public static async Task<(int, string)> CheckGithubReleses(string assemblyVersion)
         {
@@ -24,7 +24,7 @@ namespace SnowRunner_Tool
                 var thisVersion = new Version(assemblyVersion);
                 var latestVersion = new Version(latest);
                 int result = latestVersion.CompareTo(thisVersion);
-                Log.Debug("Updatecheck returned {UpdateCheckResult}", result);
+                //Log.Debug("Updatecheck returned {UpdateCheckResult}", result);
                 return (result, downloadUrl);
             }
             catch

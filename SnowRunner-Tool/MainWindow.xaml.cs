@@ -598,7 +598,7 @@ namespace SnowRunner_Tool
         }
 
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void BtnBackupCurrentSave_Click(object sender, RoutedEventArgs e)
         {
             _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "manual-bak");
             ReadBackups();

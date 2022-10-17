@@ -181,5 +181,10 @@ namespace SnowRunner_Tool
             }
             return returnPath;
         }
+
+        public static void CopySlotToOtherSlot(int slot1, int slot2, string SRProfile)
+        {
+
+        }
     }
 }

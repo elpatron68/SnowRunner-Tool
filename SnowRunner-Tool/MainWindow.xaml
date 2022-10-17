@@ -32,6 +32,91 @@
                         <iconPacks:PackIconMaterial Kind="ContentSaveOutline" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem x:Name="MnCopySaveGame"
+                          Header="_Copy save game"
+                          >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="ContentCopy" />
+                    </MenuItem.Icon>
+                    <MenuItem x:Name="MnCopySaveGame1"
+                          Header="from slot _1" 
+                          IsEnabled="False"
+                          >
+                        <MenuItem x:Name="MnCopySaveGame1To2"
+                          Header="to slot _2"
+                          IsEnabled="False"
+                          >
+                        </MenuItem>
+                        <MenuItem x:Name="MnCopySaveGame1To3"
+                          Header="to slot _3"
+                          IsEnabled="False"
+                          >
+                        </MenuItem>
+                        <MenuItem x:Name="MnCopySaveGame1To4"
+                          Header="to slot _4"
+                          IsEnabled="False"
+                          >
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem x:Name="MnCopySaveGame2"
+                          Header="from slot _2"
+                          >
+                        <MenuItem x:Name="MnCopySaveGame2To1"
+                          Header="to slot _1"
+                          IsEnabled="False"
+                          >
+                        </MenuItem>
+                        <MenuItem x:Name="MnCopySaveGame2To3"
+                          Header="to slot _3"
+                          IsEnabled="False"
+                          >
+                        </MenuItem>
+                        <MenuItem x:Name="MnCopySaveGame2To4"
+                          Header="to slot _4"
+                          IsEnabled="False"
+                          >
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem x:Name="MnCopySaveGame3"
+                          Header="from slot _3"
+                          >
+                        <MenuItem x:Name="MnCopySaveGame3To1"
+                          Header="to slot _1"
+                          IsEnabled="False"
+                          >
+                        </MenuItem>
+                        <MenuItem x:Name="MnCopySaveGame3To2"
+                          Header="to slot _2"
+                          IsEnabled="False"
+                          >
+                        </MenuItem>
+                        <MenuItem x:Name="MnCopySaveGame3To4"
+                          Header="to slot _4"
+                          IsEnabled="False"
+                          >
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem x:Name="MnCopySaveGame4"
+                          Header="from slot _4"
+                          >
+                        <MenuItem x:Name="MnCopySaveGame4To1"
+                          Header="to slot _1"
+                          IsEnabled="False"
+                          >
+                        </MenuItem>
+                        <MenuItem x:Name="MnCopySaveGame4To2"
+                          Header="to slot _2"
+                          IsEnabled="False"
+                          >
+                        </MenuItem>
+                        <MenuItem x:Name="MnCopySaveGame4To3"
+                          Header="to slot _3"
+                          IsEnabled="False"
+                          >
+                        </MenuItem>
+                    </MenuItem>
+
+                </MenuItem>
                 <MenuItem x:Name="MnReload" 
                           Header="_Reload backup table"
                           Click="MnuReload_Click"

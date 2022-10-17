@@ -633,7 +633,6 @@ namespace SnowRunner_Tool
                     string f = MyBackupDir + @"\" + ((Backup)row).BackupName;
                     try
                     {
-                        // File.Delete(f);
                         NativeMethods.DeleteFileOrFolder(f);
                         changedList = true;
                     }
@@ -763,11 +762,11 @@ namespace SnowRunner_Tool
             //Wait a second, just to be sure
             Thread.Sleep(1000);
             autoSaveCounter += 1;
-            ReadBackups();
             if (autoSaveCounter == Settings.Default.autobackupinterval)
             {
                 autoSaveCounter = 0;
                 _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "auto-bak");
+                ReadBackups();
                 _logger.Debug("FSW-backup created");
             }
         }

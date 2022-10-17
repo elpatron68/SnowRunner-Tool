@@ -33,6 +33,8 @@ or all slots)
 - Rename backup files from the UI
 - Cheat the amount of money you have in your pocket
 - Cheat your experience points (XP)
+- Copy one save game to another
+
 ![SnowRunner-Tool](images/SnowRunner-Tool_Screenshot.png)
 
 ## Installation
@@ -68,6 +70,16 @@ After the start, *SnowRunner-Tool* discovers if you own the Steam- or Epic Games
    the button *Backup current save game*.   
 2. Hit the function key `F2` for an instant backup while you play the game without leaving the game.
 3. Let the tool create *regular backups* in the background while playing the game.
+
+### Copy a save game slot to another
+
+Copying a save game slot to another one may be useful. E.g. I use it if I want to play my single player fleet in a multiplayer game hosted by a friend.
+
+To copy a save game slot to another, open the *File* menu and select *Copy save game*. Select a game slot as source and navigate to the submenu of the destination slot you want it to be copied to:
+
+![Copy Save Game](images/Copy_save_game.png)
+
+Note, that only existing game slot are selectable as source, and only empty slots as destination. If all destination slots are greyed out, use the game´s own function to delete a save game slot prior to copying.
 
 #### Notes
 

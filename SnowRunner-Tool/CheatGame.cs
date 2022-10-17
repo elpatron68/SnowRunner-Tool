@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using ControlzEx.Standard;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -230,7 +231,7 @@ namespace SnowRunner_Tool
             destinationfile = Path.Combine(SRProfile, filename);
 
             string text = File.ReadAllText(sourcefile);
-            text = text.Replace(oldtext, newtext);
+            text = Regex.Replace(text, oldtext, newtext, RegexOptions.IgnoreCase);
             File.WriteAllText(Path.Combine(SRProfile, destinationfile), text);
         }
     }

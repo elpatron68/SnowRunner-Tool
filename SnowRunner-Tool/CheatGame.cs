@@ -189,7 +189,7 @@ namespace SnowRunner_Tool
         /// <param name="slot1"></param>
         /// <param name="slot2"></param>
         /// <param name="SRProfile"></param>
-        public static void CopySlotToOtherSlot(int slot1, int slot2, string SRProfile, string platform)
+        public static bool CopySlotToOtherSlot(int slot1, int slot2, string SRProfile, string platform)
         {
             string sourcefile;
             string destinationfile;
@@ -208,7 +208,7 @@ namespace SnowRunner_Tool
 
             if (slot1 > 1)
             {
-                filename = string.Format("CompleteSave{0}.{1}", (slot1-1).ToString(), extension);
+                filename = string.Format("CompleteSave{0}.{1}", (slot1 - 1).ToString(), extension);
                 oldtext = string.Format("CompleteSave{0}", (slot1 - 1).ToString());
             }
             else
@@ -232,7 +232,15 @@ namespace SnowRunner_Tool
 
             string text = File.ReadAllText(sourcefile);
             text = Regex.Replace(text, oldtext, newtext, RegexOptions.IgnoreCase);
-            File.WriteAllText(Path.Combine(SRProfile, destinationfile), text);
+            try
+            {
+                File.WriteAllText(Path.Combine(SRProfile, destinationfile), text);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

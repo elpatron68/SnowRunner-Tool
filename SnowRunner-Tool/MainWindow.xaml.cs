@@ -235,22 +235,38 @@ namespace SnowRunner_Tool
 
             saveFile = SRProfile + @"\CompleteSave." + SavegameExtension;
             saveGameExists = File.Exists(saveFile);
-            MnMoneyCheat1.IsEnabled = saveGameExists; 
+            MnMoneyCheat1.IsEnabled = saveGameExists;
+            MnCopySaveGame1.IsEnabled = saveGameExists;
+            MnCopySaveGame2To1.IsEnabled = !saveGameExists;
+            MnCopySaveGame3To1.IsEnabled = !saveGameExists;
+            MnCopySaveGame4To1.IsEnabled = !saveGameExists;
             MnXp1.IsEnabled = saveGameExists;
 
             saveFile = SRProfile + @"\CompleteSave1." + SavegameExtension; ;
             saveGameExists = File.Exists(saveFile);
             MnMoneyCheat2.IsEnabled = saveGameExists;
+            MnCopySaveGame2.IsEnabled = saveGameExists;
+            MnCopySaveGame1To2.IsEnabled = !saveGameExists;
+            MnCopySaveGame3To2.IsEnabled = !saveGameExists;
+            MnCopySaveGame4To2.IsEnabled = !saveGameExists;
             MnXp2.IsEnabled = saveGameExists;
 
             saveFile = SRProfile + @"\CompleteSave2." + SavegameExtension; ;
             saveGameExists = File.Exists(saveFile);
             MnMoneyCheat3.IsEnabled = saveGameExists;
+            MnCopySaveGame3.IsEnabled = saveGameExists;
+            MnCopySaveGame1To3.IsEnabled = !saveGameExists;
+            MnCopySaveGame2To3.IsEnabled = !saveGameExists;
+            MnCopySaveGame4To3.IsEnabled = !saveGameExists;
             MnXp3.IsEnabled = saveGameExists;
 
             saveFile = SRProfile + @"\CompleteSave3." + SavegameExtension; ;
             saveGameExists = File.Exists(saveFile);
             MnMoneyCheat4.IsEnabled = saveGameExists;
+            MnCopySaveGame4.IsEnabled = saveGameExists;
+            MnCopySaveGame1To4.IsEnabled = !saveGameExists;
+            MnCopySaveGame2To4.IsEnabled = !saveGameExists;
+            MnCopySaveGame3To4.IsEnabled = !saveGameExists;
             MnXp4.IsEnabled = saveGameExists;
         }
 
@@ -836,6 +852,84 @@ namespace SnowRunner_Tool
         {
             string logfiledir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\SRT\";
             Process.Start("explorer.exe", logfiledir);
+        }
+
+        private void MnCopySaveGame1To2_Click(object sender, RoutedEventArgs e)
+        {
+            CheatGame.CopySlotToOtherSlot(1, 2, SRProfile, Platform);
+            CopyComplete(1, 2);
+        }
+
+        private void MnCopySaveGame1To3_Click(object sender, RoutedEventArgs e)
+        {
+            CheatGame.CopySlotToOtherSlot(1, 3, SRProfile, Platform);
+            CopyComplete(1, 3);
+        }
+
+        private void MnCopySaveGame1To4_Click(object sender, RoutedEventArgs e)
+        {
+            CheatGame.CopySlotToOtherSlot(1, 4, SRProfile, Platform);
+            CopyComplete(1, 4);
+        }
+
+        private void MnCopySaveGame2To1_Click(object sender, RoutedEventArgs e)
+        {
+            CheatGame.CopySlotToOtherSlot(2, 1, SRProfile, Platform);
+            CopyComplete(2, 1);
+        }
+
+        private void MnCopySaveGame2To3_Click(object sender, RoutedEventArgs e)
+        {
+            CheatGame.CopySlotToOtherSlot(2, 3, SRProfile, Platform);
+            CopyComplete(2, 3);
+        }
+
+        private void MnCopySaveGame2To4_Click(object sender, RoutedEventArgs e)
+        {
+            CheatGame.CopySlotToOtherSlot(2, 4, SRProfile, Platform);
+            CopyComplete(2, 4);
+        }
+
+        private void MnCopySaveGame3To1_Click(object sender, RoutedEventArgs e)
+        {
+            CheatGame.CopySlotToOtherSlot(3, 1, SRProfile, Platform);
+            CopyComplete(3, 1);
+        }
+
+        private void MnCopySaveGame3To2_Click(object sender, RoutedEventArgs e)
+        {
+            CheatGame.CopySlotToOtherSlot(3, 2, SRProfile, Platform);
+            CopyComplete(3, 2);
+        }
+
+        private void MnCopySaveGame3To4_Click(object sender, RoutedEventArgs e)
+        {
+            CheatGame.CopySlotToOtherSlot(3, 4, SRProfile, Platform);
+            CopyComplete(3, 4);
+        }
+
+        private void MnCopySaveGame4To1_Click(object sender, RoutedEventArgs e)
+        {
+            CheatGame.CopySlotToOtherSlot(4, 1, SRProfile, Platform);
+            CopyComplete(4, 1);
+        }
+
+        private void MnCopySaveGame4To2_Click(object sender, RoutedEventArgs e)
+        {
+            CheatGame.CopySlotToOtherSlot(4, 2, SRProfile, Platform);
+            CopyComplete(4, 2);
+        }
+
+        private void MnCopySaveGame4To3_Click(object sender, RoutedEventArgs e)
+        {
+            CheatGame.CopySlotToOtherSlot(4, 3, SRProfile, Platform);
+            CopyComplete(4, 3);
+        }
+
+        private void CopyComplete(int slot1, int slot2)
+        {
+            _ = MetroMessage("Save game copied", string.Format("Save game slot {0} has been copied to save game slot {1}.", 
+                slot1.ToString(), slot2.ToString()));
         }
     }
 }

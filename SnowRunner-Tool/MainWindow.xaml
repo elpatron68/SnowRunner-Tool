@@ -44,17 +44,20 @@
                           >
                         <MenuItem x:Name="MnCopySaveGame1To2"
                           Header="to slot _2"
-                          IsEnabled="False"
+                          IsEnabled="False" 
+                          Click="MnCopySaveGame1To2_Click"
                           >
                         </MenuItem>
                         <MenuItem x:Name="MnCopySaveGame1To3"
                           Header="to slot _3"
-                          IsEnabled="False"
+                          IsEnabled="False" 
+                          Click="MnCopySaveGame1To3_Click"
                           >
                         </MenuItem>
                         <MenuItem x:Name="MnCopySaveGame1To4"
                           Header="to slot _4"
-                          IsEnabled="False"
+                          IsEnabled="False" 
+                          Click="MnCopySaveGame1To4_Click"
                           >
                         </MenuItem>
                     </MenuItem>
@@ -63,17 +66,20 @@
                           >
                         <MenuItem x:Name="MnCopySaveGame2To1"
                           Header="to slot _1"
-                          IsEnabled="False"
+                          IsEnabled="False" 
+                          Click="MnCopySaveGame2To1_Click"
                           >
                         </MenuItem>
                         <MenuItem x:Name="MnCopySaveGame2To3"
                           Header="to slot _3"
-                          IsEnabled="False"
+                          IsEnabled="False" 
+                          Click="MnCopySaveGame2To3_Click"
                           >
                         </MenuItem>
                         <MenuItem x:Name="MnCopySaveGame2To4"
                           Header="to slot _4"
-                          IsEnabled="False"
+                          IsEnabled="False" 
+                          Click="MnCopySaveGame2To4_Click"
                           >
                         </MenuItem>
                     </MenuItem>
@@ -82,17 +88,20 @@
                           >
                         <MenuItem x:Name="MnCopySaveGame3To1"
                           Header="to slot _1"
-                          IsEnabled="False"
+                          IsEnabled="False" 
+                          Click="MnCopySaveGame3To1_Click"
                           >
                         </MenuItem>
                         <MenuItem x:Name="MnCopySaveGame3To2"
                           Header="to slot _2"
-                          IsEnabled="False"
+                          IsEnabled="False" 
+                          Click="MnCopySaveGame3To2_Click"
                           >
                         </MenuItem>
                         <MenuItem x:Name="MnCopySaveGame3To4"
                           Header="to slot _4"
-                          IsEnabled="False"
+                          IsEnabled="False" 
+                          Click="MnCopySaveGame3To4_Click"
                           >
                         </MenuItem>
                     </MenuItem>
@@ -101,17 +110,20 @@
                           >
                         <MenuItem x:Name="MnCopySaveGame4To1"
                           Header="to slot _1"
-                          IsEnabled="False"
+                          IsEnabled="False" 
+                          Click="MnCopySaveGame4To1_Click"
                           >
                         </MenuItem>
                         <MenuItem x:Name="MnCopySaveGame4To2"
                           Header="to slot _2"
-                          IsEnabled="False"
+                          IsEnabled="False" 
+                          Click="MnCopySaveGame4To2_Click"
                           >
                         </MenuItem>
                         <MenuItem x:Name="MnCopySaveGame4To3"
                           Header="to slot _3"
-                          IsEnabled="False"
+                          IsEnabled="False" 
+                          Click="MnCopySaveGame4To3_Click"
                           >
                         </MenuItem>
                     </MenuItem>

@@ -182,9 +182,56 @@ namespace SnowRunner_Tool
             return returnPath;
         }
 
-        public static void CopySlotToOtherSlot(int slot1, int slot2, string SRProfile)
+        /// <summary>
+        /// Copy a save game slot to another. 1-based integer.
+        /// </summary>
+        /// <param name="slot1"></param>
+        /// <param name="slot2"></param>
+        /// <param name="SRProfile"></param>
+        public static void CopySlotToOtherSlot(int slot1, int slot2, string SRProfile, string platform)
         {
+            string sourcefile;
+            string destinationfile;
+            string filename;
+            string oldtext;
+            string newtext;
+            string extension;
+            if (platform == "steam")
+            {
+                extension = "cfg";
+            }
+            else
+            {
+                extension = "dat";
+            }
 
+            if (slot1 > 1)
+            {
+                filename = string.Format("CompleteSave{0}.{1}", (slot1-1).ToString(), extension);
+                oldtext = string.Format("CompleteSave{0}", (slot1 - 1).ToString());
+            }
+            else
+            {
+                filename = string.Format("CompleteSave.{0}", extension);
+                oldtext = "CompleteSave";
+            }
+            sourcefile = Path.Combine(SRProfile, filename);
+            
+            if (slot2 > 1)
+            {
+                filename = string.Format("CompleteSave{0}.{1}", (slot2 - 1).ToString(), extension);
+                newtext = string.Format("CompleteSave{0}", (slot2 - 1).ToString());
+            }
+            else
+            {
+                filename = string.Format("CompleteSave.{0}", extension);
+                newtext = "CompleteSave";
+            }
+            destinationfile = Path.Combine(SRProfile, filename);
+
+            string text = File.ReadAllText(sourcefile);
+            text = text.Replace(oldtext, newtext);
+            File.WriteAllText(Path.Combine(SRProfile, destinationfile), text);
         }
     }
 }

@@ -184,7 +184,7 @@ namespace SnowRunner_Tool
         }
 
         /// <summary>
-        /// Copy a save game slot to another. 1-based integer.
+        /// Copy a save game slot to another. Slots are 1-based integer.
         /// </summary>
         /// <param name="slot1"></param>
         /// <param name="slot2"></param>

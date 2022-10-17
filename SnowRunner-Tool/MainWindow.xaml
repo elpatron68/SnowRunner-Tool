@@ -115,7 +115,6 @@
                           >
                         </MenuItem>
                     </MenuItem>
-
                 </MenuItem>
                 <MenuItem x:Name="MnReload" 
                           Header="_Reload backup table"

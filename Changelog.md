@@ -1,6 +1,6 @@
 ﻿# SnowRunner-Tool Changes
 
-## v1.0.5.2 ()
+## v1.0.5.2 (23.10.2022)
 - Delete files using system´s recycle bin
 - Copy a save game slot to another (empty) one
 

@@ -857,76 +857,76 @@ namespace SnowRunner_Tool
         private void MnCopySaveGame1To2_Click(object sender, RoutedEventArgs e)
         {
             bool result = CheatGame.CopySlotToOtherSlot(1, 2, SRProfile, Platform);
-            CopyComplete(1, 2, result);
+            CopyFinishMessage(1, 2, result);
         }
 
         private void MnCopySaveGame1To3_Click(object sender, RoutedEventArgs e)
         {
             bool result = CheatGame.CopySlotToOtherSlot(1, 3, SRProfile, Platform);
-            CopyComplete(1, 3, result);
+            CopyFinishMessage(1, 3, result);
         }
 
         private void MnCopySaveGame1To4_Click(object sender, RoutedEventArgs e)
         {
             bool result = CheatGame.CopySlotToOtherSlot(1, 4, SRProfile, Platform);
-            CopyComplete(1, 4, result);
+            CopyFinishMessage(1, 4, result);
         }
 
         private void MnCopySaveGame2To1_Click(object sender, RoutedEventArgs e)
         {
             bool result = CheatGame.CopySlotToOtherSlot(2, 1, SRProfile, Platform);
-            CopyComplete(2, 1, result);
+            CopyFinishMessage(2, 1, result);
         }
 
         private void MnCopySaveGame2To3_Click(object sender, RoutedEventArgs e)
         {
             bool result = CheatGame.CopySlotToOtherSlot(2, 3, SRProfile, Platform);
-            CopyComplete(2, 3, result);
+            CopyFinishMessage(2, 3, result);
         }
 
         private void MnCopySaveGame2To4_Click(object sender, RoutedEventArgs e)
         {
             bool result = CheatGame.CopySlotToOtherSlot(2, 4, SRProfile, Platform);
-            CopyComplete(2, 4, result);
+            CopyFinishMessage(2, 4, result);
         }
 
         private void MnCopySaveGame3To1_Click(object sender, RoutedEventArgs e)
         {
             bool result = CheatGame.CopySlotToOtherSlot(3, 1, SRProfile, Platform);
-            CopyComplete(3, 1, result);
+            CopyFinishMessage(3, 1, result);
         }
 
         private void MnCopySaveGame3To2_Click(object sender, RoutedEventArgs e)
         {
             bool result = CheatGame.CopySlotToOtherSlot(3, 2, SRProfile, Platform);
-            CopyComplete(3, 2, result);
+            CopyFinishMessage(3, 2, result);
         }
 
         private void MnCopySaveGame3To4_Click(object sender, RoutedEventArgs e)
         {
             bool result = CheatGame.CopySlotToOtherSlot(3, 4, SRProfile, Platform);
-            CopyComplete(3, 4, result);
+            CopyFinishMessage(3, 4, result);
         }
 
         private void MnCopySaveGame4To1_Click(object sender, RoutedEventArgs e)
         {
             bool result = CheatGame.CopySlotToOtherSlot(4, 1, SRProfile, Platform);
-            CopyComplete(4, 1, result);
+            CopyFinishMessage(4, 1, result);
         }
 
         private void MnCopySaveGame4To2_Click(object sender, RoutedEventArgs e)
         {
             bool result = CheatGame.CopySlotToOtherSlot(4, 2, SRProfile, Platform);
-            CopyComplete(4, 2, result);
+            CopyFinishMessage(4, 2, result);
         }
 
         private void MnCopySaveGame4To3_Click(object sender, RoutedEventArgs e)
         {
             bool result = CheatGame.CopySlotToOtherSlot(4, 3, SRProfile, Platform);
-            CopyComplete(4, 3, result);
+            CopyFinishMessage(4, 3, result);
         }
 
-        private void CopyComplete(int slot1, int slot2, bool result)
+        private void CopyFinishMessage(int slot1, int slot2, bool result)
         {
             _logger.Information(string.Format("Save game copy: Source: {0}, destination: {1}, result: {2}",
                 slot1.ToString(), slot2.ToString(), result.ToString()));

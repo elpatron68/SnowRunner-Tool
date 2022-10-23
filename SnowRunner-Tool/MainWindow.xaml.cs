@@ -235,22 +235,38 @@ namespace SnowRunner_Tool
 
             saveFile = SRProfile + @"\CompleteSave." + SavegameExtension;
             saveGameExists = File.Exists(saveFile);
-            MnMoneyCheat1.IsEnabled = saveGameExists; 
+            MnMoneyCheat1.IsEnabled = saveGameExists;
+            MnCopySaveGame1.IsEnabled = saveGameExists;
+            MnCopySaveGame2To1.IsEnabled = !saveGameExists;
+            MnCopySaveGame3To1.IsEnabled = !saveGameExists;
+            MnCopySaveGame4To1.IsEnabled = !saveGameExists;
             MnXp1.IsEnabled = saveGameExists;
 
             saveFile = SRProfile + @"\CompleteSave1." + SavegameExtension; ;
             saveGameExists = File.Exists(saveFile);
             MnMoneyCheat2.IsEnabled = saveGameExists;
+            MnCopySaveGame2.IsEnabled = saveGameExists;
+            MnCopySaveGame1To2.IsEnabled = !saveGameExists;
+            MnCopySaveGame3To2.IsEnabled = !saveGameExists;
+            MnCopySaveGame4To2.IsEnabled = !saveGameExists;
             MnXp2.IsEnabled = saveGameExists;
 
             saveFile = SRProfile + @"\CompleteSave2." + SavegameExtension; ;
             saveGameExists = File.Exists(saveFile);
             MnMoneyCheat3.IsEnabled = saveGameExists;
+            MnCopySaveGame3.IsEnabled = saveGameExists;
+            MnCopySaveGame1To3.IsEnabled = !saveGameExists;
+            MnCopySaveGame2To3.IsEnabled = !saveGameExists;
+            MnCopySaveGame4To3.IsEnabled = !saveGameExists;
             MnXp3.IsEnabled = saveGameExists;
 
             saveFile = SRProfile + @"\CompleteSave3." + SavegameExtension; ;
             saveGameExists = File.Exists(saveFile);
             MnMoneyCheat4.IsEnabled = saveGameExists;
+            MnCopySaveGame4.IsEnabled = saveGameExists;
+            MnCopySaveGame1To4.IsEnabled = !saveGameExists;
+            MnCopySaveGame2To4.IsEnabled = !saveGameExists;
+            MnCopySaveGame3To4.IsEnabled = !saveGameExists;
             MnXp4.IsEnabled = saveGameExists;
         }
 
@@ -633,7 +649,7 @@ namespace SnowRunner_Tool
                     string f = MyBackupDir + @"\" + ((Backup)row).BackupName;
                     try
                     {
-                        File.Delete(f);
+                        NativeMethods.DeleteFileOrFolder(f);
                         changedList = true;
                     }
                     catch (IOException ex)
@@ -762,11 +778,11 @@ namespace SnowRunner_Tool
             //Wait a second, just to be sure
             Thread.Sleep(1000);
             autoSaveCounter += 1;
-            ReadBackups();
             if (autoSaveCounter == Settings.Default.autobackupinterval)
             {
                 autoSaveCounter = 0;
                 _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "auto-bak");
+                ReadBackups();
                 _logger.Debug("FSW-backup created");
             }
         }
@@ -836,6 +852,95 @@ namespace SnowRunner_Tool
         {
             string logfiledir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\SRT\";
             Process.Start("explorer.exe", logfiledir);
+        }
+
+        private void MnCopySaveGame1To2_Click(object sender, RoutedEventArgs e)
+        {
+            bool result = CheatGame.CopySlotToOtherSlot(1, 2, SRProfile, Platform);
+            CopyFinishMessage(1, 2, result);
+        }
+
+        private void MnCopySaveGame1To3_Click(object sender, RoutedEventArgs e)
+        {
+            bool result = CheatGame.CopySlotToOtherSlot(1, 3, SRProfile, Platform);
+            CopyFinishMessage(1, 3, result);
+        }
+
+        private void MnCopySaveGame1To4_Click(object sender, RoutedEventArgs e)
+        {
+            bool result = CheatGame.CopySlotToOtherSlot(1, 4, SRProfile, Platform);
+            CopyFinishMessage(1, 4, result);
+        }
+
+        private void MnCopySaveGame2To1_Click(object sender, RoutedEventArgs e)
+        {
+            bool result = CheatGame.CopySlotToOtherSlot(2, 1, SRProfile, Platform);
+            CopyFinishMessage(2, 1, result);
+        }
+
+        private void MnCopySaveGame2To3_Click(object sender, RoutedEventArgs e)
+        {
+            bool result = CheatGame.CopySlotToOtherSlot(2, 3, SRProfile, Platform);
+            CopyFinishMessage(2, 3, result);
+        }
+
+        private void MnCopySaveGame2To4_Click(object sender, RoutedEventArgs e)
+        {
+            bool result = CheatGame.CopySlotToOtherSlot(2, 4, SRProfile, Platform);
+            CopyFinishMessage(2, 4, result);
+        }
+
+        private void MnCopySaveGame3To1_Click(object sender, RoutedEventArgs e)
+        {
+            bool result = CheatGame.CopySlotToOtherSlot(3, 1, SRProfile, Platform);
+            CopyFinishMessage(3, 1, result);
+        }
+
+        private void MnCopySaveGame3To2_Click(object sender, RoutedEventArgs e)
+        {
+            bool result = CheatGame.CopySlotToOtherSlot(3, 2, SRProfile, Platform);
+            CopyFinishMessage(3, 2, result);
+        }
+
+        private void MnCopySaveGame3To4_Click(object sender, RoutedEventArgs e)
+        {
+            bool result = CheatGame.CopySlotToOtherSlot(3, 4, SRProfile, Platform);
+            CopyFinishMessage(3, 4, result);
+        }
+
+        private void MnCopySaveGame4To1_Click(object sender, RoutedEventArgs e)
+        {
+            bool result = CheatGame.CopySlotToOtherSlot(4, 1, SRProfile, Platform);
+            CopyFinishMessage(4, 1, result);
+        }
+
+        private void MnCopySaveGame4To2_Click(object sender, RoutedEventArgs e)
+        {
+            bool result = CheatGame.CopySlotToOtherSlot(4, 2, SRProfile, Platform);
+            CopyFinishMessage(4, 2, result);
+        }
+
+        private void MnCopySaveGame4To3_Click(object sender, RoutedEventArgs e)
+        {
+            bool result = CheatGame.CopySlotToOtherSlot(4, 3, SRProfile, Platform);
+            CopyFinishMessage(4, 3, result);
+        }
+
+        private void CopyFinishMessage(int slot1, int slot2, bool result)
+        {
+            _logger.Information(string.Format("Save game copy: Source: {0}, destination: {1}, result: {2}",
+                slot1.ToString(), slot2.ToString(), result.ToString()));
+
+            if (result)
+            {
+                _ = MetroMessage("Save game copied", string.Format("Save game slot {0} has been copied to save game slot {1}.",
+                    slot1.ToString(), slot2.ToString()));
+            }
+            else
+            {
+                _ = MetroMessage("Save game copy failed", string.Format("Copying save game slot {0} to save game slot {1} failed.",
+                    slot1.ToString(), slot2.ToString()));
+            }
         }
     }
 }

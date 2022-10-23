@@ -232,6 +232,7 @@
     <Compile Include="EpicParser.cs" />
     <Compile Include="KeyboardHook.cs" />
     <Compile Include="MessageBoxManager.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="OsInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

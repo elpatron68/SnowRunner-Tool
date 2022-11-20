@@ -1,9 +1,4 @@
-﻿![Epic Games](https://img.shields.io/badge/epicgames-%23313131.svg?style=for-the-badge&logo=epicgames&logoColor=white)
-![Steam](https://img.shields.io/badge/steam-%23000000.svg?style=for-the-badge&logo=steam&logoColor=white)
-![.Net](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white)
-![Visual Studio](https://img.shields.io/badge/Visual%20Studio-5C2D91.svg?style=for-the-badge&logo=visual-studio&logoColor=white)
-![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=c-sharp&logoColor=white)
-	![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+﻿![Epic Games](https://img.shields.io/badge/epicgames-%23313131.svg?style=for-the-badge&logo=epicgames&logoColor=white)![Steam](https://img.shields.io/badge/steam-%23000000.svg?style=for-the-badge&logo=steam&logoColor=white)![.Net](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white)![Visual Studio](https://img.shields.io/badge/Visual%20Studio-5C2D91.svg?style=for-the-badge&logo=visual-studio&logoColor=white)![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=c-sharp&logoColor=white)![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 
 [![Github All Releases](https://img.shields.io/github/downloads/elpatron68/SnowRunner-Tool/total.svg)]() 
 
@@ -13,7 +8,7 @@ The game *SnowRunner* is a pain! Don´t play it. But if you do, you will sooner 
 
 So, if you feel that restoring a saved game would sometimes be nice to have, here is the good news: The game creates backups from time to time, and it´s easy to restore them.
 
-*SnowRunner-Tool* does nothing that you could not do in a manual way, but it makes it safe and easy and it´s looking beautiful.
+*SnowRunner-Tool* does nothing that you could not do in a manual way by editing/copying text files, but it makes it safe and easy and it´s looking beautiful.
 
 In addition, this tool lets you change (cheat) the money and experience points of the current game state. So, if you feel, you are broke, don´t hesitate to rob the bank!
 
@@ -21,7 +16,7 @@ In addition, this tool lets you change (cheat) the money and experience points o
 
 ## Features
 
-*SnowRunner-Tool* Features in details
+*SnowRunner-Tool* - feature list
 
 - Create backups of the current game state and list them in a fancy style
 - Supports *Epic Games* **and** *Steam* version of the game
@@ -85,11 +80,13 @@ Note, that only existing game slot are selectable as source, and only empty slot
 
 - **Backups can usually be created while the game is running**. If you have to master a risky maneuver, just switch to your *SnowRunner-Tool* and make a backup before you fail. Or even easier: Let the tool run in the background and use the instant-hotkey-backup (`F2`).
 - The `F2` backup function only works while the game is running!
-- Activate *regular backups* in the settings menu to automatically let the tool create backups in the background.
+- Activate *regular backups* in the settings menu to automatically let the tool create scheduled backups in the background.
 
 ### Menu Cheats
 
 Set the amount of money or experience points you´d like to have by opening the *Cheats* menu. Before changing the money or XP points in your save game file, another fresh backup will be made.
+
+You can edit money/XP in every of the four save game slots (if a saved game exists).
 
 ![Money cheat](images/SnowRunner-Tool_MoneyCheat.png)
 
@@ -101,8 +98,8 @@ by the game itself: After the game saved it´s state (when a "saving" message is
 2, 5 or 10 "minutes" - or exact: *cycles*. The actual time intervals depend on the intervals, the game saves 
 it´s state. 
 
-They vary from ~ 20 seconds to ~ 60 seconds. So, if you activate an interval of 5 minutes, the game state is 
-backuped every fifth time the game itself saves, which usually results in one backup per less than 5 minutes. 
+They vary from ~ 30 seconds to ~ 120 seconds. So, if you activate an interval of 5 minutes, the game state is 
+backup-ed every fifth time the game itself saves, which usually results in one backup per less than 5 minutes. 
 You have to reload the backup list (*File* - *Reload backup table*) or restart *SnowRunner-Tool* to see these 
 backups appear in the list.
 
@@ -131,8 +128,8 @@ Pretty self-explanatory:
 * After you have restored a saved game from a backup or after altering money or XP, the *Epic Launcher* detects 
   locally changed files at the next game start. You are asked if you want to upload local files into the cloud or 
   download cloud files to your local disk. Choose *Upload local files*. Steam asks a similar question, see screenshot.
-![Epic Launcher](images/epic-cloud.png)
-![Steam Conflict](images/steam-cloud.png)
+  ![Epic Launcher](images/epic-cloud.png)
+  ![Steam Conflict](images/steam-cloud.png)
 * It is not possible to change money or XP while the game is running.
 
 ## Advanced, Troubleshooting
@@ -173,10 +170,9 @@ Version 2, December 2004
    TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION 
 
   0. You just DO WHAT THE FUCK YOU WANT TO.
- ```
- 
+```
+
  ## Third party Licenses
- 
+
  - Icons from https://material.io/ ([Apache License](https://github.com/google/material-design-icons/blob/master/LICENSE))
  - WPF theme from https://mahapps.com/ ([MIT License](https://github.com/MahApps/MahApps.Metro/blob/develop/LICENSE))
- 

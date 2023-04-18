@@ -202,7 +202,8 @@ namespace SnowRunner_Tool
                             sgMoney[i] = CheatGame.GetMoney(backupSaveGameFile, i + 1, SavegameExtension);
                             sgXp[i] = CheatGame.GetXp(backupSaveGameFile, i + 1, SavegameExtension);
                         }
-                        backups.Add(new Backup() { BackupName = dir, 
+                        backups.Add(new Backup() { 
+                            BackupName = dir, 
                             Timestamp = timestamp, 
                             Type = "Game-Backup", 
                             MoneySlot1 = sgMoney[0], 

@@ -48,7 +48,7 @@ namespace SnowRunner_Tool
             _logger = logger;
             // Command line options
             Parser.Default.ParseArguments<Options>(args)
-                   .WithParsed<Options>(o =>
+                   .WithParsed(o =>
                    {
                        Platform = o.Platform.ToLower();
                    });
@@ -180,7 +180,7 @@ namespace SnowRunner_Tool
         /// </summary>
         private void ReadBackups()
         {
-            _logger.Information("Reading list of existin backups");
+            _logger.Information("Reading list of existing backups");
             List<Backup> allBackups = new List<Backup>();
             // Add SnowRunner backup directories
             try

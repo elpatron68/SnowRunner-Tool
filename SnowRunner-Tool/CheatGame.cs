@@ -35,12 +35,14 @@ namespace SnowRunner_Tool
                 return "n/a";
             }
             string s = File.ReadAllText(saveGameFile);
-            string sPattern = @"\""money\""\:\d+";
+            // https://github.com/elpatron68/SnowRunner-Tool/issues/28
+            string sPattern = @"persistentProfileData.*,\""money\"":\d+";
             string moneyAmount;
             if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
             {
                 moneyAmount = Regex.Match(s, sPattern).Value;
-                moneyAmount = moneyAmount.Replace("\"money\":", null);
+                moneyAmount=Regex.Match(moneyAmount, @",\""money\"":\d+").Value;
+                moneyAmount = moneyAmount.Replace(",\"money\":", null);
                 Log.Debug("Read money {MoneyFromSavegame}", moneyAmount);
                 return moneyAmount;
             }
@@ -103,7 +105,9 @@ namespace SnowRunner_Tool
             }
 
             string s = File.ReadAllText(saveGameFile);
-            string sPattern = @"\""experience\""\:\d+";
+            // https://github.com/elpatron68/SnowRunner-Tool/issues/28
+            //string sPattern = @"\""experience\""\:\d+";
+            string sPattern = @"\""persistentProfileData\""(.*?)\""experience\""\:\d+";
             string xpAmount;
             if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
             {

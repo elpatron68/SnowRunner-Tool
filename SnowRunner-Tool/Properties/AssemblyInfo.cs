@@ -52,5 +52,5 @@ using System.Windows;
 // indem Sie "*" wie unten gezeigt eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.5.3")]
-[assembly: AssemblyFileVersion("1.0.5.2")]
+[assembly: AssemblyFileVersion("1.0.5.3")]
 [assembly: Guid("fbc516d8-771f-414e-b57b-14211d6e0c62")]

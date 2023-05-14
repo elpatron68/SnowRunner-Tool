@@ -106,13 +106,14 @@ namespace SnowRunner_Tool
 
             string s = File.ReadAllText(saveGameFile);
             // https://github.com/elpatron68/SnowRunner-Tool/issues/28
-            //string sPattern = @"\""experience\""\:\d+";
-            string sPattern = @"\""persistentProfileData\""(.*?)\""experience\""\:\d+";
+            string sPattern = @"persistentProfileData.*,\""experience\"":\d+";
             string xpAmount;
             if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
             {
                 xpAmount = Regex.Match(s, sPattern).Value;
-                xpAmount = xpAmount.Replace("\"experience\":", null);
+                xpAmount = xpAmount.Replace(".*\"experience\":", null);
+                xpAmount = Regex.Match(xpAmount, @",\""experience\"":\d+").Value;
+                xpAmount = xpAmount.Replace(",\"experience\":", null);
                 Log.Debug("Read XP {XpFromSavegame}", xpAmount);
                 return xpAmount;
             }

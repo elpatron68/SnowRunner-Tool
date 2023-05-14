@@ -545,7 +545,7 @@ namespace SnowRunner_Tool
             
             int oldMoney = int.Parse(oldMoneyString);
             string result = await MetroInputMessage("Money Cheat", "Enter the amount of money you´d like to have.\n\n" +
-                "Warning: If you played the last session in multi player mode, you should start in single player mode " +
+                "Note: If you played the last session in multi player mode, you should start in single player mode " +
                 "before you change the amount of money if you want your MP earnings to be transferred.", oldMoneyString);
             if (!string.IsNullOrEmpty(result))
             {

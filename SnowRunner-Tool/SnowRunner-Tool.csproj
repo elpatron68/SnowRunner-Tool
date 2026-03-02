@@ -67,10 +67,10 @@
       <HintPath>..\packages\ControlzEx.5.0.2\lib\net462\ControlzEx.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=4242.42.42.42, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.2023.3.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <HintPath>..\packages\JetBrains.Annotations.2025.2.4\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro, Version=2.0.0.0, Culture=neutral, PublicKeyToken=51482d6f650b2b3f, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.2.4.10\lib\net47\MahApps.Metro.dll</HintPath>
+      <HintPath>..\packages\MahApps.Metro.2.4.11\lib\net47\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro.IconPacks, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0c0d510f9915137a, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.IconPacks.4.11.0\lib\net47\MahApps.Metro.IconPacks.dll</HintPath>
@@ -172,10 +172,10 @@
       <HintPath>..\packages\MahApps.Metro.IconPacks.4.11.0\lib\net47\MahApps.Metro.IconPacks.Zondicons.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.77\lib\net462\Microsoft.Xaml.Behaviors.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.141\lib\net462\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Octokit, Version=10.0.0.0, Culture=neutral, PublicKeyToken=0be8860aee462442, processorArchitecture=MSIL">
       <HintPath>..\packages\Octokit.10.0.0\lib\netstandard2.0\Octokit.dll</HintPath>
@@ -232,7 +232,7 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="Windows">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.19041.0\Windows.winmd</HintPath>
+      <HintPath>$(ProgramFiles(x86))\Windows Kits\10\UnionMetadata\10.0.19041.0\Windows.winmd</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />

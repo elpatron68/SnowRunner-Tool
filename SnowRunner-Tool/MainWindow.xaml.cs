@@ -17,7 +17,6 @@ using CommandLine;
 using System.Linq;
 using Serilog.Core;
 using System.Linq.Expressions;
-using Windows.Foundation.Metadata;
 using Microsoft.Xaml.Behaviors;
 using Winforms = System.Windows.Forms;
 

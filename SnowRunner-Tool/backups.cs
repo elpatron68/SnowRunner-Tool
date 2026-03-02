@@ -1,4 +1,4 @@
-﻿using MahApps.Metro.Controls.Dialogs;
+using MahApps.Metro.Controls.Dialogs;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Threading;
 using System.Threading.Tasks;
-using Windows.Foundation.Metadata;
 
 namespace SnowRunner_Tool
 {

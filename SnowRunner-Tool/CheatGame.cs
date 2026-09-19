@@ -18,17 +18,9 @@ namespace SnowRunner_Tool
         /// </summary>
         public static string GetMoney(string saveGameFile, int saveGameSlot, string SavegameExtension)
         {
-            switch (saveGameSlot)
+            if (saveGameSlot > 1 && saveGameSlot < 5)
             {
-                case 2:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave1." + SavegameExtension;
-                    break;
-                case 3:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave2." + SavegameExtension;
-                    break;
-                case 4:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave3." + SavegameExtension;
-                    break;
+                saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave" + (saveGameSlot - 1).ToString() + "." + SavegameExtension;
             }
             if (!File.Exists(saveGameFile))
             {
@@ -56,17 +48,9 @@ namespace SnowRunner_Tool
 
         public static bool SaveMoney(string saveGameFile, string newAmount, int saveGameSlot, string SavegameExtension)
         {
-            switch (saveGameSlot)
+            if (saveGameSlot > 1 && saveGameSlot < 5)
             {
-                case 2:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave1." + SavegameExtension;
-                    break;
-                case 3:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave2." + SavegameExtension;
-                    break;
-                case 4:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave3." + SavegameExtension;
-                    break;
+                saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave" + (saveGameSlot - 1).ToString() + "." + SavegameExtension;
             }
             if (!File.Exists(saveGameFile))
             {
@@ -88,17 +72,9 @@ namespace SnowRunner_Tool
 
         public static string GetXp(string saveGameFile, int saveGameSlot, string SavegameExtension)
         {
-            switch (saveGameSlot)
+            if (saveGameSlot > 1 && saveGameSlot < 5)
             {
-                case 2:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave1." + SavegameExtension;
-                    break;
-                case 3:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave2." + SavegameExtension;
-                    break;
-                case 4:
-                    saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave3." + SavegameExtension;
-                    break;
+                saveGameFile = Path.GetDirectoryName(saveGameFile) + @"\CompleteSave" + (saveGameSlot - 1).ToString() + "." + SavegameExtension;
             }
             if (!File.Exists(saveGameFile))
             {

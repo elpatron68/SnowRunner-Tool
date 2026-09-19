@@ -56,8 +56,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="images\baseline_done_black_18dp.png" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="images\baseline_done_black_18dp_1x.png" CopyToOutputDirectory="PreserveNewest" />
+    <Resource Include="baseline_restore_black_18dp.ico" />
+    <Resource Include="Resources\baseline_restore_black_18dp.png" />
+    <Resource Include="images\baseline_done_black_18dp.png" />
+    <Resource Include="images\baseline_done_black_18dp_1x.png" />
+    <Content Include="images\baseline_restore_white_48dp.png" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

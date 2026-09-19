@@ -11,13 +11,13 @@ using Serilog;
 using System.Diagnostics;
 using System.Windows.Media.Imaging;
 using SnowRunner_Tool.Properties;
-using System.Threading;
 using System.Collections.Generic;
 using CommandLine;
 using System.Linq;
 using Serilog.Core;
 using System.Linq.Expressions;
 using Microsoft.Xaml.Behaviors;
+using System.Windows.Threading;
 using Winforms = System.Windows.Forms;
 
 namespace SnowRunner_Tool
@@ -36,6 +36,7 @@ namespace SnowRunner_Tool
         private static readonly string AssemblyVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private KeyboardHook _hook;
         private FileSystemWatcher fswGameBackup;
+        private DispatcherTimer autoBackupDebounceTimer;
         private static int autoSaveCounter = 0;
         private readonly ILogger _logger;
         private readonly string[] answers = { "Fine", "OK", "Make it so", "Hmmm", "Okay", "Hoot", "Ладно", "Хорошо", "D'accord",
@@ -143,14 +144,24 @@ namespace SnowRunner_Tool
             dgBackups.AutoGenerateColumns = true;
             ReadBackups();
 
-            // Register Autobackup FileSystemWatcher
+            // Register Autobackup FileSystemWatcher (game save cycles, not wall-clock minutes)
             _logger.Information("Registering FileSystemWatcher");
             fswGameBackup = new FileSystemWatcher
             {
                 Path = SRProfile,
-                Filter = "CompleteSave*.*"
+                Filter = "CompleteSave*.*",
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.CreationTime | NotifyFilters.Size
             };
-            fswGameBackup.Changed += FileSystemWatcher_Changed;
+            fswGameBackup.Changed += FileSystemWatcher_OnSaveActivity;
+            fswGameBackup.Created += FileSystemWatcher_OnSaveActivity;
+            fswGameBackup.Renamed += FileSystemWatcher_OnSaveActivity;
+
+            autoBackupDebounceTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(1500)
+            };
+            autoBackupDebounceTimer.Tick += AutoBackupDebounce_Tick;
+
             SetAutobackup(Settings.Default.autobackupinterval);
 
             // Register global hotkey
@@ -277,73 +288,91 @@ namespace SnowRunner_Tool
         private void RestoreBackup_Click(object sender, RoutedEventArgs e)
         {
             _logger.Information("Start restoring a backup");
-            fswGameBackup.EnableRaisingEvents=false;
-
-            bool copyResult = false;
-            if (BackupScheduler.IsActive())
+            bool watcherWasEnabled = fswGameBackup != null && fswGameBackup.EnableRaisingEvents;
+            if (fswGameBackup != null)
             {
-                _ = MetroMessage("Attention!", "The game has to be closed before a backup can be restored.");
+                fswGameBackup.EnableRaisingEvents = false;
             }
-            else
+
+            try
             {
-                int SavegameSlot = 0;
+                if (BackupScheduler.IsActive())
+                {
+                    _ = MetroMessage("Attention!", "The game has to be closed before a backup can be restored.");
+                    return;
+                }
 
-                String source = e.Source.ToString();
-                if (source.Contains("#_1"))
+                if (dgBackups.SelectedItems.Count != 1)
                 {
-                    SavegameSlot = 1;
+                    _ = MetroMessage("Restore item", "Select a single backup row, then choose a restore option.");
+                    return;
                 }
-                if (source.Contains("#_2"))
-                {
-                    SavegameSlot = 2;
-                }
-                if (source.Contains("#_3"))
-                {
-                    SavegameSlot = 3;
-                }
-                if (source.Contains("#_4"))
-                {
-                    SavegameSlot = 4;
-                }
-                _logger.Debug("Slot: " + SavegameSlot);
 
-                ContextMenu contextMenu = this.FindName("Restore") as ContextMenu;
-                DataGrid item = (DataGrid)contextMenu.PlacementTarget;
+                int savegameSlot = GetRestoreSlotFromSender(sender);
+                _logger.Debug("Slot: " + savegameSlot);
 
-                if (dgBackups.SelectedItems.Count > 1)
+                Backup restoreItem = dgBackups.SelectedItem as Backup;
+                if (restoreItem == null && dgBackups.SelectedCells.Count > 0)
                 {
-                    _ = MetroMessage("Restore item", "You can only restore one item, please select a single row.");
+                    restoreItem = dgBackups.SelectedCells[0].Item as Backup;
+                }
+                if (restoreItem == null)
+                {
+                    _ = MetroMessage("Restore item", "Could not determine the selected backup. Select a row and try again.");
+                    return;
+                }
+
+                _logger.Debug("Backing up current save game before restoring");
+                _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "safety-bak");
+
+                string backupSource = string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase)
+                    ? SRBackupDir + @"\" + restoreItem.BackupName
+                    : MyBackupDir + @"\" + restoreItem.BackupName;
+
+                _logger.Information(String.Format("Restoring {0}, slot {1} to {2}", backupSource, savegameSlot, SRProfile));
+                bool copyResult = Backup.RestoreBackup(backupSource, SRProfile, savegameSlot, SavegameExtension);
+                if (copyResult)
+                {
+                    _logger.Debug("Restore was successful");
+                    _ = MetroDonateMessage("Next time better luck", "The selected saved game has successfully been restored. A backup of your former save game has been made.\n\n" +
+                        "As I may have saved your a** this time (again?), consider to buy me a \U0001F37A or a \U00002615!");
                 }
                 else
                 {
-                    Backup restoreItem = (Backup)item.SelectedCells[0].Item;
+                    _logger.Warning("Restore failed");
+                    _ = MetroMessage("File not found", "The selected backup slot contains no corresponding save game file. Select a valid slot or restore all slots.");
+                }
 
-                    // Create a backup before restore
-                    _logger.Debug("Backing up current save game before restoring");
-                    _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "safety-bak");
-
-                    string backupSource = string.Equals(restoreItem.Type, "Game-Backup", StringComparison.OrdinalIgnoreCase)
-                        ? SRBackupDir + @"\" + restoreItem.BackupName
-                        : MyBackupDir + @"\" + restoreItem.BackupName;
-
-                    _logger.Information(String.Format("Restoring {0}, slot {1} to {2}", backupSource, SavegameSlot, SRProfile));
-                    copyResult = Backup.RestoreBackup(backupSource, SRProfile, SavegameSlot, SavegameExtension);
-                    if (copyResult)
-                    {
-                        _logger.Debug("Restore was successful");
-                        _ = MetroDonateMessage("Next time better luck", "The selected saved game has successfully been restored. A backup of your former save game has been made.\n\n" +
-                            "As I may have saved your a** this time (again?), consider to buy me a \U0001F37A or a \U00002615!");
-                    }
-                    else
-                    {
-                        _logger.Warning("Restore failed");
-                        _ = MetroMessage("File not found", "The selected backup slot contains no corresponding save game file. Select a valid slot or restore all slots.");
-                    }
-
-                    ReadBackups();
-                    fswGameBackup.EnableRaisingEvents = true;
+                ReadBackups();
+            }
+            finally
+            {
+                if (fswGameBackup != null)
+                {
+                    fswGameBackup.EnableRaisingEvents = watcherWasEnabled && Settings.Default.autobackupinterval > 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// Reads the restore target slot from MenuItem.Tag (0 = all slots).
+        /// </summary>
+        private static int GetRestoreSlotFromSender(object sender)
+        {
+            if (sender is MenuItem menuItem && menuItem.Tag != null
+                && int.TryParse(menuItem.Tag.ToString(), out int slot)
+                && slot >= 0 && slot <= 4)
+            {
+                return slot;
+            }
+
+            // Fallback for older menu text parsing
+            string source = sender != null ? sender.ToString() : string.Empty;
+            if (source.Contains("#_1") || source.Contains("#1")) return 1;
+            if (source.Contains("#_2") || source.Contains("#2")) return 2;
+            if (source.Contains("#_3") || source.Contains("#3")) return 3;
+            if (source.Contains("#_4") || source.Contains("#4")) return 4;
+            return 0;
         }
 
 
@@ -748,6 +777,11 @@ namespace SnowRunner_Tool
             // Save new setting if changed
             Settings.Default.autobackupinterval = interval;
             Settings.Default.Save();
+            autoSaveCounter = 0;
+            if (autoBackupDebounceTimer != null)
+            {
+                autoBackupDebounceTimer.Stop();
+            }
             // Set check mark icon
             switch (interval)
             {
@@ -778,24 +812,53 @@ namespace SnowRunner_Tool
                 default:
                     break;
             }
-            if (Platform != null)
+            if (Platform != null && fswGameBackup != null)
             {
                 fswGameBackup.EnableRaisingEvents = interval > 0;
             }
         }
 
-        private void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
+        private void FileSystemWatcher_OnSaveActivity(object sender, FileSystemEventArgs e)
         {
-            //Wait a second, just to be sure
-            Thread.Sleep(1000);
-            autoSaveCounter += 1;
-            if (autoSaveCounter == Settings.Default.autobackupinterval)
+            // Coalesce burst of Created/Changed/Renamed events from one game save into a single cycle.
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                autoSaveCounter = 0;
-                _ = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "auto-bak");
-                ReadBackups();
-                _logger.Debug("FSW-backup created");
+                if (Settings.Default.autobackupinterval <= 0)
+                {
+                    return;
+                }
+                autoBackupDebounceTimer.Stop();
+                autoBackupDebounceTimer.Start();
+            }));
+        }
+
+        private void AutoBackupDebounce_Tick(object sender, EventArgs e)
+        {
+            autoBackupDebounceTimer.Stop();
+
+            int interval = Settings.Default.autobackupinterval;
+            if (interval <= 0)
+            {
+                return;
             }
+
+            autoSaveCounter += 1;
+            _logger.Debug("Autobackup cycle {Count}/{Interval} after game save activity", autoSaveCounter, interval);
+            if (autoSaveCounter < interval)
+            {
+                return;
+            }
+
+            autoSaveCounter = 0;
+            string zipPath = Backup.BackupCurrentSavegame(SRProfile, MyBackupDir, "auto-bak");
+            if (string.IsNullOrEmpty(zipPath))
+            {
+                _logger.Warning("Autobackup skipped or failed (file locked or zip error)");
+                return;
+            }
+
+            ReadBackups();
+            _logger.Debug("FSW-backup created {ZipPath}", zipPath);
         }
 
         private void MnAutoOff_Click(object sender, RoutedEventArgs e)

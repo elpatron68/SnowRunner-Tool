@@ -249,17 +249,17 @@
                               >
                     </MenuItem>
                     <MenuItem x:Name="MnAuto2"
-                              Header="_2 minutes"
+                              Header="Every _2 game saves"
                               Click="MnAuto2_Click"
                               >
                     </MenuItem>
                     <MenuItem x:Name="MnAuto5"
-                              Header="_5 minutes"
+                              Header="Every _5 game saves"
                               Click="MnAuto5_Click"
                               >
                     </MenuItem>
                     <MenuItem x:Name="MnAuto10"
-                              Header="_10 minutes"
+                              Header="Every 1_0 game saves"
                               Click="MnAuto10_Click"
                               >
                     </MenuItem>
@@ -386,43 +386,42 @@
 
             <DataGrid.ContextMenu>
                 <ContextMenu x:Name="Restore" DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
-                    <MenuItem  Header="Re_store this backup" 
-                               CommandParameter="{Binding Parent, RelativeSource={RelativeSource Self}}"
-                               >
+                    <MenuItem  Header="Restore _all slots" 
+                               Tag="0"
+                               Click="RestoreBackup_Click"
+                               ToolTip="Restore every save slot from the selected backup">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial Kind="BackupRestore" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem  Header="Restore single slot">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial Kind="BackupRestore" />
                         </MenuItem.Icon>
                         <MenuItem  Header="Restore slot #_1" 
-                                   Click="RestoreBackup_Click" 
-                                   CommandParameter="{Binding Parent, RelativeSource={RelativeSource Self}}">
+                                   Tag="1"
+                                   Click="RestoreBackup_Click">
                             <MenuItem.Icon>
                                 <iconPacks:PackIconMaterial Kind="BackupRestore" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem  Header="Restore slot #_2" 
-                                   Click="RestoreBackup_Click" 
-                                   CommandParameter="{Binding Parent, RelativeSource={RelativeSource Self}}">
+                                   Tag="2"
+                                   Click="RestoreBackup_Click">
                             <MenuItem.Icon>
                                 <iconPacks:PackIconMaterial Kind="BackupRestore" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem  Header="Restore slot #_3" 
-                                   Click="RestoreBackup_Click" 
-                                   CommandParameter="{Binding Parent, RelativeSource={RelativeSource Self}}">
+                                   Tag="3"
+                                   Click="RestoreBackup_Click">
                             <MenuItem.Icon>
                                 <iconPacks:PackIconMaterial Kind="BackupRestore" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem  Header="Restore slot #_4" 
-                                   Click="RestoreBackup_Click" 
-                                   CommandParameter="{Binding Parent, RelativeSource={RelativeSource Self}}">
-                            <MenuItem.Icon>
-                                <iconPacks:PackIconMaterial Kind="BackupRestore" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem  Header="Restore _all slots" 
-                                   Click="RestoreBackup_Click" 
-                                   CommandParameter="{Binding Parent, RelativeSource={RelativeSource Self}}">
+                                   Tag="4"
+                                   Click="RestoreBackup_Click">
                             <MenuItem.Icon>
                                 <iconPacks:PackIconMaterial Kind="BackupRestore" />
                             </MenuItem.Icon>

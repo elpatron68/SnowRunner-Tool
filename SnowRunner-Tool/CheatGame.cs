@@ -26,24 +26,18 @@ namespace SnowRunner_Tool
             {
                 return "n/a";
             }
-            string s = File.ReadAllText(saveGameFile);
+
             // https://github.com/elpatron68/SnowRunner-Tool/issues/28
             // https://github.com/elpatron68/SnowRunner-Tool/issues/42 - support negative money
-            string sPattern = @"persistentProfileData.*,\""money\"":-?\d+";
-            string moneyAmount;
-            if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
+            string json = File.ReadAllText(saveGameFile);
+            if (SaveGameJson.TryGetProfileNumber(json, SaveGameJson.MoneyProperty, out string moneyAmount))
             {
-                moneyAmount = Regex.Match(s, sPattern).Value;
-                moneyAmount=Regex.Match(moneyAmount, @",\""money\"":-?\d+").Value;
-                moneyAmount = moneyAmount.Replace(",\"money\":", null);
                 Log.Debug("Read money {MoneyFromSavegame}", moneyAmount);
                 return moneyAmount;
             }
-            else
-            {
-                Log.Warning("Money value not found in {SaveGameFile}", saveGameFile);
-                return null;
-            }
+
+            Log.Warning("Money value not found in {SaveGameFile}", saveGameFile);
+            return null;
         }
 
         public static bool SaveMoney(string saveGameFile, string newAmount, int saveGameSlot, string SavegameExtension)
@@ -57,17 +51,21 @@ namespace SnowRunner_Tool
                 return false;
             }
 
-            // Check if money value is numeric (positive or negative)
             Log.Information("SaveMoney");
-            if (Regex.IsMatch(newAmount, @"^-?\d+$"))
-            {
-                File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:-?\d+", "\"money\":" + newAmount));
-                return true;
-            }
-            else
+            if (!SaveGameJson.IsInteger(newAmount))
             {
                 return false;
             }
+
+            string json = File.ReadAllText(saveGameFile);
+            if (!SaveGameJson.TryReplaceProfileNumber(json, SaveGameJson.MoneyProperty, newAmount, out string updated))
+            {
+                Log.Warning("Money value not found in {SaveGameFile}", saveGameFile);
+                return false;
+            }
+
+            File.WriteAllText(saveGameFile, updated);
+            return true;
         }
 
         public static string GetXp(string saveGameFile, int saveGameSlot, string SavegameExtension)
@@ -81,25 +79,16 @@ namespace SnowRunner_Tool
                 return "n/a";
             }
 
-            string s = File.ReadAllText(saveGameFile);
+            string json = File.ReadAllText(saveGameFile);
             // https://github.com/elpatron68/SnowRunner-Tool/issues/28
-            string sPattern = @"persistentProfileData.*,\""experience\"":\d+";
-            string xpAmount;
-            if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
+            if (SaveGameJson.TryGetProfileNumber(json, SaveGameJson.ExperienceProperty, out string xpAmount))
             {
-                xpAmount = Regex.Match(s, sPattern).Value;
-                xpAmount = xpAmount.Replace(".*\"experience\":", null);
-                xpAmount = Regex.Match(xpAmount, @",\""experience\"":\d+").Value;
-                xpAmount = xpAmount.Replace(",\"experience\":", null);
                 Log.Debug("Read XP {XpFromSavegame}", xpAmount);
                 return xpAmount;
             }
-            else
-            {
-                Log.Warning("Money value not found in {SaveGameFile}", saveGameFile);
-                return null;
-            }
 
+            Log.Warning("XP value not found in {SaveGameFile}", saveGameFile);
+            return null;
         }
 
         public static bool SaveXp(string SRSaveGameDir, string newXP, int SaveGameSlot, string SavegameExtension)
@@ -120,14 +109,26 @@ namespace SnowRunner_Tool
             }
 
             Log.Information("SaveXp");
+            if (!SaveGameJson.IsInteger(newXP))
+            {
+                return false;
+            }
+
             try
             {
-                File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""experience\""\:\d+", "\"experience\":" + newXP));
+                string json = File.ReadAllText(saveGameFile);
+                if (!SaveGameJson.TryReplaceProfileNumber(json, SaveGameJson.ExperienceProperty, newXP, out string updated))
+                {
+                    Log.Warning("XP value not found in {SaveGameFile}", saveGameFile);
+                    return false;
+                }
+
+                File.WriteAllText(saveGameFile, updated);
                 return true;
             }
             catch (IOException ex)
             {
-                Log.Error(ex, "Error reading money in SaveXp");
+                Log.Error(ex, "Error writing XP in SaveXp");
                 return false;
             }
         }

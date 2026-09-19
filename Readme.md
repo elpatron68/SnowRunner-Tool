@@ -103,16 +103,14 @@ You can edit money/XP in every of the four save game slots (if a saved game exis
 
 ### Autobackup
 
-The *Autobackup* option automatically creates backups while the game is running. The function ist triggered 
-by the game itself: After the game saved it´s state (when a "saving" message is displayed to the player), 
-*SnowRunner-Tool* creates a backup of the files. You can disable this function or set it to 
-2, 5 or 10 "minutes" - or exact: *cycles*. The actual time intervals depend on the intervals, the game saves 
-it´s state. 
+The *Autobackup* option automatically creates backups while the game is running. It is triggered 
+by the game itself: After the game saves its state (when a "saving" message is displayed), 
+*SnowRunner-Tool* counts that as one **game-save cycle**. You can disable the function or run a backup 
+every 2, 5 or 10 game saves. There is no wall-clock timer — if the game does not write a new save, 
+no automatic backup is created (and would not be useful anyway).
 
-They vary from ~ 30 seconds to ~ 120 seconds. So, if you activate an interval of 5 minutes, the game state is 
-backup-ed every fifth time the game itself saves, which usually results in one backup per less than 5 minutes. 
-You have to reload the backup list (*File* - *Reload backup table*) or restart *SnowRunner-Tool* to see these 
-backups appear in the list.
+Game save intervals vary (roughly ~30–120 seconds). So "every 5 game saves" often results in a backup 
+about every few minutes of active play. The backup list refreshes automatically when an auto-backup is created.
 
 ### Logging
 

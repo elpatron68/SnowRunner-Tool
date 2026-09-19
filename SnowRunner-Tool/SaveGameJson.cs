@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using Serilog;
 using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -22,6 +23,57 @@ namespace SnowRunner_Tool
         internal static bool IsInteger(string value)
         {
             return !string.IsNullOrEmpty(value) && IntegerPattern.IsMatch(value);
+        }
+
+        /// <summary>
+        /// True when the JSON contains a persistentProfileData object (a real save slot).
+        /// Empty stubs or unrelated files without that object are treated as unoccupied.
+        /// </summary>
+        internal static bool HasPersistentProfileData(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                return false;
+            }
+
+            try
+            {
+                JToken root = JToken.Parse(json);
+                foreach (JToken profile in root.SelectTokens("$..persistentProfileData"))
+                {
+                    if (profile.Type == JTokenType.Object)
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch (JsonException)
+            {
+                return false;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// True when the path is an occupied SnowRunner save slot file (exists + profile data).
+        /// </summary>
+        internal static bool IsOccupiedSaveFile(string path)
+        {
+            if (string.IsNullOrEmpty(path) || !File.Exists(path))
+            {
+                return false;
+            }
+
+            try
+            {
+                return HasPersistentProfileData(File.ReadAllText(path));
+            }
+            catch (IOException ex)
+            {
+                Log.Warning(ex, "Could not read save file {SaveFile}", path);
+                return true;
+            }
         }
 
         internal static bool TryGetProfileNumber(string json, string propertyName, out string numberText)

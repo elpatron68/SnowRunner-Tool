@@ -83,7 +83,9 @@ To copy a save game slot to another, open the *File* menu and select *Copy save 
 
 ![Copy Save Game](images/Copy_save_game.png)
 
-Note, that only existing game slot are selectable as source, and only empty slots as destination. If all destination slots are greyed out, use the game´s own function to delete a save game slot prior to copying.
+Note, that only existing game slots are selectable as source, and only empty slots as destination. A slot counts as empty when its save file is missing **or** does not contain real profile data (empty stub files are treated as free). If destinations are still greyed out because a real save occupies that slot, delete that slot in the game first (or remove the corresponding `CompleteSave*.cfg` / `.dat` file while the game is closed).
+
+To copy from slot 1 to another slot: **File → Copy save game → from slot 1 → to slot 2/3/4**.
 
 #### Notes
 

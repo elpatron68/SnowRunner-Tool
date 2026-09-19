@@ -1,4 +1,5 @@
 # SnowRunner-Tool Build Script
-# .NET 8: dotnet build funktioniert jetzt mit SDK-style Projekt
+# .NET 8: build app and run unit tests
 
-dotnet build SnowRunner-Tool\SnowRunner-Tool.csproj -c Debug
+dotnet test SnowRunner-Tool.sln -c Debug
+exit $LASTEXITCODE

@@ -63,4 +63,8 @@
     <Content Include="images\baseline_restore_white_48dp.png" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="SnowRunner-Tool.Tests" />
+  </ItemGroup>
+
 </Project>

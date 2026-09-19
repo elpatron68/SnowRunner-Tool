@@ -208,6 +208,7 @@ namespace SnowRunner_Tool
                         dgBackups.Items.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
                         _logger.Debug("Refreshing table");
                         dgBackups.Items.Refresh();
+                        lbTotalBackups.Content = "Total backups: " + allBackups.Count;
                     });
                 }
                 else
@@ -215,6 +216,7 @@ namespace SnowRunner_Tool
                     dgBackups.ItemsSource = allBackups;
                     dgBackups.Items.SortDescriptions.Clear();
                     dgBackups.Items.Refresh();
+                    lbTotalBackups.Content = "Total backups: " + allBackups.Count;
                 }
                 
                 UpdateTitle();

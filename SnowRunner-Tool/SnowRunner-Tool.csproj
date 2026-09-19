@@ -11,9 +11,9 @@
     <AssemblyName>SnowRunner-Tool</AssemblyName>
     <ApplicationIcon>baseline_restore_black_18dp.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.0.5.3</Version>
-    <AssemblyVersion>1.0.5.3</AssemblyVersion>
-    <FileVersion>1.0.5.3</FileVersion>
+    <Version>1.0.5.4</Version>
+    <AssemblyVersion>1.0.5.4</AssemblyVersion>
+    <FileVersion>1.0.5.4</FileVersion>
     <Deterministic>true</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <SupportedOSPlatform>windows</SupportedOSPlatform>
@@ -27,6 +27,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,5 +1,14 @@
 ﻿# SnowRunner-Tool Changes
 
+## v1.0.5.4 (19.09.2026)
+- Migrate to .NET 8 / SDK-style project
+- Fix cheat crash with negative money and profile JSON parsing (#42, #49)
+- Fix empty save stubs blocking copy destinations (#44)
+- Fix total backups counter refresh (#41)
+- Harden autobackup (game-save cycles) and context-menu restore (#39)
+- Add unit tests for save JSON / cheat slot logic
+- Update NuGet packages; refresh Readme badges and docs
+
 ## v1.0.5.2 (23.10.2022)
 - Delete files using system´s recycle bin
 - Copy a save game slot to another (empty) one

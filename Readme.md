@@ -1,6 +1,15 @@
-﻿![Epic Games](https://img.shields.io/badge/epicgames-%23313131.svg?style=for-the-badge&logo=epicgames&logoColor=white)![Steam](https://img.shields.io/badge/steam-%23000000.svg?style=for-the-badge&logo=steam&logoColor=white)![.Net](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white)![Visual Studio](https://img.shields.io/badge/Visual%20Studio-5C2D91.svg?style=for-the-badge&logo=visual-studio&logoColor=white)![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=c-sharp&logoColor=white)![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+﻿![Epic Games](https://img.shields.io/badge/epicgames-%23313131.svg?style=for-the-badge&logo=epicgames&logoColor=white)
+![Steam](https://img.shields.io/badge/steam-%23000000.svg?style=for-the-badge&logo=steam&logoColor=white)
+![.NET](https://img.shields.io/badge/.NET%208-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=csharp&logoColor=white)
+![WPF](https://img.shields.io/badge/WPF-0078D4?style=for-the-badge&logo=windows&logoColor=white)
+![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 
-[![Github All Releases](https://img.shields.io/github/downloads/elpatron68/SnowRunner-Tool/total.svg)]() 
+[![GitHub release](https://img.shields.io/github/v/release/elpatron68/SnowRunner-Tool?style=flat-square)](https://github.com/elpatron68/SnowRunner-Tool/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/elpatron68/SnowRunner-Tool/total?style=flat-square)](https://github.com/elpatron68/SnowRunner-Tool/releases)
+[![License](https://img.shields.io/github/license/elpatron68/SnowRunner-Tool?style=flat-square)](https://github.com/elpatron68/SnowRunner-Tool/blob/master/copying)
+[![Last commit](https://img.shields.io/github/last-commit/elpatron68/SnowRunner-Tool?style=flat-square)](https://github.com/elpatron68/SnowRunner-Tool/commits/master)
+[![Issues](https://img.shields.io/github/issues/elpatron68/SnowRunner-Tool?style=flat-square)](https://github.com/elpatron68/SnowRunner-Tool/issues)
 
 # SnowRunner-Tool
 

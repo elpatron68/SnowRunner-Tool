@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +17,6 @@ using CommandLine;
 using System.Linq;
 using Serilog.Core;
 using System.Linq.Expressions;
-using Windows.Foundation.Metadata;
 using Microsoft.Xaml.Behaviors;
 using Winforms = System.Windows.Forms;
 
@@ -542,7 +541,12 @@ namespace SnowRunner_Tool
                 _ = MetroMessage("File not found", "The selected backup slot contains no corresponding save game file. Select a valid slot.");
                 return;
             }
-            
+            if (string.IsNullOrEmpty(oldMoneyString))
+            {
+                _ = MetroMessage("Parse error", "Could not read money value from save game. The file may be corrupted or use an unexpected format.");
+                return;
+            }
+
             int oldMoney = int.Parse(oldMoneyString);
             string result = await MetroInputMessage("Money Cheat", "Enter the amount of money you´d like to have.\n\n" +
                 "Note: If you played the last session in multi player mode, you should start in single player mode " +

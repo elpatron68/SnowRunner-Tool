@@ -1,4 +1,4 @@
-﻿using ControlzEx.Standard;
+using ControlzEx.Standard;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -36,12 +36,13 @@ namespace SnowRunner_Tool
             }
             string s = File.ReadAllText(saveGameFile);
             // https://github.com/elpatron68/SnowRunner-Tool/issues/28
-            string sPattern = @"persistentProfileData.*,\""money\"":\d+";
+            // https://github.com/elpatron68/SnowRunner-Tool/issues/42 - support negative money
+            string sPattern = @"persistentProfileData.*,\""money\"":-?\d+";
             string moneyAmount;
             if (Regex.IsMatch(s, sPattern, RegexOptions.IgnoreCase))
             {
                 moneyAmount = Regex.Match(s, sPattern).Value;
-                moneyAmount=Regex.Match(moneyAmount, @",\""money\"":\d+").Value;
+                moneyAmount=Regex.Match(moneyAmount, @",\""money\"":-?\d+").Value;
                 moneyAmount = moneyAmount.Replace(",\"money\":", null);
                 Log.Debug("Read money {MoneyFromSavegame}", moneyAmount);
                 return moneyAmount;
@@ -72,11 +73,11 @@ namespace SnowRunner_Tool
                 return false;
             }
 
-            // Check if money value is numeric
+            // Check if money value is numeric (positive or negative)
             Log.Information("SaveMoney");
-            if (Regex.IsMatch(newAmount, @"^\d+$"))
+            if (Regex.IsMatch(newAmount, @"^-?\d+$"))
             {
-                File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:\d+", "\"money\":" + newAmount));
+                File.WriteAllText(saveGameFile, Regex.Replace(File.ReadAllText(saveGameFile), @"\""money\""\:-?\d+", "\"money\":" + newAmount));
                 return true;
             }
             else

@@ -234,8 +234,11 @@ namespace SnowRunner_Tool
             bool saveGameExists;
             string saveFile;
 
+            // Occupied = file exists and contains persistentProfileData (issue #44).
+            // Empty stubs without profile data stay selectable as copy destinations.
+
             saveFile = SRProfile + @"\CompleteSave." + SavegameExtension;
-            saveGameExists = File.Exists(saveFile);
+            saveGameExists = SaveGameJson.IsOccupiedSaveFile(saveFile);
             MnMoneyCheat1.IsEnabled = saveGameExists;
             MnCopySaveGame1.IsEnabled = saveGameExists;
             MnCopySaveGame2To1.IsEnabled = !saveGameExists;
@@ -243,8 +246,8 @@ namespace SnowRunner_Tool
             MnCopySaveGame4To1.IsEnabled = !saveGameExists;
             MnXp1.IsEnabled = saveGameExists;
 
-            saveFile = SRProfile + @"\CompleteSave1." + SavegameExtension; ;
-            saveGameExists = File.Exists(saveFile);
+            saveFile = SRProfile + @"\CompleteSave1." + SavegameExtension;
+            saveGameExists = SaveGameJson.IsOccupiedSaveFile(saveFile);
             MnMoneyCheat2.IsEnabled = saveGameExists;
             MnCopySaveGame2.IsEnabled = saveGameExists;
             MnCopySaveGame1To2.IsEnabled = !saveGameExists;
@@ -252,8 +255,8 @@ namespace SnowRunner_Tool
             MnCopySaveGame4To2.IsEnabled = !saveGameExists;
             MnXp2.IsEnabled = saveGameExists;
 
-            saveFile = SRProfile + @"\CompleteSave2." + SavegameExtension; ;
-            saveGameExists = File.Exists(saveFile);
+            saveFile = SRProfile + @"\CompleteSave2." + SavegameExtension;
+            saveGameExists = SaveGameJson.IsOccupiedSaveFile(saveFile);
             MnMoneyCheat3.IsEnabled = saveGameExists;
             MnCopySaveGame3.IsEnabled = saveGameExists;
             MnCopySaveGame1To3.IsEnabled = !saveGameExists;
@@ -261,8 +264,8 @@ namespace SnowRunner_Tool
             MnCopySaveGame4To3.IsEnabled = !saveGameExists;
             MnXp3.IsEnabled = saveGameExists;
 
-            saveFile = SRProfile + @"\CompleteSave3." + SavegameExtension; ;
-            saveGameExists = File.Exists(saveFile);
+            saveFile = SRProfile + @"\CompleteSave3." + SavegameExtension;
+            saveGameExists = SaveGameJson.IsOccupiedSaveFile(saveFile);
             MnMoneyCheat4.IsEnabled = saveGameExists;
             MnCopySaveGame4.IsEnabled = saveGameExists;
             MnCopySaveGame1To4.IsEnabled = !saveGameExists;
@@ -941,6 +944,8 @@ namespace SnowRunner_Tool
 
             if (result)
             {
+                UpdateSaveGameSlotMenus();
+                UpdateTitle();
                 _ = MetroMessage("Save game copied", string.Format("Save game slot {0} has been copied to save game slot {1}.",
                     slot1.ToString(), slot2.ToString()));
             }

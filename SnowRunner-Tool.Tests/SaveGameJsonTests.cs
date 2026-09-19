@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+
 namespace SnowRunner_Tool.Tests
 {
     [Collection(SerilogCollection.Name)]
@@ -102,6 +105,64 @@ namespace SnowRunner_Tool.Tests
         public void TryReplaceProfileNumber_InvalidJson_ReturnsFalse()
         {
             Assert.False(SaveGameJson.TryReplaceProfileNumber("not json", SaveGameJson.MoneyProperty, "1", out _));
+        }
+
+        [Fact]
+        public void HasPersistentProfileData_DetectsRealSave()
+        {
+            Assert.True(SaveGameJson.HasPersistentProfileData(MinifiedWithForeignMoney));
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("{}")]
+        [InlineData("{\"CompleteSave\":{\"foo\":1}}")]
+        [InlineData("not json")]
+        public void HasPersistentProfileData_RejectsEmptyOrStub(string json)
+        {
+            Assert.False(SaveGameJson.HasPersistentProfileData(json));
+        }
+
+        [Fact]
+        public void IsOccupiedSaveFile_TreatsStubFileAsFree()
+        {
+            string path = Path.Combine(Path.GetTempPath(), "SRT-stub-" + Guid.NewGuid().ToString("N") + ".cfg");
+            try
+            {
+                File.WriteAllText(path, "{}");
+                Assert.False(SaveGameJson.IsOccupiedSaveFile(path));
+            }
+            finally
+            {
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+            }
+        }
+
+        [Fact]
+        public void IsOccupiedSaveFile_TreatsProfileFileAsOccupied()
+        {
+            string path = Path.Combine(Path.GetTempPath(), "SRT-save-" + Guid.NewGuid().ToString("N") + ".cfg");
+            try
+            {
+                File.WriteAllText(path, MinifiedWithForeignMoney);
+                Assert.True(SaveGameJson.IsOccupiedSaveFile(path));
+            }
+            finally
+            {
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+            }
+        }
+
+        [Fact]
+        public void IsOccupiedSaveFile_MissingPath_ReturnsFalse()
+        {
+            Assert.False(SaveGameJson.IsOccupiedSaveFile(Path.Combine(Path.GetTempPath(), "does-not-exist-" + Guid.NewGuid().ToString("N") + ".cfg")));
         }
     }
 }
